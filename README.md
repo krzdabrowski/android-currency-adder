@@ -12,7 +12,6 @@ Android project, generated using [Android Starter](https://github.com/krzdabrows
 * Retrofit - for networking
 * Hilt - for Dependency Injection pattern implementation
 * Room - for local database
-* Coil - for image loading
 * Version Catalog - for dependency management
 * Timber - for logging
 * JUnit5, Turbine and MockK - for unit tests

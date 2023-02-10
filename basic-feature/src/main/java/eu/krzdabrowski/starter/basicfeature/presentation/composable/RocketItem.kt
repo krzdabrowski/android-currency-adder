@@ -9,9 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import coil.compose.AsyncImage
 import eu.krzdabrowski.starter.basicfeature.R
 import eu.krzdabrowski.starter.basicfeature.presentation.model.RocketDisplayable
 import eu.krzdabrowski.starter.core.ui.Typography
@@ -26,6 +26,9 @@ fun RocketItem(
         modifier = modifier
             .padding(
                 vertical = dimensionResource(id = R.dimen.dimen_medium)
+            )
+            .testTag(
+                stringResource(R.string.rocket_content_description)
             )
             .clickable { onRocketClick() },
         verticalAlignment = Alignment.CenterVertically
@@ -74,12 +77,5 @@ fun RocketItem(
                 style = Typography.bodyMedium
             )
         }
-
-        AsyncImage(
-            model = rocket.imageUrl,
-            contentDescription = stringResource(id = R.string.rocket_image_content_description),
-            modifier = Modifier
-                .weight(1f)
-        )
     }
 }

@@ -3,7 +3,7 @@ package eu.krzdabrowski.starter.basicfeature.tests
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import eu.krzdabrowski.starter.basicfeature.R
 import eu.krzdabrowski.starter.basicfeature.data.generateTestRocketsFromPresentation
@@ -27,7 +27,7 @@ class RocketsScreenTest {
     @Before
     fun setUp() {
         with(composeTestRule.activity) {
-            rocketContentDescription = getString(R.string.rocket_image_content_description)
+            rocketContentDescription = getString(R.string.rocket_content_description)
             errorRefreshingMessage = getString(R.string.rockets_error_refreshing)
             errorFetchingMessage = getString(R.string.rockets_error_fetching)
         }
@@ -43,7 +43,7 @@ class RocketsScreenTest {
         )
 
         composeTestRule
-            .onAllNodesWithContentDescription(rocketContentDescription)
+            .onAllNodesWithTag(rocketContentDescription)
             .assertCountEquals(testRockets.size)
     }
 

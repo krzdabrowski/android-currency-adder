@@ -8,5 +8,5 @@
     <string name="rockets_error_fetching">Sorry, something went wrong when fetching rockets</string>
     <string name="rockets_error_refreshing">Sorry, something went wrong when refreshing rockets</string>
 
-    <string name="rocket_image_content_description">Rocket image</string>
+    <string name="rocket_content_description">Rocket</string>
 </resources>
