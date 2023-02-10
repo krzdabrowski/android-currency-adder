@@ -16,7 +16,7 @@ android {
     namespace = "eu.krzdabrowski.starter.basicfeature"
 
     with (defaultConfig) {
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
     }
 
@@ -36,8 +36,6 @@ android {
     }
 
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -69,7 +67,6 @@ dependencies {
 
     implementation(platform(libs.compose.bom))
     implementation(libs.accompanist.swipe.refresh)
-    implementation(libs.coil)
     implementation(libs.compose.material3)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
@@ -85,8 +82,6 @@ dependencies {
 
     kapt(libs.hilt.compiler)
     kaptAndroidTest(libs.test.android.hilt.compiler)
-
-    coreLibraryDesugaring(libs.desugar)
 
     detektPlugins(libs.detekt.twitter.compose)
 }

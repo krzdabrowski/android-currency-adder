@@ -15,7 +15,7 @@ android {
     namespace = "eu.krzdabrowski.starter.core"
 
     with (defaultConfig) {
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
     }
 

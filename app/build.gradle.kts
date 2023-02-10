@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "eu.krzdabrowski.starter"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -38,8 +38,6 @@ android {
     }
 
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -68,8 +66,6 @@ dependencies {
 
     kapt(libs.hilt.compiler)
     ksp(libs.room.compiler)
-
-    coreLibraryDesugaring(libs.desugar)
 
     detektPlugins(libs.detekt.twitter.compose)
 }

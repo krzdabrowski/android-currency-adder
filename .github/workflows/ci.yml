@@ -43,6 +43,6 @@ jobs:
       - name: Run instrumentation tests
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
-          api-level: 24
+          api-level: 26
           disable-animations: false
           script: ./gradlew connectedCheck --stacktrace
