@@ -12,10 +12,10 @@ plugins {
 
 android {
     compileSdk = 33
-    namespace = "eu.krzdabrowski.starter"
+    namespace = "eu.krzdabrowski.currencyadder"
 
     defaultConfig {
-        applicationId = "eu.krzdabrowski.starter"
+        applicationId = "eu.krzdabrowski.currencyadder"
         minSdk = 26
         targetSdk = 33
         versionCode = 1

@@ -12,7 +12,7 @@ plugins {
 
 android {
     compileSdk = 33
-    namespace = "eu.krzdabrowski.starter.core"
+    namespace = "eu.krzdabrowski.currencyadder.core"
 
     with (defaultConfig) {
         minSdk = 26

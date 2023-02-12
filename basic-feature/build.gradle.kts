@@ -13,7 +13,7 @@ plugins {
 
 android {
     compileSdk = 33
-    namespace = "eu.krzdabrowski.starter.basicfeature"
+    namespace = "eu.krzdabrowski.currencyadder.basicfeature"
 
     with (defaultConfig) {
         minSdk = 26
@@ -21,7 +21,7 @@ android {
     }
 
     defaultConfig {
-        testInstrumentationRunner = "eu.krzdabrowski.starter.core.utils.HiltTestRunner"
+        testInstrumentationRunner = "eu.krzdabrowski.currencyadder.core.utils.HiltTestRunner"
     }
 
     buildFeatures {
