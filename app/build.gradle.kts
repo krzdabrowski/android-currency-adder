@@ -67,7 +67,7 @@ dependencies {
     kapt(libs.hilt.compiler)
     ksp(libs.room.compiler)
 
-    detektPlugins(libs.detekt.twitter.compose)
+    detektPlugins(libs.detekt.compose.rules)
 }
 
 ksp {

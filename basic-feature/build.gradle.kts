@@ -83,5 +83,5 @@ dependencies {
     kapt(libs.hilt.compiler)
     kaptAndroidTest(libs.test.android.hilt.compiler)
 
-    detektPlugins(libs.detekt.twitter.compose)
+    detektPlugins(libs.detekt.compose.rules)
 }
