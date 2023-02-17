@@ -1,10 +1,10 @@
 package eu.krzdabrowski.currencyadder.basicfeature.domain
 
 import app.cash.turbine.test
-import eu.krzdabrowski.currencyadder.basicfeature.domain.repository.RocketRepository
-import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.GetRocketsUseCase
-import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.getRockets
-import eu.krzdabrowski.currencyadder.basicfeature.generateTestRocketFromDomain
+import eu.krzdabrowski.currencyadder.basicfeature.domain.repository.ExchangeRatesRepository
+import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.GetExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.getExchangeRates
+import eu.krzdabrowski.currencyadder.basicfeature.generateTestExchangeRatesFromDomain
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -17,31 +17,31 @@ import java.io.IOException
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.test.assertEquals
 
-class GetRocketsUseCaseTest {
+class GetExchangeRatesUseCaseTest {
 
     @RelaxedMockK
-    private lateinit var rocketRepository: RocketRepository
+    private lateinit var exchangeRatesRepository: ExchangeRatesRepository
 
-    private lateinit var objectUnderTest: GetRocketsUseCase
+    private lateinit var objectUnderTest: GetExchangeRatesUseCase
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        setUpGetRocketsUseCase()
+        setUpGetExchangeRatesUseCase()
     }
 
     @Test
     fun `should wrap result with success if repository doesn't throw`() = runTest {
         // Given
-        val testRocketsFromDomain = listOf(generateTestRocketFromDomain())
-        coEvery { rocketRepository.getRockets() } returns flowOf(testRocketsFromDomain)
+        val testExchangeRatesFromDomain = listOf(generateTestExchangeRatesFromDomain())
+        coEvery { exchangeRatesRepository.getExchangeRates() } returns flowOf(testExchangeRatesFromDomain)
 
         // When-Then
         objectUnderTest.invoke().test {
             val result = awaitItem()
 
             assertEquals(
-                expected = Result.success(testRocketsFromDomain),
+                expected = Result.success(testExchangeRatesFromDomain),
                 actual = result
             )
             awaitComplete()
@@ -52,8 +52,8 @@ class GetRocketsUseCaseTest {
     fun `should retry operation if repository throws IOException`() = runTest {
         // Given
         val testException = IOException("Test message")
-        val testRocketsFromDomain = listOf(generateTestRocketFromDomain())
-        coEvery { rocketRepository.getRockets() } throws testException andThen flowOf(testRocketsFromDomain)
+        val testExchangeRatesFromDomain = listOf(generateTestExchangeRatesFromDomain())
+        coEvery { exchangeRatesRepository.getExchangeRates() } throws testException andThen flowOf(testExchangeRatesFromDomain)
 
         // When-Then
         assertThrows<IOException> {
@@ -68,7 +68,7 @@ class GetRocketsUseCaseTest {
                 val itemsResult = awaitItem()
 
                 assertEquals(
-                    expected = Result.success(testRocketsFromDomain),
+                    expected = Result.success(testExchangeRatesFromDomain),
                     actual = itemsResult
                 )
             }
@@ -78,7 +78,7 @@ class GetRocketsUseCaseTest {
     @Test
     fun `should rethrow if repository throws CancellationException`() = runTest {
         // Given
-        coEvery { rocketRepository.getRockets() } throws CancellationException()
+        coEvery { exchangeRatesRepository.getExchangeRates() } throws CancellationException()
 
         // When-Then
         assertThrows<CancellationException> {
@@ -90,7 +90,7 @@ class GetRocketsUseCaseTest {
     fun `should wrap result with failure if repository throws other Exception`() = runTest {
         // Given
         val testException = Exception("Test message")
-        coEvery { rocketRepository.getRockets() } throws testException
+        coEvery { exchangeRatesRepository.getExchangeRates() } throws testException
 
         // When-Then
         assertThrows<Exception> {
@@ -105,9 +105,9 @@ class GetRocketsUseCaseTest {
         }
     }
 
-    private fun setUpGetRocketsUseCase() {
-        objectUnderTest = GetRocketsUseCase {
-            getRockets(rocketRepository)
+    private fun setUpGetExchangeRatesUseCase() {
+        objectUnderTest = GetExchangeRatesUseCase {
+            getExchangeRates(exchangeRatesRepository)
         }
     }
 }

@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("String", "SPACEX_API_URL", "\"https://api.spacexdata.com/v4/\"")
+        buildConfigField("String", "NBP_API_URL", "\"https://api.nbp.pl/api/\"")
     }
 
     buildFeatures {

@@ -38,7 +38,7 @@ class RocketsRouteTest {
     fun rocketsRoute_whenHappyPath_shouldShowAllFakeRockets() {
         testRockets.forEach { rocket ->
             composeTestRule
-                .onNodeWithText(rocket.name)
+                .onNodeWithText(rocket.currencyCode)
                 .assertExists()
         }
     }

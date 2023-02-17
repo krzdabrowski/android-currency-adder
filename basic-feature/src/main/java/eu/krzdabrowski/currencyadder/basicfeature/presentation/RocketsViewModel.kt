@@ -2,8 +2,8 @@ package eu.krzdabrowski.currencyadder.basicfeature.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.GetRocketsUseCase
-import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.RefreshRocketsUseCase
+import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.GetExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basicfeature.presentation.RocketsEvent.OpenWebBrowserWithDetails
 import eu.krzdabrowski.currencyadder.basicfeature.presentation.RocketsIntent.GetRockets
 import eu.krzdabrowski.currencyadder.basicfeature.presentation.RocketsIntent.RefreshRockets
@@ -25,8 +25,8 @@ private const val HTTPS_PREFIX = "https"
 
 @HiltViewModel
 class RocketsViewModel @Inject constructor(
-    private val getRocketsUseCase: GetRocketsUseCase,
-    private val refreshRocketsUseCase: RefreshRocketsUseCase,
+    private val getExchangeRatesUseCase: GetExchangeRatesUseCase,
+    private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
     savedStateHandle: SavedStateHandle,
     rocketsInitialState: RocketsUiState
 ) : BaseViewModel<RocketsUiState, PartialState, RocketsEvent, RocketsIntent>(
@@ -63,7 +63,7 @@ class RocketsViewModel @Inject constructor(
     }
 
     private fun getRockets(): Flow<PartialState> = flow {
-        getRocketsUseCase()
+        getExchangeRatesUseCase()
             .onStart {
                 emit(Loading)
             }
@@ -79,7 +79,7 @@ class RocketsViewModel @Inject constructor(
     }
 
     private fun refreshRockets(): Flow<PartialState> = flow {
-        refreshRocketsUseCase()
+        refreshExchangeRatesUseCase()
             .onFailure {
                 emit(Error(it))
             }

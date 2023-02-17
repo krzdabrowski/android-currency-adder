@@ -1,34 +1,34 @@
 package eu.krzdabrowski.currencyadder.basicfeature.data
 
-import eu.krzdabrowski.currencyadder.basicfeature.domain.model.Rocket
-import eu.krzdabrowski.currencyadder.basicfeature.presentation.model.RocketDisplayable
+import eu.krzdabrowski.currencyadder.basicfeature.domain.model.ExchangeRate
+import eu.krzdabrowski.currencyadder.basicfeature.presentation.model.ExchangeRateDisplayable
 import java.time.LocalDate
 
 internal fun generateTestRocketsFromPresentation() = listOf(
-    RocketDisplayable(
+    ExchangeRateDisplayable(
         id = "1",
-        name = "test rocket",
-        costPerLaunchInMillions = 10,
+        currencyCode = "test rocket",
+        currencyRate = 10,
         firstFlightDate = "2022-09-25",
         heightInMeters = 20,
         weightInTonnes = 30,
         wikiUrl = "https://testrocket.com",
         imageUrl = ""
     ),
-    RocketDisplayable(
+    ExchangeRateDisplayable(
         id = "2",
-        name = "test rocket 2",
-        costPerLaunchInMillions = 20,
+        currencyCode = "test rocket 2",
+        currencyRate = 20,
         firstFlightDate = "2022-09-25",
         heightInMeters = 40,
         weightInTonnes = 50,
         wikiUrl = "https://testrocket.com",
         imageUrl = ""
     ),
-    RocketDisplayable(
+    ExchangeRateDisplayable(
         id = "3",
-        name = "test rocket 3",
-        costPerLaunchInMillions = 30,
+        currencyCode = "test rocket 3",
+        currencyRate = 30,
         firstFlightDate = "2022-09-25",
         heightInMeters = 60,
         weightInTonnes = 70,
@@ -38,30 +38,30 @@ internal fun generateTestRocketsFromPresentation() = listOf(
 )
 
 internal fun generateTestRocketsFromDomain() = listOf(
-    Rocket(
+    ExchangeRate(
         id = "1",
-        name = "test rocket",
-        costPerLaunch = 10_000_000,
+        currencyCode = "test rocket",
+        currencyRate = 10_000_000,
         firstFlight = LocalDate.parse("2022-09-25"),
         height = 20,
         weight = 30_000,
         wikiUrl = "https://testrocket.com",
         imageUrl = "https://testrocket.com/1.jpg"
     ),
-    Rocket(
+    ExchangeRate(
         id = "2",
-        name = "test rocket 2",
-        costPerLaunch = 20_000_000,
+        currencyCode = "test rocket 2",
+        currencyRate = 20_000_000,
         firstFlight = LocalDate.parse("2022-09-25"),
         height = 40,
         weight = 50_000,
         wikiUrl = "https://testrocket.com",
         imageUrl = "https://testrocket.com/2.jpg"
     ),
-    Rocket(
+    ExchangeRate(
         id = "3",
-        name = "test rocket 3",
-        costPerLaunch = 30_000_000,
+        currencyCode = "test rocket 3",
+        currencyRate = 30_000_000,
         firstFlight = LocalDate.parse("2022-09-25"),
         height = 60,
         weight = 70_000,

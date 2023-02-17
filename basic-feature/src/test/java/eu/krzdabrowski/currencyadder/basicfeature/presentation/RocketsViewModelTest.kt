@@ -2,9 +2,9 @@ package eu.krzdabrowski.currencyadder.basicfeature.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.GetRocketsUseCase
-import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.RefreshRocketsUseCase
-import eu.krzdabrowski.currencyadder.basicfeature.generateTestRocketFromDomain
+import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.GetExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.RefreshExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basicfeature.generateTestExchangeRatesFromDomain
 import eu.krzdabrowski.currencyadder.basicfeature.presentation.RocketsEvent.OpenWebBrowserWithDetails
 import eu.krzdabrowski.currencyadder.basicfeature.presentation.RocketsIntent.RefreshRockets
 import eu.krzdabrowski.currencyadder.basicfeature.presentation.RocketsIntent.RocketClicked
@@ -31,10 +31,10 @@ class RocketsViewModelTest {
     val mainDispatcherExtension = MainDispatcherExtension()
 
     @RelaxedMockK
-    private lateinit var getRocketsUseCase: GetRocketsUseCase
+    private lateinit var getExchangeRatesUseCase: GetExchangeRatesUseCase
 
     // there is some issue with mocking functional interface with kotlin.Result(Unit)
-    private val refreshRocketsUseCase: RefreshRocketsUseCase = RefreshRocketsUseCase {
+    private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase = RefreshExchangeRatesUseCase {
         Result.failure(IllegalStateException("Test error"))
     }
 
@@ -51,7 +51,7 @@ class RocketsViewModelTest {
     @Test
     fun `should show loading state with no error state first during init rockets retrieval`() = runTest {
         // Given
-        every { getRocketsUseCase() } returns emptyFlow()
+        every { getExchangeRatesUseCase() } returns emptyFlow()
         setUpRocketsViewModel()
 
         // When
@@ -69,9 +69,9 @@ class RocketsViewModelTest {
     @Test
     fun `should show fetched rockets with no loading & error state during init rockets retrieval success`() = runTest {
         // Given
-        val testRocketsFromDomain = listOf(generateTestRocketFromDomain())
+        val testRocketsFromDomain = listOf(generateTestExchangeRatesFromDomain())
         val testRocketsToPresentation = testRocketsFromDomain.map { it.toPresentationModel() }
-        every { getRocketsUseCase() } returns flowOf(
+        every { getExchangeRatesUseCase() } returns flowOf(
             Result.success(testRocketsFromDomain)
         )
         setUpRocketsViewModel()
@@ -95,7 +95,7 @@ class RocketsViewModelTest {
     @Test
     fun `should show error state with no loading state during init rockets retrieval failure`() = runTest {
         // Given
-        every { getRocketsUseCase() } returns flowOf(
+        every { getExchangeRatesUseCase() } returns flowOf(
             Result.failure(IllegalStateException("Test error"))
         )
         setUpRocketsViewModel()
@@ -115,9 +115,9 @@ class RocketsViewModelTest {
     @Test
     fun `should show error state with previously fetched rockets during rockets refresh failure`() = runTest {
         // Given
-        val testRocketsFromDomain = listOf(generateTestRocketFromDomain())
+        val testRocketsFromDomain = listOf(generateTestExchangeRatesFromDomain())
         val testRocketsToPresentation = testRocketsFromDomain.map { it.toPresentationModel() }
-        every { getRocketsUseCase() } returns flowOf(
+        every { getExchangeRatesUseCase() } returns flowOf(
             Result.success(testRocketsFromDomain)
         )
         setUpRocketsViewModel()
@@ -141,7 +141,7 @@ class RocketsViewModelTest {
     fun `should open web browser if link has proper prefix`() = runTest {
         // Given
         val testUri = "https://testrocket.com"
-        every { getRocketsUseCase() } returns emptyFlow()
+        every { getExchangeRatesUseCase() } returns emptyFlow()
         setUpRocketsViewModel()
 
         // When
@@ -160,7 +160,7 @@ class RocketsViewModelTest {
     fun `should not open web browser if link is incorrect`() = runTest {
         // Given
         val testUri = "incorrectlink.com"
-        every { getRocketsUseCase() } returns emptyFlow()
+        every { getExchangeRatesUseCase() } returns emptyFlow()
         setUpRocketsViewModel()
 
         // When
@@ -176,8 +176,8 @@ class RocketsViewModelTest {
         initialUiState: RocketsUiState = RocketsUiState()
     ) {
         objectUnderTest = RocketsViewModel(
-            getRocketsUseCase,
-            refreshRocketsUseCase,
+            getExchangeRatesUseCase,
+            refreshExchangeRatesUseCase,
             savedStateHandle,
             initialUiState
         )

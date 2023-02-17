@@ -9,13 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import eu.krzdabrowski.currencyadder.basicfeature.R
-import eu.krzdabrowski.currencyadder.basicfeature.presentation.model.RocketDisplayable
+import eu.krzdabrowski.currencyadder.basicfeature.presentation.model.ExchangeRateDisplayable
 
 const val ROCKET_DIVIDER_TEST_TAG = "rocketDividerTestTag"
 
 @Composable
 fun RocketsListContent(
-    rocketList: List<RocketDisplayable>,
+    rocketList: List<ExchangeRateDisplayable>,
     modifier: Modifier = Modifier,
     onRocketClick: (String) -> Unit
 ) {
@@ -27,11 +27,11 @@ fun RocketsListContent(
     ) {
         itemsIndexed(
             items = rocketList,
-            key = { _, rocket -> rocket.id }
+            key = { _, rocket -> rocket.currencyCode }
         ) { index, item ->
             RocketItem(
                 rocket = item,
-                onRocketClick = { onRocketClick(item.wikiUrl) }
+                onRocketClick = { onRocketClick("") }
             )
 
             if (index < rocketList.lastIndex) {

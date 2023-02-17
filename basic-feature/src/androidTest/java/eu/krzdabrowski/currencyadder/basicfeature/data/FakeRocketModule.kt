@@ -4,22 +4,22 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import eu.krzdabrowski.currencyadder.basicfeature.data.di.RocketModule
-import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.GetRocketsUseCase
-import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.RefreshRocketsUseCase
+import eu.krzdabrowski.currencyadder.basicfeature.data.di.ExchangeRatesModule
+import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.GetExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.core.extensions.resultOf
 import kotlinx.coroutines.flow.flowOf
 
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [RocketModule::class]
+    replaces = [ExchangeRatesModule::class]
 )
 object FakeRocketModule {
 
     @Provides
-    fun provideFakeGetRocketsUseCase(): GetRocketsUseCase {
-        return GetRocketsUseCase {
+    fun provideFakeGetRocketsUseCase(): GetExchangeRatesUseCase {
+        return GetExchangeRatesUseCase {
             flowOf(
                 Result.success(generateTestRocketsFromDomain())
             )
@@ -27,8 +27,8 @@ object FakeRocketModule {
     }
 
     @Provides
-    fun provideNoopRefreshRocketsUseCase(): RefreshRocketsUseCase {
-        return RefreshRocketsUseCase {
+    fun provideNoopRefreshRocketsUseCase(): RefreshExchangeRatesUseCase {
+        return RefreshExchangeRatesUseCase {
             resultOf { }
         }
     }

@@ -1,7 +1,7 @@
 package eu.krzdabrowski.currencyadder.basicfeature.domain.usecase
 
-import eu.krzdabrowski.currencyadder.basicfeature.domain.model.Rocket
-import eu.krzdabrowski.currencyadder.basicfeature.domain.repository.RocketRepository
+import eu.krzdabrowski.currencyadder.basicfeature.domain.model.ExchangeRate
+import eu.krzdabrowski.currencyadder.basicfeature.domain.repository.ExchangeRatesRepository
 import eu.krzdabrowski.currencyadder.core.extensions.resultOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -12,12 +12,12 @@ import java.io.IOException
 
 private const val RETRY_TIME_IN_MILLIS = 15_000L
 
-fun interface GetRocketsUseCase : () -> Flow<Result<List<Rocket>>>
+fun interface GetExchangeRatesUseCase : () -> Flow<Result<List<ExchangeRate>>>
 
-fun getRockets(
-    rocketRepository: RocketRepository
-): Flow<Result<List<Rocket>>> = rocketRepository
-    .getRockets()
+fun getExchangeRates(
+    exchangeRatesRepository: ExchangeRatesRepository
+): Flow<Result<List<ExchangeRate>>> = exchangeRatesRepository
+    .getExchangeRates()
     .map {
         resultOf { it }
     }

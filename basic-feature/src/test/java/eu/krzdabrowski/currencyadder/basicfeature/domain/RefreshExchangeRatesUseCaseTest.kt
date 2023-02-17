@@ -1,8 +1,8 @@
 package eu.krzdabrowski.currencyadder.basicfeature.domain
 
-import eu.krzdabrowski.currencyadder.basicfeature.domain.repository.RocketRepository
-import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.RefreshRocketsUseCase
-import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.refreshRockets
+import eu.krzdabrowski.currencyadder.basicfeature.domain.repository.ExchangeRatesRepository
+import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.RefreshExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basicfeature.domain.usecase.refreshExchangeRates
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -15,23 +15,23 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 
-class RefreshRocketsUseCaseTest {
+class RefreshExchangeRatesUseCaseTest {
 
     @RelaxedMockK
-    private lateinit var rocketRepository: RocketRepository
+    private lateinit var exchangeRatesRepository: ExchangeRatesRepository
 
-    private lateinit var objectUnderTest: RefreshRocketsUseCase
+    private lateinit var objectUnderTest: RefreshExchangeRatesUseCase
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        setUpRefreshRocketsUseCase()
+        setUpRefreshExchangeRatesUseCase()
     }
 
     @Test
     fun `should wrap result with success if repository doesn't throw`() = runTest {
         // Given
-        coEvery { rocketRepository.refreshRockets() } just Runs
+        coEvery { exchangeRatesRepository.refreshExchangeRates() } just Runs
 
         // When
         val result = objectUnderTest.invoke()
@@ -46,7 +46,7 @@ class RefreshRocketsUseCaseTest {
     @Test
     fun `should rethrow if repository throws CancellationException`() = runTest {
         // Given
-        coEvery { rocketRepository.refreshRockets() } throws CancellationException()
+        coEvery { exchangeRatesRepository.refreshExchangeRates() } throws CancellationException()
 
         // When-Then
         assertThrows<CancellationException> {
@@ -58,7 +58,7 @@ class RefreshRocketsUseCaseTest {
     fun `should wrap result with failure if repository throws other Throwable`() = runTest {
         // Given
         val testException = Throwable("Test message")
-        coEvery { rocketRepository.refreshRockets() } throws testException
+        coEvery { exchangeRatesRepository.refreshExchangeRates() } throws testException
 
         // When-Then
         assertThrows<Throwable> {
@@ -71,9 +71,9 @@ class RefreshRocketsUseCaseTest {
         }
     }
 
-    private fun setUpRefreshRocketsUseCase() {
-        objectUnderTest = RefreshRocketsUseCase {
-            refreshRockets(rocketRepository)
+    private fun setUpRefreshExchangeRatesUseCase() {
+        objectUnderTest = RefreshExchangeRatesUseCase {
+            refreshExchangeRates(exchangeRatesRepository)
         }
     }
 }

@@ -13,12 +13,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import eu.krzdabrowski.currencyadder.basicfeature.R
-import eu.krzdabrowski.currencyadder.basicfeature.presentation.model.RocketDisplayable
+import eu.krzdabrowski.currencyadder.basicfeature.presentation.model.ExchangeRateDisplayable
 import eu.krzdabrowski.currencyadder.core.ui.Typography
 
 @Composable
 fun RocketItem(
-    rocket: RocketDisplayable,
+    rocket: ExchangeRateDisplayable,
     modifier: Modifier = Modifier,
     onRocketClick: () -> Unit
 ) {
@@ -41,39 +41,12 @@ fun RocketItem(
             )
         ) {
             Text(
-                text = rocket.name,
+                text = rocket.currencyCode,
                 style = Typography.titleMedium
             )
 
             Text(
-                text = stringResource(
-                    id = R.string.rocket_cost_per_launch,
-                    rocket.costPerLaunchInMillions
-                ),
-                style = Typography.bodyMedium
-            )
-
-            Text(
-                text = stringResource(
-                    id = R.string.rocket_first_flight,
-                    rocket.firstFlightDate
-                ),
-                style = Typography.bodyMedium
-            )
-
-            Text(
-                text = stringResource(
-                    id = R.string.rocket_height,
-                    rocket.heightInMeters
-                ),
-                style = Typography.bodyMedium
-            )
-
-            Text(
-                text = stringResource(
-                    id = R.string.rocket_weight,
-                    rocket.weightInTonnes
-                ),
+                text = rocket.currencyRate,
                 style = Typography.bodyMedium
             )
         }
