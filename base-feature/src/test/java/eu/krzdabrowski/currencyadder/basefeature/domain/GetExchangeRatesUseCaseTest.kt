@@ -53,7 +53,9 @@ class GetExchangeRatesUseCaseTest {
         // Given
         val testException = IOException("Test message")
         val testExchangeRatesFromDomain = listOf(generateTestExchangeRatesFromDomain())
-        coEvery { exchangeRatesRepository.getExchangeRates() } throws testException andThen flowOf(testExchangeRatesFromDomain)
+        coEvery {
+            exchangeRatesRepository.getExchangeRates()
+        } throws testException andThen flowOf(testExchangeRatesFromDomain)
 
         // When-Then
         assertThrows<IOException> {

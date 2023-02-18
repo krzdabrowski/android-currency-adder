@@ -8,8 +8,10 @@ import dagger.hilt.components.SingletonComponent
 import eu.krzdabrowski.currencyadder.basefeature.data.remote.api.ExchangeRatesApi
 import eu.krzdabrowski.currencyadder.basefeature.data.repository.ExchangeRatesRepositoryImpl
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRatesRepository
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.GetCurrencyCodesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.GetExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.RefreshExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.getCurrencyCodes
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.getExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.refreshExchangeRates
 import retrofit2.Retrofit
@@ -33,6 +35,15 @@ object ExchangeRatesModule {
     ): GetExchangeRatesUseCase {
         return GetExchangeRatesUseCase {
             getExchangeRates(exchangeRatesRepository)
+        }
+    }
+
+    @Provides
+    fun provideGetCurrencyCodesUseCase(
+        exchangeRatesRepository: ExchangeRatesRepository
+    ): GetCurrencyCodesUseCase {
+        return GetCurrencyCodesUseCase {
+            getCurrencyCodes(exchangeRatesRepository)
         }
     }
 

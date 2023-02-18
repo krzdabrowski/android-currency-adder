@@ -9,7 +9,7 @@ internal fun generateTestExchangeRatesFromRemote() = ExchangeRatesResponse(
             code = "USD",
             rate = 4.5276
         )
-    ),
+    )
 )
 
 internal fun generateTestExchangeRatesFromDomain() = ExchangeRate(
