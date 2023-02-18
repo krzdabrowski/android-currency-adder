@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.ExchangeRatesDao
+import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.UserSavingsDao
 import javax.inject.Singleton
 
 private const val APP_DATABASE_NAME = "app_database_name"
@@ -32,5 +33,11 @@ object DatabaseModule {
     @Provides
     fun provideExchangeRatesDao(database: AppDatabase): ExchangeRatesDao {
         return database.exchangeRatesDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserSavingsDao(database: AppDatabase): UserSavingsDao {
+        return database.userSavingsDao()
     }
 }
