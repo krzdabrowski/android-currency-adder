@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 include(":app")
-include(":basic-feature")
+include(":base-feature")
 include(":core")
 
 pluginManagement {

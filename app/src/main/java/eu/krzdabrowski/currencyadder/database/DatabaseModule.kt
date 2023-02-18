@@ -7,7 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import eu.krzdabrowski.currencyadder.basicfeature.data.local.dao.ExchangeRatesDao
+import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.ExchangeRatesDao
 import javax.inject.Singleton
 
 private const val APP_DATABASE_NAME = "app_database_name"

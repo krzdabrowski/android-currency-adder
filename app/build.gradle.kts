@@ -57,7 +57,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":basic-feature"))
+    implementation(project(":base-feature"))
 
     implementation(libs.hilt)
     implementation(libs.navigation) // needed for Room
