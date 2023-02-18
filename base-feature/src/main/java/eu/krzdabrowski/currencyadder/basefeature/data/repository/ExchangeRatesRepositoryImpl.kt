@@ -23,14 +23,19 @@ class ExchangeRatesRepositoryImpl @Inject constructor(
     override fun getExchangeRates(): Flow<List<ExchangeRate>> {
         return exchangeRatesDao
             .getExchangeRates()
-            .map { exchangeRateCached ->
-                exchangeRateCached.map { it.toDomainModel() }
+            .map { exchangeRates ->
+                exchangeRates.map { it.toDomainModel() }
             }
             .onEach { exchangeRates ->
                 if (exchangeRates.isEmpty()) {
                     refreshExchangeRates()
                 }
             }
+    }
+
+    override suspend fun getCurrencyCodes(): List<String> {
+        return exchangeRatesDao
+            .getCurrencyCodes()
     }
 
     override suspend fun refreshExchangeRates() {
