@@ -14,8 +14,8 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.model.ExchangeRate
 const val ROCKET_DIVIDER_TEST_TAG = "rocketDividerTestTag"
 
 @Composable
-fun RocketsListContent(
-    rocketList: List<ExchangeRateDisplayable>,
+fun CurrencyAdderListContent(
+    exchangeRateList: List<ExchangeRateDisplayable>,
     modifier: Modifier = Modifier,
     onRocketClick: (String) -> Unit
 ) {
@@ -26,15 +26,15 @@ fun RocketsListContent(
             )
     ) {
         itemsIndexed(
-            items = rocketList,
+            items = exchangeRateList,
             key = { _, rocket -> rocket.currencyCode }
         ) { index, item ->
-            RocketItem(
-                rocket = item,
+            UserSavingItem(
+                exchangeRate = item,
                 onRocketClick = { onRocketClick("") }
             )
 
-            if (index < rocketList.lastIndex) {
+            if (index < exchangeRateList.lastIndex) {
                 Divider(
                     modifier = Modifier.testTag(ROCKET_DIVIDER_TEST_TAG)
                 )

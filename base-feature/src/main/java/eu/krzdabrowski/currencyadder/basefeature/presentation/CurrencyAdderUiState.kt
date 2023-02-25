@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Immutable
 @Parcelize
-data class RocketsUiState(
+data class CurrencyAdderUiState(
     val isLoading: Boolean = false,
     val rockets: List<ExchangeRateDisplayable> = emptyList(),
     val isError: Boolean = false

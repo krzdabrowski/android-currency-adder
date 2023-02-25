@@ -15,24 +15,24 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import eu.krzdabrowski.currencyadder.basefeature.R
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsEvent
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsEvent.OpenWebBrowserWithDetails
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsIntent.RefreshRockets
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsIntent.RocketClicked
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsUiState
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsViewModel
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent.OpenWebBrowserWithDetails
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshRockets
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RocketClicked
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderViewModel
 import eu.krzdabrowski.currencyadder.core.extensions.collectAsStateWithLifecycle
 import eu.krzdabrowski.currencyadder.core.extensions.collectWithLifecycle
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun RocketsRoute(
-    viewModel: RocketsViewModel = hiltViewModel()
+fun CurrencyAdderRoute(
+    viewModel: CurrencyAdderViewModel = hiltViewModel()
 ) {
     HandleEvents(viewModel.event)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    RocketsScreen(
+    CurrencyAdderScreen(
         uiState = uiState,
         onRefreshRockets = {
             viewModel.acceptIntent(RefreshRockets)
@@ -44,8 +44,8 @@ fun RocketsRoute(
 }
 
 @Composable
-internal fun RocketsScreen(
-    uiState: RocketsUiState,
+internal fun CurrencyAdderScreen(
+    uiState: CurrencyAdderUiState,
     onRefreshRockets: () -> Unit,
     onRocketClicked: (String) -> Unit
 ) {
@@ -62,13 +62,13 @@ internal fun RocketsScreen(
                 .padding(it)
         ) {
             if (uiState.rockets.isNotEmpty()) {
-                RocketsAvailableContent(
+                CurrencyAdderAvailableContent(
                     snackbarHostState = snackbarHostState,
                     uiState = uiState,
                     onRocketClick = onRocketClicked
                 )
             } else {
-                RocketsNotAvailableContent(
+                CurrencyAdderNotAvailableContent(
                     uiState = uiState
                 )
             }
@@ -77,7 +77,7 @@ internal fun RocketsScreen(
 }
 
 @Composable
-private fun HandleEvents(events: Flow<RocketsEvent>) {
+private fun HandleEvents(events: Flow<CurrencyAdderEvent>) {
     val uriHandler = LocalUriHandler.current
 
     events.collectWithLifecycle {
@@ -90,9 +90,9 @@ private fun HandleEvents(events: Flow<RocketsEvent>) {
 }
 
 @Composable
-private fun RocketsAvailableContent(
+private fun CurrencyAdderAvailableContent(
     snackbarHostState: SnackbarHostState,
-    uiState: RocketsUiState,
+    uiState: CurrencyAdderUiState,
     onRocketClick: (String) -> Unit
 ) {
     if (uiState.isError) {
@@ -105,16 +105,16 @@ private fun RocketsAvailableContent(
         }
     }
 
-    RocketsListContent(
-        rocketList = uiState.rockets,
+    CurrencyAdderListContent(
+        exchangeRateList = uiState.rockets,
         onRocketClick = { onRocketClick(it) }
     )
 }
 
 @Composable
-private fun RocketsNotAvailableContent(uiState: RocketsUiState) {
+private fun CurrencyAdderNotAvailableContent(uiState: CurrencyAdderUiState) {
     when {
-        uiState.isLoading -> RocketsLoadingPlaceholder()
-        uiState.isError -> RocketsErrorContent()
+        uiState.isLoading -> CurrencyAdderLoadingPlaceholder()
+        uiState.isError -> CurrencyAdderErrorContent()
     }
 }

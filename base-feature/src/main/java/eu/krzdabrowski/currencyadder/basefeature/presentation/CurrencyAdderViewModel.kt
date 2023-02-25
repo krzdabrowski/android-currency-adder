@@ -4,14 +4,14 @@ import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsEvent.OpenWebBrowserWithDetails
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsIntent.GetRockets
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsIntent.RefreshRockets
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsIntent.RocketClicked
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsUiState.PartialState
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsUiState.PartialState.Error
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsUiState.PartialState.Fetched
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsUiState.PartialState.Loading
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent.OpenWebBrowserWithDetails
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.GetRockets
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshRockets
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RocketClicked
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.Error
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.Fetched
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.Loading
 import eu.krzdabrowski.currencyadder.basefeature.presentation.mapper.toPresentationModel
 import eu.krzdabrowski.currencyadder.core.base.BaseViewModel
 import kotlinx.coroutines.flow.Flow
@@ -24,29 +24,29 @@ private const val HTTP_PREFIX = "http"
 private const val HTTPS_PREFIX = "https"
 
 @HiltViewModel
-class RocketsViewModel @Inject constructor(
+class CurrencyAdderViewModel @Inject constructor(
     private val getExchangeRatesUseCase: GetExchangeRatesUseCase,
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
     savedStateHandle: SavedStateHandle,
-    rocketsInitialState: RocketsUiState
-) : BaseViewModel<RocketsUiState, PartialState, RocketsEvent, RocketsIntent>(
+    currencyAdderInitialState: CurrencyAdderUiState
+) : BaseViewModel<CurrencyAdderUiState, PartialState, CurrencyAdderEvent, CurrencyAdderIntent>(
     savedStateHandle,
-    rocketsInitialState
+    currencyAdderInitialState
 ) {
     init {
         acceptIntent(GetRockets)
     }
 
-    override fun mapIntents(intent: RocketsIntent): Flow<PartialState> = when (intent) {
+    override fun mapIntents(intent: CurrencyAdderIntent): Flow<PartialState> = when (intent) {
         is GetRockets -> getRockets()
         is RefreshRockets -> refreshRockets()
         is RocketClicked -> rocketClicked(intent.uri)
     }
 
     override fun reduceUiState(
-        previousState: RocketsUiState,
+        previousState: CurrencyAdderUiState,
         partialState: PartialState
-    ): RocketsUiState = when (partialState) {
+    ): CurrencyAdderUiState = when (partialState) {
         is Loading -> previousState.copy(
             isLoading = true,
             isError = false

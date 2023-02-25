@@ -5,9 +5,9 @@ import app.cash.turbine.test
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.GetExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.generateTestExchangeRatesFromDomain
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsEvent.OpenWebBrowserWithDetails
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsIntent.RefreshRockets
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsIntent.RocketClicked
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent.OpenWebBrowserWithDetails
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshRockets
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RocketClicked
 import eu.krzdabrowski.currencyadder.basefeature.presentation.mapper.toPresentationModel
 import eu.krzdabrowski.currencyadder.core.utils.MainDispatcherExtension
 import io.mockk.MockKAnnotations
@@ -24,7 +24,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class RocketsViewModelTest {
+class CurrencyAdderViewModelTest {
 
     @JvmField
     @RegisterExtension
@@ -41,7 +41,7 @@ class RocketsViewModelTest {
     @SpyK
     private var savedStateHandle = SavedStateHandle()
 
-    private lateinit var objectUnderTest: RocketsViewModel
+    private lateinit var objectUnderTest: CurrencyAdderViewModel
 
     @BeforeEach
     fun setUp() {
@@ -173,9 +173,9 @@ class RocketsViewModelTest {
     }
 
     private fun setUpRocketsViewModel(
-        initialUiState: RocketsUiState = RocketsUiState()
+        initialUiState: CurrencyAdderUiState = CurrencyAdderUiState()
     ) {
-        objectUnderTest = RocketsViewModel(
+        objectUnderTest = CurrencyAdderViewModel(
             getExchangeRatesUseCase,
             refreshExchangeRatesUseCase,
             savedStateHandle,

@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import eu.krzdabrowski.currencyadder.basefeature.R
 
 @Composable
-fun RocketsErrorContent(
+fun CurrencyAdderErrorContent(
     modifier: Modifier = Modifier
 ) {
     Box(

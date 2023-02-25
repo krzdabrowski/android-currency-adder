@@ -6,7 +6,7 @@ import androidx.compose.ui.test.onNodeWithText
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import eu.krzdabrowski.currencyadder.basefeature.data.generateTestRocketsFromDomain
-import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.RocketsRoute
+import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.CurrencyAdderRoute
 import eu.krzdabrowski.currencyadder.core.MainActivity
 import eu.krzdabrowski.currencyadder.core.utils.getHiltTestViewModel
 import org.junit.Before
@@ -14,7 +14,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @HiltAndroidTest
-class RocketsRouteTest {
+class CurrencyAdderRouteTest {
 
     @get:Rule(order = 0)
     val hiltTestRule = HiltAndroidRule(this)
@@ -28,7 +28,7 @@ class RocketsRouteTest {
     fun setUp() {
         hiltTestRule.inject()
         composeTestRule.activity.setContent {
-            RocketsRoute(
+            CurrencyAdderRoute(
                 viewModel = composeTestRule.getHiltTestViewModel()
             )
         }

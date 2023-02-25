@@ -5,12 +5,12 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import eu.krzdabrowski.currencyadder.basefeature.data.generateTestRocketsFromPresentation
 import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.ROCKET_DIVIDER_TEST_TAG
-import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.RocketsListContent
+import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.CurrencyAdderListContent
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class RocketsListContentTest {
+class CurrencyAdderListContentTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -20,8 +20,8 @@ class RocketsListContentTest {
     @Before
     fun setUp() {
         composeTestRule.setContent {
-            RocketsListContent(
-                rocketList = testRockets,
+            CurrencyAdderListContent(
+                exchangeRateList = testRockets,
                 onRocketClick = { }
             )
         }

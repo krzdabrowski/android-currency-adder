@@ -7,25 +7,25 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsNavigationFactory
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsUiState
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderNavigationFactory
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
 import eu.krzdabrowski.currencyadder.core.navigation.NavigationFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object RocketsViewModelModule {
+object CurrencyAdderViewModelModule {
 
     @Provides
-    fun provideInitialRocketsUiState(): RocketsUiState = RocketsUiState()
+    fun provideInitialCurrencyAdderUiState(): CurrencyAdderUiState = CurrencyAdderUiState()
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface RocketsSingletonModule {
+interface CurrencyAdderSingletonModule {
 
     @Singleton
     @Binds
     @IntoSet
-    fun bindRocketsNavigationFactory(factory: RocketsNavigationFactory): NavigationFactory
+    fun bindCurrencyAdderNavigationFactory(factory: CurrencyAdderNavigationFactory): NavigationFactory
 }

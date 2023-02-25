@@ -17,8 +17,8 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.model.ExchangeRate
 import eu.krzdabrowski.currencyadder.core.ui.Typography
 
 @Composable
-fun RocketItem(
-    rocket: ExchangeRateDisplayable,
+fun UserSavingItem(
+    exchangeRate: ExchangeRateDisplayable,
     modifier: Modifier = Modifier,
     onRocketClick: () -> Unit
 ) {
@@ -41,12 +41,12 @@ fun RocketItem(
             )
         ) {
             Text(
-                text = rocket.currencyCode,
+                text = exchangeRate.currencyCode,
                 style = Typography.titleMedium
             )
 
             Text(
-                text = rocket.currencyRate,
+                text = exchangeRate.currencyRate,
                 style = Typography.bodyMedium
             )
         }

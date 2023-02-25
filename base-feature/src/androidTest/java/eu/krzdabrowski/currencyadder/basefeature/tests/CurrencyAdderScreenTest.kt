@@ -7,13 +7,13 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.data.generateTestRocketsFromPresentation
-import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsUiState
-import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.RocketsScreen
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
+import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.CurrencyAdderScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class RocketsScreenTest {
+class CurrencyAdderScreenTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
@@ -36,7 +36,7 @@ class RocketsScreenTest {
     @Test
     fun rocketsScreen_whenContentAvailableAndErrorOccurs_shouldKeepContent() {
         setUpComposable(
-            RocketsUiState(
+            CurrencyAdderUiState(
                 rockets = testRockets,
                 isError = true
             )
@@ -50,7 +50,7 @@ class RocketsScreenTest {
     @Test
     fun rocketsScreen_whenContentAvailableAndErrorOccurs_shouldShowErrorSnackbar() {
         setUpComposable(
-            RocketsUiState(
+            CurrencyAdderUiState(
                 rockets = testRockets,
                 isError = true
             )
@@ -64,7 +64,7 @@ class RocketsScreenTest {
     @Test
     fun rocketsScreen_whenContentNotAvailableAndErrorOccurs_shouldHaveErrorContent() {
         setUpComposable(
-            RocketsUiState(isError = true)
+            CurrencyAdderUiState(isError = true)
         )
 
         composeTestRule
@@ -73,11 +73,11 @@ class RocketsScreenTest {
     }
 
     private fun setUpComposable(
-        rocketsUiState: RocketsUiState
+        currencyAdderUiState: CurrencyAdderUiState
     ) {
         composeTestRule.setContent {
-            RocketsScreen(
-                uiState = rocketsUiState,
+            CurrencyAdderScreen(
+                uiState = currencyAdderUiState,
                 onRefreshRockets = { },
                 onRocketClicked = { }
             )
