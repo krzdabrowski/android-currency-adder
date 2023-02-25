@@ -1,9 +1,11 @@
 package eu.krzdabrowski.currencyadder.basefeature.presentation.mapper
 
-import eu.krzdabrowski.currencyadder.basefeature.domain.model.ExchangeRate
-import eu.krzdabrowski.currencyadder.basefeature.presentation.model.ExchangeRateDisplayable
+import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
 
-fun ExchangeRate.toPresentationModel() = ExchangeRateDisplayable(
-    currencyCode = currencyCode,
-    currencyRate = currencyRate.toString()
+fun UserSaving.toPresentationModel() = UserSavingDisplayable(
+    id = id,
+    location = location,
+    saving = saving.toString(),
+    currency = currency
 )

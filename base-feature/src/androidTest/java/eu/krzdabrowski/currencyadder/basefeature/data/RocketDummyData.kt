@@ -1,11 +1,11 @@
 package eu.krzdabrowski.currencyadder.basefeature.data
 
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.ExchangeRate
-import eu.krzdabrowski.currencyadder.basefeature.presentation.model.ExchangeRateDisplayable
+import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
 import java.time.LocalDate
 
 internal fun generateTestRocketsFromPresentation() = listOf(
-    ExchangeRateDisplayable(
+    UserSavingDisplayable(
         id = "1",
         currencyCode = "test rocket",
         currencyRate = 10,
@@ -15,7 +15,7 @@ internal fun generateTestRocketsFromPresentation() = listOf(
         wikiUrl = "https://testrocket.com",
         imageUrl = ""
     ),
-    ExchangeRateDisplayable(
+    UserSavingDisplayable(
         id = "2",
         currencyCode = "test rocket 2",
         currencyRate = 20,
@@ -25,7 +25,7 @@ internal fun generateTestRocketsFromPresentation() = listOf(
         wikiUrl = "https://testrocket.com",
         imageUrl = ""
     ),
-    ExchangeRateDisplayable(
+    UserSavingDisplayable(
         id = "3",
         currencyCode = "test rocket 3",
         currencyRate = 30,

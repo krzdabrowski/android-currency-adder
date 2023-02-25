@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent.OpenWebBrowserWithDetails
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.GetRockets
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshRockets
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RocketClicked
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.GetUserSavings
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshExchangeRates
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UserSavingAmountChanged
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UserSavingCurrencyClicked
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UserSavingLocationChanged
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.Error
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.Fetched
@@ -25,7 +27,7 @@ private const val HTTPS_PREFIX = "https"
 
 @HiltViewModel
 class CurrencyAdderViewModel @Inject constructor(
-    private val getExchangeRatesUseCase: GetExchangeRatesUseCase,
+    private val getUserSavingsUseCase: GetUserSavingsUseCase,
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
     savedStateHandle: SavedStateHandle,
     currencyAdderInitialState: CurrencyAdderUiState
@@ -34,13 +36,16 @@ class CurrencyAdderViewModel @Inject constructor(
     currencyAdderInitialState
 ) {
     init {
-        acceptIntent(GetRockets)
+        acceptIntent(RefreshExchangeRates)
+        acceptIntent(GetUserSavings)
     }
 
     override fun mapIntents(intent: CurrencyAdderIntent): Flow<PartialState> = when (intent) {
-        is GetRockets -> getRockets()
-        is RefreshRockets -> refreshRockets()
-        is RocketClicked -> rocketClicked(intent.uri)
+        is GetUserSavings -> getUserSavings()
+        is RefreshExchangeRates -> refreshExchangeRates()
+        is UserSavingCurrencyClicked -> userSavingCurrencyClicked(intent.userSavingId)
+        is UserSavingAmountChanged -> emptyFlow()
+        is UserSavingLocationChanged -> emptyFlow()
     }
 
     override fun reduceUiState(
@@ -53,7 +58,7 @@ class CurrencyAdderViewModel @Inject constructor(
         )
         is Fetched -> previousState.copy(
             isLoading = false,
-            rockets = partialState.list,
+            userSavings = partialState.list,
             isError = false
         )
         is Error -> previousState.copy(
@@ -62,15 +67,15 @@ class CurrencyAdderViewModel @Inject constructor(
         )
     }
 
-    private fun getRockets(): Flow<PartialState> = flow {
-        getExchangeRatesUseCase()
+    private fun getUserSavings(): Flow<PartialState> = flow {
+        getUserSavingsUseCase()
             .onStart {
                 emit(Loading)
             }
             .collect { result ->
                 result
-                    .onSuccess { rocketList ->
-                        emit(Fetched(rocketList.map { it.toPresentationModel() }))
+                    .onSuccess { userSavingList ->
+                        emit(Fetched(userSavingList.map { it.toPresentationModel() }))
                     }
                     .onFailure {
                         emit(Error(it))
@@ -78,18 +83,14 @@ class CurrencyAdderViewModel @Inject constructor(
             }
     }
 
-    private fun refreshRockets(): Flow<PartialState> = flow {
+    private fun refreshExchangeRates(): Flow<PartialState> = flow {
         refreshExchangeRatesUseCase()
             .onFailure {
                 emit(Error(it))
             }
     }
 
-    private fun rocketClicked(uri: String): Flow<PartialState> {
-        if (uri.startsWith(HTTP_PREFIX) || uri.startsWith(HTTPS_PREFIX)) {
-            publishEvent(OpenWebBrowserWithDetails(uri))
-        }
-
+    private fun userSavingCurrencyClicked(userSavingId: Int): Flow<PartialState> {
         return emptyFlow()
     }
 }

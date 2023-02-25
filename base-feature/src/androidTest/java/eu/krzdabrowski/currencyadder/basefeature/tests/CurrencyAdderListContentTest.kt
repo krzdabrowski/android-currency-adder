@@ -4,7 +4,7 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import eu.krzdabrowski.currencyadder.basefeature.data.generateTestRocketsFromPresentation
-import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.ROCKET_DIVIDER_TEST_TAG
+import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.USER_SAVING_DIVIDER_TEST_TAG
 import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.CurrencyAdderListContent
 import org.junit.Before
 import org.junit.Rule
@@ -21,8 +21,8 @@ class CurrencyAdderListContentTest {
     fun setUp() {
         composeTestRule.setContent {
             CurrencyAdderListContent(
-                exchangeRateList = testRockets,
-                onRocketClick = { }
+                userSavingList = testRockets,
+                onUserSavingClick = { }
             )
         }
     }
@@ -32,7 +32,7 @@ class CurrencyAdderListContentTest {
         val expectedDividerCount = testRockets.size - 1
 
         composeTestRule
-            .onAllNodesWithTag(ROCKET_DIVIDER_TEST_TAG)
+            .onAllNodesWithTag(USER_SAVING_DIVIDER_TEST_TAG)
             .assertCountEquals(expectedDividerCount)
     }
 }

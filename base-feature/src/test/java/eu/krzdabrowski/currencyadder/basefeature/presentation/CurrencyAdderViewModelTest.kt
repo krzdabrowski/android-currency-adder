@@ -6,8 +6,8 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.GetExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.generateTestExchangeRatesFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent.OpenWebBrowserWithDetails
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshRockets
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RocketClicked
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshExchangeRates
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UserSavingCurrencyClicked
 import eu.krzdabrowski.currencyadder.basefeature.presentation.mapper.toPresentationModel
 import eu.krzdabrowski.currencyadder.core.utils.MainDispatcherExtension
 import io.mockk.MockKAnnotations
@@ -85,7 +85,7 @@ class CurrencyAdderViewModelTest {
 
             assertEquals(
                 expected = testRocketsToPresentation,
-                actual = actualItem.rockets
+                actual = actualItem.userSavings
             )
             assertFalse(actualItem.isLoading)
             assertFalse(actualItem.isError)
@@ -123,7 +123,7 @@ class CurrencyAdderViewModelTest {
         setUpRocketsViewModel()
 
         // When
-        objectUnderTest.acceptIntent(RefreshRockets)
+        objectUnderTest.acceptIntent(RefreshExchangeRates)
 
         // Then
         objectUnderTest.uiState.test {
@@ -132,7 +132,7 @@ class CurrencyAdderViewModelTest {
             assertTrue(actualItem.isError)
             assertEquals(
                 expected = testRocketsToPresentation,
-                actual = actualItem.rockets
+                actual = actualItem.userSavings
             )
         }
     }
@@ -145,7 +145,7 @@ class CurrencyAdderViewModelTest {
         setUpRocketsViewModel()
 
         // When
-        objectUnderTest.acceptIntent(RocketClicked(testUri))
+        objectUnderTest.acceptIntent(UserSavingCurrencyClicked(testUri))
 
         // Then
         objectUnderTest.event.test {
@@ -164,7 +164,7 @@ class CurrencyAdderViewModelTest {
         setUpRocketsViewModel()
 
         // When
-        objectUnderTest.acceptIntent(RocketClicked(testUri))
+        objectUnderTest.acceptIntent(UserSavingCurrencyClicked(testUri))
 
         // Then
         objectUnderTest.event.test {

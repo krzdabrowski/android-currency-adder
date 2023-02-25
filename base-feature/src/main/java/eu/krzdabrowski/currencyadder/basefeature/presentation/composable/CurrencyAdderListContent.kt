@@ -9,15 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import eu.krzdabrowski.currencyadder.basefeature.R
-import eu.krzdabrowski.currencyadder.basefeature.presentation.model.ExchangeRateDisplayable
+import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
 
-const val ROCKET_DIVIDER_TEST_TAG = "rocketDividerTestTag"
+const val USER_SAVING_DIVIDER_TEST_TAG = "userSavingDividerTestTag"
 
 @Composable
 fun CurrencyAdderListContent(
-    exchangeRateList: List<ExchangeRateDisplayable>,
+    userSavingList: List<UserSavingDisplayable>,
     modifier: Modifier = Modifier,
-    onRocketClick: (String) -> Unit
+    onUserSavingClick: (Int) -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -26,17 +26,17 @@ fun CurrencyAdderListContent(
             )
     ) {
         itemsIndexed(
-            items = exchangeRateList,
-            key = { _, rocket -> rocket.currencyCode }
+            items = userSavingList,
+            key = { _, userSaving -> userSaving.id }
         ) { index, item ->
             UserSavingItem(
-                exchangeRate = item,
-                onRocketClick = { onRocketClick("") }
+                userSaving = item,
+                onUserSavingClick = { onUserSavingClick(item.id) }
             )
 
-            if (index < exchangeRateList.lastIndex) {
+            if (index < userSavingList.lastIndex) {
                 Divider(
-                    modifier = Modifier.testTag(ROCKET_DIVIDER_TEST_TAG)
+                    modifier = Modifier.testTag(USER_SAVING_DIVIDER_TEST_TAG)
                 )
             }
         }

@@ -1,7 +1,9 @@
 package eu.krzdabrowski.currencyadder.basefeature.presentation
 
 sealed class CurrencyAdderIntent {
-    object GetRockets : CurrencyAdderIntent()
-    object RefreshRockets : CurrencyAdderIntent()
-    data class RocketClicked(val uri: String) : CurrencyAdderIntent()
+    object GetUserSavings : CurrencyAdderIntent()
+    object RefreshExchangeRates : CurrencyAdderIntent()
+    data class UserSavingLocationChanged(val newLocation: String) : CurrencyAdderIntent()
+    data class UserSavingAmountChanged(val newAmount: Double) : CurrencyAdderIntent()
+    data class UserSavingCurrencyClicked(val userSavingId: Int) : CurrencyAdderIntent()
 }

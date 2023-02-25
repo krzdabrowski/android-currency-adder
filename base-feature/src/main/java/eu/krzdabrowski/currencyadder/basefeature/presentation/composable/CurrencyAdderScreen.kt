@@ -1,24 +1,24 @@
 package eu.krzdabrowski.currencyadder.basefeature.presentation.composable
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent.OpenWebBrowserWithDetails
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshRockets
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RocketClicked
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshExchangeRates
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UserSavingCurrencyClicked
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderViewModel
 import eu.krzdabrowski.currencyadder.core.extensions.collectAsStateWithLifecycle
@@ -34,11 +34,11 @@ fun CurrencyAdderRoute(
 
     CurrencyAdderScreen(
         uiState = uiState,
-        onRefreshRockets = {
-            viewModel.acceptIntent(RefreshRockets)
+        onRefreshExchangeRates = {
+            viewModel.acceptIntent(RefreshExchangeRates)
         },
-        onRocketClicked = {
-            viewModel.acceptIntent(RocketClicked(it))
+        onUserSavingClicked = {
+            viewModel.acceptIntent(UserSavingCurrencyClicked(it))
         }
     )
 }
@@ -46,8 +46,8 @@ fun CurrencyAdderRoute(
 @Composable
 internal fun CurrencyAdderScreen(
     uiState: CurrencyAdderUiState,
-    onRefreshRockets: () -> Unit,
-    onRocketClicked: (String) -> Unit
+    onRefreshExchangeRates: () -> Unit,
+    onUserSavingClicked: (Int) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -57,20 +57,18 @@ internal fun CurrencyAdderScreen(
         // TODO: migrate from accompanist to built-in pull-to-refresh when added to Material3
         SwipeRefresh(
             state = rememberSwipeRefreshState(uiState.isLoading),
-            onRefresh = onRefreshRockets,
+            onRefresh = onRefreshExchangeRates,
             modifier = Modifier
                 .padding(it)
         ) {
-            if (uiState.rockets.isNotEmpty()) {
+            if (uiState.userSavings.isNotEmpty()) {
                 CurrencyAdderAvailableContent(
                     snackbarHostState = snackbarHostState,
                     uiState = uiState,
-                    onRocketClick = onRocketClicked
+                    onUserSavingClick = onUserSavingClicked
                 )
             } else {
-                CurrencyAdderNotAvailableContent(
-                    uiState = uiState
-                )
+                CurrencyAdderNotAvailableContent()
             }
         }
     }
@@ -78,25 +76,17 @@ internal fun CurrencyAdderScreen(
 
 @Composable
 private fun HandleEvents(events: Flow<CurrencyAdderEvent>) {
-    val uriHandler = LocalUriHandler.current
-
-    events.collectWithLifecycle {
-        when (it) {
-            is OpenWebBrowserWithDetails -> {
-                uriHandler.openUri(it.uri)
-            }
-        }
-    }
+    events.collectWithLifecycle { }
 }
 
 @Composable
 private fun CurrencyAdderAvailableContent(
     snackbarHostState: SnackbarHostState,
     uiState: CurrencyAdderUiState,
-    onRocketClick: (String) -> Unit
+    onUserSavingClick: (Int) -> Unit
 ) {
     if (uiState.isError) {
-        val errorMessage = stringResource(R.string.rockets_error_refreshing)
+        val errorMessage = stringResource(R.string.exchange_rates_error_refreshing)
 
         LaunchedEffect(snackbarHostState) {
             snackbarHostState.showSnackbar(
@@ -106,15 +96,14 @@ private fun CurrencyAdderAvailableContent(
     }
 
     CurrencyAdderListContent(
-        exchangeRateList = uiState.rockets,
-        onRocketClick = { onRocketClick(it) }
+        userSavingList = uiState.userSavings,
+        onUserSavingClick = { onUserSavingClick(it) }
     )
 }
 
 @Composable
-private fun CurrencyAdderNotAvailableContent(uiState: CurrencyAdderUiState) {
-    when {
-        uiState.isLoading -> CurrencyAdderLoadingPlaceholder()
-        uiState.isError -> CurrencyAdderErrorContent()
-    }
+private fun CurrencyAdderNotAvailableContent() {
+    Text(
+        text = "Add some savings!"
+    )
 }

@@ -27,9 +27,9 @@ class CurrencyAdderScreenTest {
     @Before
     fun setUp() {
         with(composeTestRule.activity) {
-            rocketContentDescription = getString(R.string.rocket_content_description)
-            errorRefreshingMessage = getString(R.string.rockets_error_refreshing)
-            errorFetchingMessage = getString(R.string.rockets_error_fetching)
+            rocketContentDescription = getString(R.string.user_saving_content_description)
+            errorRefreshingMessage = getString(R.string.exchange_rates_error_refreshing)
+            errorFetchingMessage = getString(R.string.user_savings_error_fetching)
         }
     }
 
@@ -37,7 +37,7 @@ class CurrencyAdderScreenTest {
     fun rocketsScreen_whenContentAvailableAndErrorOccurs_shouldKeepContent() {
         setUpComposable(
             CurrencyAdderUiState(
-                rockets = testRockets,
+                userSavings = testRockets,
                 isError = true
             )
         )
@@ -51,7 +51,7 @@ class CurrencyAdderScreenTest {
     fun rocketsScreen_whenContentAvailableAndErrorOccurs_shouldShowErrorSnackbar() {
         setUpComposable(
             CurrencyAdderUiState(
-                rockets = testRockets,
+                userSavings = testRockets,
                 isError = true
             )
         )
@@ -78,8 +78,8 @@ class CurrencyAdderScreenTest {
         composeTestRule.setContent {
             CurrencyAdderScreen(
                 uiState = currencyAdderUiState,
-                onRefreshRockets = { },
-                onRocketClicked = { }
+                onRefreshExchangeRates = { },
+                onUserSavingClicked = { }
             )
         }
     }

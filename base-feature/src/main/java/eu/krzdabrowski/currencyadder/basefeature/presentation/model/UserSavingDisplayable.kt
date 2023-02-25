@@ -4,7 +4,9 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ExchangeRateDisplayable(
-    val currencyCode: String,
-    val currencyRate: String
+data class UserSavingDisplayable(
+    val id: Int,
+    val location: String,
+    val saving: String,
+    val currency: String
 ) : Parcelable

@@ -13,14 +13,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import eu.krzdabrowski.currencyadder.basefeature.R
-import eu.krzdabrowski.currencyadder.basefeature.presentation.model.ExchangeRateDisplayable
+import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
 import eu.krzdabrowski.currencyadder.core.ui.Typography
 
 @Composable
 fun UserSavingItem(
-    exchangeRate: ExchangeRateDisplayable,
+    userSaving: UserSavingDisplayable,
     modifier: Modifier = Modifier,
-    onRocketClick: () -> Unit
+    onUserSavingClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -28,27 +28,24 @@ fun UserSavingItem(
                 vertical = dimensionResource(id = R.dimen.dimen_medium)
             )
             .testTag(
-                stringResource(R.string.rocket_content_description)
+                stringResource(R.string.user_saving_content_description)
             )
-            .clickable { onRocketClick() },
+            .clickable { onUserSavingClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(
-            modifier = Modifier
-                .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(
-                dimensionResource(id = R.dimen.dimen_small)
-            )
-        ) {
-            Text(
-                text = exchangeRate.currencyCode,
-                style = Typography.titleMedium
-            )
+        Text(
+            text = userSaving.location,
+            style = Typography.titleMedium
+        )
 
-            Text(
-                text = exchangeRate.currencyRate,
-                style = Typography.bodyMedium
-            )
-        }
+        Text(
+            text = userSaving.saving,
+            style = Typography.bodyMedium
+        )
+
+        Text(
+            text = userSaving.currency,
+            style = Typography.bodyMedium
+        )
     }
 }
