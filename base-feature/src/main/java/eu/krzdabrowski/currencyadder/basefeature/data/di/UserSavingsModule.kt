@@ -8,14 +8,14 @@ import dagger.hilt.components.SingletonComponent
 import eu.krzdabrowski.currencyadder.basefeature.data.repository.UserSavingsRepositoryImpl
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.UserSavingsRepository
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.AddUserSavingUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.GetUserSavingsUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.RemoveUserSavingUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.UpdateUserSavingUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.addUserSaving
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.getUserSavings
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.removeUserSaving
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.updateUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.addUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.getUserSavings
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.removeUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.updateUserSaving
 import javax.inject.Singleton
 
 @Module(includes = [UserSavingsModule.BindsModule::class])

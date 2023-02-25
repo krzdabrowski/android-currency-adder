@@ -2,8 +2,8 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.GetExchangeRatesUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.RefreshExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsEvent.OpenWebBrowserWithDetails
 import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsIntent.GetRockets
 import eu.krzdabrowski.currencyadder.basefeature.presentation.RocketsIntent.RefreshRockets

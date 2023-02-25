@@ -8,12 +8,12 @@ import dagger.hilt.components.SingletonComponent
 import eu.krzdabrowski.currencyadder.basefeature.data.remote.api.ExchangeRatesApi
 import eu.krzdabrowski.currencyadder.basefeature.data.repository.ExchangeRatesRepositoryImpl
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRatesRepository
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.GetCurrencyCodesUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.GetExchangeRatesUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.RefreshExchangeRatesUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.getCurrencyCodes
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.getExchangeRates
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.refreshExchangeRates
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.getCurrencyCodes
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.getExchangeRates
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.refreshExchangeRates
 import retrofit2.Retrofit
 import javax.inject.Singleton
 

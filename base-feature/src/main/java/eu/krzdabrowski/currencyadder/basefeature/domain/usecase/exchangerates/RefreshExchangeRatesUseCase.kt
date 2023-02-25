@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.basefeature.domain.usecase
+package eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates
 
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRatesRepository
 import eu.krzdabrowski.currencyadder.core.extensions.resultOf

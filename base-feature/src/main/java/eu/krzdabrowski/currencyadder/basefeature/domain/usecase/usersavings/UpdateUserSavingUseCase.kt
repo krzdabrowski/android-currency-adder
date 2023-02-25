@@ -1,14 +1,14 @@
-package eu.krzdabrowski.currencyadder.basefeature.domain.usecase
+package eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings
 
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.UserSavingsRepository
 import eu.krzdabrowski.currencyadder.core.extensions.resultOf
 
-fun interface AddUserSavingUseCase : suspend (UserSaving) -> Result<Unit>
+fun interface UpdateUserSavingUseCase : suspend (UserSaving) -> Result<Unit>
 
-suspend fun addUserSaving(
+suspend fun updateUserSaving(
     userSavingsRepository: UserSavingsRepository,
     userSaving: UserSaving
 ): Result<Unit> = resultOf {
-    userSavingsRepository.addUserSaving(userSaving)
+    userSavingsRepository.updateUserSaving(userSaving)
 }
