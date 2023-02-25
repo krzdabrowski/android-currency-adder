@@ -1,7 +1,10 @@
 package eu.krzdabrowski.currencyadder.basefeature.presentation.composable
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -17,8 +20,9 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.AddUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshExchangeRates
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UserSavingCurrencyClicked
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.ChooseUserSavingCurrency
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderViewModel
 import eu.krzdabrowski.currencyadder.core.extensions.collectAsStateWithLifecycle
@@ -37,8 +41,11 @@ fun CurrencyAdderRoute(
         onRefreshExchangeRates = {
             viewModel.acceptIntent(RefreshExchangeRates)
         },
-        onUserSavingClicked = {
-            viewModel.acceptIntent(UserSavingCurrencyClicked(it))
+        onUserSavingCurrencyClicked = {
+            viewModel.acceptIntent(ChooseUserSavingCurrency(it))
+        },
+        onAddUserSaving = {
+            viewModel.acceptIntent(AddUserSaving)
         }
     )
 }
@@ -47,12 +54,19 @@ fun CurrencyAdderRoute(
 internal fun CurrencyAdderScreen(
     uiState: CurrencyAdderUiState,
     onRefreshExchangeRates: () -> Unit,
-    onUserSavingClicked: (Int) -> Unit
+    onUserSavingCurrencyClicked: (Int) -> Unit,
+    onAddUserSaving: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { onAddUserSaving() }) {
+                    Icon(Icons.Filled.Add, stringResource(R.string.add_user_saving_content_description))
+            }
+        }
     ) {
         // TODO: migrate from accompanist to built-in pull-to-refresh when added to Material3
         SwipeRefresh(
@@ -65,7 +79,7 @@ internal fun CurrencyAdderScreen(
                 CurrencyAdderAvailableContent(
                     snackbarHostState = snackbarHostState,
                     uiState = uiState,
-                    onUserSavingClick = onUserSavingClicked
+                    onUserSavingClick = onUserSavingCurrencyClicked
                 )
             } else {
                 CurrencyAdderNotAvailableContent()

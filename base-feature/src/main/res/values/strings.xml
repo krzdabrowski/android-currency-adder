@@ -3,4 +3,5 @@
     <string name="exchange_rates_error_refreshing">Sorry, something went wrong when refreshing exchange rates</string>
 
     <string name="user_saving_content_description">User saving</string>
+    <string name="add_user_saving_content_description">Add user saving</string>
 </resources>

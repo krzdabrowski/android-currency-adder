@@ -9,3 +9,10 @@ fun UserSaving.toPresentationModel() = UserSavingDisplayable(
     saving = saving.toString(),
     currency = currency
 )
+
+fun UserSavingDisplayable.toDomainModel() = UserSaving(
+    id = id,
+    location = location,
+    saving = saving.toDouble(),
+    currency = currency
+)

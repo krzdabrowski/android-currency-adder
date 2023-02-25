@@ -79,7 +79,7 @@ class CurrencyAdderScreenTest {
             CurrencyAdderScreen(
                 uiState = currencyAdderUiState,
                 onRefreshExchangeRates = { },
-                onUserSavingClicked = { }
+                onUserSavingCurrencyClicked = { }
             )
         }
     }

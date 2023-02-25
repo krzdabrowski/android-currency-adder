@@ -6,7 +6,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import eu.krzdabrowski.currencyadder.basefeature.data.repository.UserSavingsRepositoryImpl
-import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.UserSavingsRepository
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
@@ -34,30 +33,27 @@ object UserSavingsModule {
     @Provides
     fun provideAddUserSavingUseCase(
         userSavingsRepository: UserSavingsRepository,
-        userSaving: UserSaving
     ): AddUserSavingUseCase {
         return AddUserSavingUseCase {
-            addUserSaving(userSavingsRepository, userSaving)
+            addUserSaving(userSavingsRepository, it)
         }
     }
 
     @Provides
     fun provideUpdateUserSavingUseCase(
         userSavingsRepository: UserSavingsRepository,
-        userSaving: UserSaving
     ): UpdateUserSavingUseCase {
         return UpdateUserSavingUseCase {
-            updateUserSaving(userSavingsRepository, userSaving)
+            updateUserSaving(userSavingsRepository, it)
         }
     }
 
     @Provides
     fun provideRemoveUserSavingUseCase(
         userSavingsRepository: UserSavingsRepository,
-        userSaving: UserSaving
     ): RemoveUserSavingUseCase {
         return RemoveUserSavingUseCase {
-            removeUserSaving(userSavingsRepository, userSaving)
+            removeUserSaving(userSavingsRepository, it)
         }
     }
 
