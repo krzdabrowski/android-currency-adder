@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class UserSavingDisplayable(
     val id: Int = 0,
-    val location: String,
+    val place: String,
     val saving: String,
     val currency: String
 ) : Parcelable

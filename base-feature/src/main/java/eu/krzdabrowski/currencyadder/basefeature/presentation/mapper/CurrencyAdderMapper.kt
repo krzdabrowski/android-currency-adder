@@ -5,14 +5,14 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDi
 
 fun UserSaving.toPresentationModel() = UserSavingDisplayable(
     id = id,
-    location = location,
+    place = place,
     saving = saving.toString(),
     currency = currency
 )
 
 fun UserSavingDisplayable.toDomainModel() = UserSaving(
     id = id,
-    location = location,
+    place = place,
     saving = saving.toDouble(),
     currency = currency
 )

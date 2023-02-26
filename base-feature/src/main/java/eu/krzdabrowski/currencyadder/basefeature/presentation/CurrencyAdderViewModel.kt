@@ -10,7 +10,7 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderInten
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UpdateUserSavingAmount
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.ChooseUserSavingCurrency
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UpdateUserSavingLocation
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UpdateUserSavingPlace
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.Error
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.Fetched
@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
-import kotlin.random.Random
 
 private const val BASE_EXCHANGE_RATE_CODE = "PLN"
 
@@ -50,7 +49,7 @@ class CurrencyAdderViewModel @Inject constructor(
         is RefreshExchangeRates -> refreshExchangeRates()
         is ChooseUserSavingCurrency -> userSavingCurrencyClicked(intent.userSavingId)
         is UpdateUserSavingAmount -> emptyFlow()
-        is UpdateUserSavingLocation -> emptyFlow()
+        is UpdateUserSavingPlace -> emptyFlow()
     }
 
     override fun reduceUiState(
@@ -98,7 +97,7 @@ class CurrencyAdderViewModel @Inject constructor(
     }
 
     private fun createEmptyUserSaving() = UserSavingDisplayable(
-        location = "",
+        place = "",
         saving = "0",
         currency = BASE_EXCHANGE_RATE_CODE
     )

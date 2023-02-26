@@ -10,8 +10,8 @@ data class UserSavingCached(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 
-    @ColumnInfo(name = "location")
-    val location: String,
+    @ColumnInfo(name = "place")
+    val place: String,
 
     @ColumnInfo(name = "saving")
     val saving: Double,
