@@ -1,11 +1,12 @@
 package eu.krzdabrowski.currencyadder.basefeature.presentation
 
+import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
+
 sealed class CurrencyAdderIntent {
     object GetUserSavings : CurrencyAdderIntent()
     object AddUserSaving : CurrencyAdderIntent()
-    data class UpdateUserSavingPlace(val newPlace: String) : CurrencyAdderIntent()
-    data class UpdateUserSavingAmount(val newAmount: Double) : CurrencyAdderIntent()
-    data class ChooseUserSavingCurrency(val userSavingId: Int) : CurrencyAdderIntent()
+    data class UpdateUserSaving(val updatedSaving: UserSavingDisplayable) : CurrencyAdderIntent()
 
     object RefreshExchangeRates : CurrencyAdderIntent()
+    object GetCurrencyCodes : CurrencyAdderIntent()
 }

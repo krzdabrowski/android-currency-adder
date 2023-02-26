@@ -18,6 +18,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import eu.krzdabrowski.currencyadder.basefeature.R
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
 
 const val USER_SAVING_DIVIDER_TEST_TAG = "userSavingDividerTestTag"
@@ -29,27 +30,26 @@ private val headerStringResources = listOf(
 
 @Composable
 fun CurrencyAdderListContent(
-    userSavingList: List<UserSavingDisplayable>,
+    uiState: CurrencyAdderUiState,
     modifier: Modifier = Modifier,
-    onUserSavingClick: (Int) -> Unit
+    onUpdateUserSaving: (UserSavingDisplayable) -> Unit
 ) {
-
-
     LazyColumn(
         modifier = modifier
     ) {
         header()
 
         itemsIndexed(
-            items = userSavingList,
+            items = uiState.userSavings,
             key = { _, userSaving -> userSaving.id }
         ) { index, item ->
             UserSavingItem(
-                userSaving = item,
-                onUserSavingClick = { onUserSavingClick(item.id) }
+                item = item,
+                currencyCodes = uiState.currencyCodes,
+                onItemUpdate = onUpdateUserSaving
             )
 
-            if (index < userSavingList.lastIndex) {
+            if (index < uiState.userSavings.lastIndex) {
                 Divider(
                     modifier = Modifier.testTag(USER_SAVING_DIVIDER_TEST_TAG)
                 )
