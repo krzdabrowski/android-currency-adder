@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="list_header_place">Place</string>
+    <string name="list_header_saving">Saving</string>
+    <string name="list_header_currency">Currency</string>
     <string name="exchange_rates_error_refreshing">Sorry, something went wrong when refreshing exchange rates</string>
 
     <string name="user_saving_content_description">User saving</string>
