@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Divider
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -39,21 +37,15 @@ fun CurrencyAdderListContent(
     ) {
         header()
 
-        itemsIndexed(
+        items(
             items = uiState.userSavings,
-            key = { _, userSaving -> userSaving.id }
-        ) { index, item ->
+            key = { userSaving -> userSaving.id }
+        ) {
             UserSavingItem(
-                item = item,
+                item = it,
                 currencyCodes = uiState.currencyCodes,
                 onItemUpdate = onUpdateUserSaving
             )
-
-            if (index < uiState.userSavings.lastIndex) {
-                Divider(
-                    modifier = Modifier.testTag(USER_SAVING_DIVIDER_TEST_TAG)
-                )
-            }
         }
     }
 }
