@@ -13,6 +13,6 @@ fun UserSaving.toPresentationModel() = UserSavingDisplayable(
 fun UserSavingDisplayable.toDomainModel() = UserSaving(
     id = id,
     place = place,
-    saving = saving.toDouble(),
+    saving = saving.toDoubleOrNull() ?: 0.0,
     currency = currency
 )

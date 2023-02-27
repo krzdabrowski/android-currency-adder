@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -32,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
+import eu.krzdabrowski.currencyadder.core.extensions.DebounceEffect
 
 private const val DEFAULT_SAVING_VALUE = "0.0"
 
@@ -86,16 +86,13 @@ private fun UserSavingPlace(
     modifier: Modifier = Modifier,
     onItemUpdate: (UserSavingDisplayable) -> Unit
 ) {
+    var input by remember {
+        mutableStateOf(TextFieldValue(item.place))
+    }
+
     TextField(
-        value = TextFieldValue(
-            text = item.place,
-            selection = TextRange(item.place.length)
-        ),
-        onValueChange = {
-            onItemUpdate(
-                item.copy(place = it.text)
-            )
-        },
+        value = input,
+        onValueChange = { input = it },
         modifier = modifier,
         textStyle = LocalTextStyle.current.copy(
             textAlign = TextAlign.Center
@@ -105,6 +102,15 @@ private fun UserSavingPlace(
             containerColor = MaterialTheme.colorScheme.background
         )
     )
+
+    DebounceEffect(
+        input = input,
+        operation = {
+            onItemUpdate(
+                item.copy(place = input.text)
+            )
+        }
+    )
 }
 
 @Composable
@@ -113,16 +119,17 @@ private fun UserSavingAmount(
     modifier: Modifier = Modifier,
     onItemUpdate: (UserSavingDisplayable) -> Unit
 ) {
-    TextField(
-        value = TextFieldValue(
-            text = if (item.saving != DEFAULT_SAVING_VALUE) item.saving else "",
-            selection = TextRange(item.place.length)
-        ),
-        onValueChange = {
-            onItemUpdate(
-                item.copy(saving = it.text)
+    var input by remember {
+        mutableStateOf(
+            TextFieldValue(
+                if (item.saving != DEFAULT_SAVING_VALUE) item.saving else ""
             )
-        },
+        )
+    }
+
+    TextField(
+        value = input,
+        onValueChange = { input = it },
         modifier = modifier,
         textStyle = LocalTextStyle.current.copy(
             textAlign = TextAlign.Center
@@ -134,6 +141,15 @@ private fun UserSavingAmount(
         colors = TextFieldDefaults.textFieldColors(
             containerColor = MaterialTheme.colorScheme.background
         )
+    )
+
+    DebounceEffect(
+        input = input,
+        operation = {
+            onItemUpdate(
+                item.copy(saving = input.text)
+            )
+        }
     )
 }
 
