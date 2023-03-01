@@ -34,6 +34,8 @@ android {
                 getDefaultProguardFile("proguard-android.txt"),
                 "proguard-rules.pro"
             )
+            // for development purposes, remember to create a release signing config if releasing app
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
