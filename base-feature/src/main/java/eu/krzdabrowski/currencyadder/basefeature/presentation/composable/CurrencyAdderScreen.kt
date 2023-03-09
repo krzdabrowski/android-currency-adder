@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import eu.krzdabrowski.currencyadder.basefeature.R
@@ -26,7 +27,6 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderInten
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderViewModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
-import eu.krzdabrowski.currencyadder.core.extensions.collectAsStateWithLifecycle
 import eu.krzdabrowski.currencyadder.core.extensions.collectWithLifecycle
 import kotlinx.coroutines.flow.Flow
 
