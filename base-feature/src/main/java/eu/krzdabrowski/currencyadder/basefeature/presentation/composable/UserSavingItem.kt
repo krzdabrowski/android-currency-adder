@@ -53,10 +53,8 @@ import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
 import eu.krzdabrowski.currencyadder.core.extensions.DebounceEffect
 
-private const val DEFAULT_SAVING_VALUE = "0.0"
-private const val MAX_FRACTIONAL_DIGITS = 2
 private const val SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE = 0.75f
-
+private const val MAX_FRACTIONAL_DIGITS = 2
 private const val FRACTIONAL_LIMITER: Char = '.'
 private const val FRACTIONAL_DEFAULT_VALUE: Char = 'x'
 
@@ -218,9 +216,7 @@ private fun UserSavingAmount(
     onItemUpdate: (UserSavingDisplayable) -> Unit
 ) {
     var currentInput by remember {
-        mutableStateOf(
-            if (item.saving != DEFAULT_SAVING_VALUE) item.saving else ""
-        )
+        mutableStateOf(item.saving)
     }
 
     TextField(
