@@ -26,7 +26,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.krzdabrowski.currencyadder.basefeature.R
@@ -34,6 +33,9 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDi
 import eu.krzdabrowski.currencyadder.core.extensions.DebounceEffect
 
 private const val DEFAULT_SAVING_VALUE = "0.0"
+private const val MAX_FRACTIONAL_DIGITS = 2
+private const val FRACTIONAL_LIMITER: Char = '.'
+private const val FRACTIONAL_DEFAULT_VALUE: Char = 'x'
 
 @Composable
 fun UserSavingItem(
@@ -87,7 +89,7 @@ private fun UserSavingPlace(
     onItemUpdate: (UserSavingDisplayable) -> Unit
 ) {
     var input by remember {
-        mutableStateOf(TextFieldValue(item.place))
+        mutableStateOf(item.place)
     }
 
     TextField(
@@ -107,7 +109,7 @@ private fun UserSavingPlace(
         input = input,
         operation = {
             onItemUpdate(
-                item.copy(place = input.text)
+                item.copy(place = input)
             )
         }
     )
@@ -119,17 +121,22 @@ private fun UserSavingAmount(
     modifier: Modifier = Modifier,
     onItemUpdate: (UserSavingDisplayable) -> Unit
 ) {
-    var input by remember {
+    var currentInput by remember {
         mutableStateOf(
-            TextFieldValue(
-                if (item.saving != DEFAULT_SAVING_VALUE) item.saving else ""
-            )
+            if (item.saving != DEFAULT_SAVING_VALUE) item.saving else ""
         )
     }
 
     TextField(
-        value = input,
-        onValueChange = { input = it },
+        value = currentInput,
+        onValueChange = { newInput ->
+            currentInput = when {
+                newInput.isEmpty() -> newInput
+                !newInput.isValidAmount() -> currentInput
+                !newInput.isValidFractional() -> currentInput
+                else -> newInput
+            }
+        },
         modifier = modifier,
         textStyle = LocalTextStyle.current.copy(
             textAlign = TextAlign.Center
@@ -144,10 +151,10 @@ private fun UserSavingAmount(
     )
 
     DebounceEffect(
-        input = input,
+        input = currentInput,
         operation = {
             onItemUpdate(
-                item.copy(saving = input.text)
+                item.copy(saving = currentInput)
             )
         }
     )
@@ -208,3 +215,9 @@ private fun VerticalDivider(
             .width(1.dp)
     )
 }
+
+private fun String.isValidAmount() =
+    toDoubleOrNull() != null
+
+private fun String.isValidFractional() =
+    getOrElse(length - MAX_FRACTIONAL_DIGITS - 2) { FRACTIONAL_DEFAULT_VALUE } != FRACTIONAL_LIMITER

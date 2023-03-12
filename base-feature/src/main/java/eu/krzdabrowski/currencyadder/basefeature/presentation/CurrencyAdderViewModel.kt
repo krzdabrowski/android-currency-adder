@@ -34,6 +34,7 @@ private val emptyUserSaving = UserSavingDisplayable(
     currency = BASE_EXCHANGE_RATE_CODE
 )
 
+@Suppress("LongParameterList")
 @HiltViewModel
 class CurrencyAdderViewModel @Inject constructor(
     private val getUserSavingsUseCase: GetUserSavingsUseCase,
@@ -115,7 +116,6 @@ class CurrencyAdderViewModel @Inject constructor(
         )
             .onFailure {
                 emit(Error(it))
-
             }
     }
 

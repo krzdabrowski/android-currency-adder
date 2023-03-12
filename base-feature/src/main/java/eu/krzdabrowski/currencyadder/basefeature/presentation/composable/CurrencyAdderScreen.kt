@@ -64,8 +64,11 @@ internal fun CurrencyAdderScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { onAddUserSaving() }) {
-                    Icon(Icons.Filled.Add, stringResource(R.string.add_user_saving_content_description))
+                onClick = {
+                    onAddUserSaving()
+                }
+            ) {
+                Icon(Icons.Filled.Add, stringResource(R.string.add_user_saving_content_description))
             }
         }
     ) {
@@ -98,7 +101,7 @@ private fun HandleEvents(events: Flow<CurrencyAdderEvent>) {
 private fun CurrencyAdderAvailableContent(
     snackbarHostState: SnackbarHostState,
     uiState: CurrencyAdderUiState,
-    onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
+    onUpdateUserSaving: (UserSavingDisplayable) -> Unit
 ) {
     if (uiState.isError) {
         val errorMessage = stringResource(R.string.exchange_rates_error_refreshing)

@@ -1,4 +1,3 @@
 package eu.krzdabrowski.currencyadder.basefeature.presentation
 
-sealed class CurrencyAdderEvent {
-}
+sealed class CurrencyAdderEvent

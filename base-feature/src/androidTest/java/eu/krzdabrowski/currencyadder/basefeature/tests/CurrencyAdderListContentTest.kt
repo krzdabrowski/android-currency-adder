@@ -4,8 +4,8 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import eu.krzdabrowski.currencyadder.basefeature.data.generateTestRocketsFromPresentation
-import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.USER_SAVING_DIVIDER_TEST_TAG
 import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.CurrencyAdderListContent
+import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.USER_SAVING_DIVIDER_TEST_TAG
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
