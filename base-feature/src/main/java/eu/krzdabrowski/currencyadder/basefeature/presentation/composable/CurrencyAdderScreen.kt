@@ -23,6 +23,7 @@ import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.AddUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshExchangeRates
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RemoveUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UpdateUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderViewModel
@@ -47,6 +48,9 @@ fun CurrencyAdderRoute(
         },
         onUpdateUserSaving = {
             viewModel.acceptIntent(UpdateUserSaving(it))
+        },
+        onRemoveUserSaving = {
+            viewModel.acceptIntent(RemoveUserSaving(it))
         }
     )
 }
@@ -56,7 +60,8 @@ internal fun CurrencyAdderScreen(
     uiState: CurrencyAdderUiState,
     onRefreshExchangeRates: () -> Unit,
     onAddUserSaving: () -> Unit,
-    onUpdateUserSaving: (UserSavingDisplayable) -> Unit
+    onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
+    onRemoveUserSaving: (UserSavingDisplayable) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -83,7 +88,8 @@ internal fun CurrencyAdderScreen(
                 CurrencyAdderAvailableContent(
                     snackbarHostState = snackbarHostState,
                     uiState = uiState,
-                    onUpdateUserSaving = onUpdateUserSaving
+                    onUpdateUserSaving = onUpdateUserSaving,
+                    onRemoveUserSaving = onRemoveUserSaving
                 )
             } else {
                 CurrencyAdderNotAvailableContent()
@@ -101,7 +107,8 @@ private fun HandleEvents(events: Flow<CurrencyAdderEvent>) {
 private fun CurrencyAdderAvailableContent(
     snackbarHostState: SnackbarHostState,
     uiState: CurrencyAdderUiState,
-    onUpdateUserSaving: (UserSavingDisplayable) -> Unit
+    onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
+    onRemoveUserSaving: (UserSavingDisplayable) -> Unit
 ) {
     if (uiState.isError) {
         val errorMessage = stringResource(R.string.exchange_rates_error_refreshing)
@@ -115,7 +122,8 @@ private fun CurrencyAdderAvailableContent(
 
     CurrencyAdderListContent(
         uiState = uiState,
-        onUpdateUserSaving = onUpdateUserSaving
+        onUpdateUserSaving = onUpdateUserSaving,
+        onRemoveUserSaving = onRemoveUserSaving
     )
 }
 

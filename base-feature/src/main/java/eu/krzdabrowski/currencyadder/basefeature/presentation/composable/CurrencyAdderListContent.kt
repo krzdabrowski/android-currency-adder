@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,8 +31,9 @@ private val headerStringResources = listOf(
 @Composable
 fun CurrencyAdderListContent(
     uiState: CurrencyAdderUiState,
-    modifier: Modifier = Modifier,
-    onUpdateUserSaving: (UserSavingDisplayable) -> Unit
+    onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
+    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier
@@ -44,8 +47,12 @@ fun CurrencyAdderListContent(
             UserSavingItem(
                 item = it,
                 currencyCodes = uiState.currencyCodes,
-                onItemUpdate = onUpdateUserSaving
+                modifier = Modifier.animateItemPlacement(),
+                onItemUpdate = onUpdateUserSaving,
+                onItemRemove = onRemoveUserSaving
             )
+
+            Divider(color = Color.Black)
         }
     }
 }

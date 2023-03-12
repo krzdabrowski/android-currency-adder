@@ -1,27 +1,48 @@
 package eu.krzdabrowski.currencyadder.basefeature.presentation.composable
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.DismissDirection.EndToStart
+import androidx.compose.material3.DismissDirection.StartToEnd
+import androidx.compose.material3.DismissState
+import androidx.compose.material3.DismissValue.Default
+import androidx.compose.material3.DismissValue.DismissedToEnd
+import androidx.compose.material3.DismissValue.DismissedToStart
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,11 +55,84 @@ import eu.krzdabrowski.currencyadder.core.extensions.DebounceEffect
 
 private const val DEFAULT_SAVING_VALUE = "0.0"
 private const val MAX_FRACTIONAL_DIGITS = 2
+private const val SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE = 0.75f
+
 private const val FRACTIONAL_LIMITER: Char = '.'
 private const val FRACTIONAL_DEFAULT_VALUE: Char = 'x'
 
 @Composable
 fun UserSavingItem(
+    item: UserSavingDisplayable,
+    currencyCodes: List<String>,
+    onItemUpdate: (UserSavingDisplayable) -> Unit,
+    onItemRemove: (UserSavingDisplayable) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val currentItem by rememberUpdatedState(item)
+    val dismissState = rememberDismissState(
+        confirmValueChange = {
+            if (it != Default) {
+                onItemRemove(currentItem)
+                true
+            } else {
+                false
+            }
+        }
+    )
+
+    SwipeToDismiss(
+        state = dismissState,
+        background = { SwipeBackground(dismissState) },
+        dismissContent = {
+            UserSavingItemContent(
+                item = item,
+                currencyCodes = currencyCodes,
+                onItemUpdate = onItemUpdate
+            )
+        },
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun SwipeBackground(dismissState: DismissState) {
+    val direction = dismissState.dismissDirection ?: return
+
+    val color by animateColorAsState(
+        when (dismissState.targetValue) {
+            DismissedToStart,
+            DismissedToEnd -> Color.Red
+            Default -> Color.LightGray
+        }
+    )
+
+    val alignment = when (direction) {
+        StartToEnd -> Alignment.CenterStart
+        EndToStart -> Alignment.CenterEnd
+    }
+
+    val scale by animateFloatAsState(
+        if (dismissState.targetValue == Default) SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE else 1f
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color)
+            .padding(horizontal = 16.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = "Remove user saving",
+            modifier = Modifier
+                .align(alignment)
+                .scale(scale)
+        )
+    }
+}
+
+@Composable
+private fun UserSavingItemContent(
     item: UserSavingDisplayable,
     currencyCodes: List<String>,
     modifier: Modifier = Modifier,
@@ -100,8 +194,10 @@ private fun UserSavingPlace(
             textAlign = TextAlign.Center
         ),
         singleLine = true,
+        shape = RectangleShape,
         colors = TextFieldDefaults.textFieldColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.background,
+            unfocusedIndicatorColor = Color.Transparent
         )
     )
 
@@ -145,8 +241,10 @@ private fun UserSavingAmount(
             keyboardType = KeyboardType.Decimal
         ),
         singleLine = true,
+        shape = RectangleShape,
         colors = TextFieldDefaults.textFieldColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.background,
+            unfocusedIndicatorColor = Color.Transparent
         )
     )
 
@@ -183,8 +281,10 @@ private fun UserSavingCurrencyDropdownMenu(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
             ),
+            shape = RectangleShape,
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.background
+                containerColor = MaterialTheme.colorScheme.background,
+                unfocusedIndicatorColor = Color.Transparent
             )
         )
 

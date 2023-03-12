@@ -6,11 +6,13 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.Ge
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.AddUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.GetCurrencyCodes
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.GetUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshExchangeRates
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RemoveUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UpdateUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.CurrencyCodesFetched
@@ -40,6 +42,7 @@ class CurrencyAdderViewModel @Inject constructor(
     private val getUserSavingsUseCase: GetUserSavingsUseCase,
     private val addUserSavingUseCase: AddUserSavingUseCase,
     private val updateUserSavingUseCase: UpdateUserSavingUseCase,
+    private val removeUserSavingUseCase: RemoveUserSavingUseCase,
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
     private val getCurrencyCodesUseCase: GetCurrencyCodesUseCase,
     savedStateHandle: SavedStateHandle,
@@ -58,6 +61,7 @@ class CurrencyAdderViewModel @Inject constructor(
         is GetUserSavings -> getUserSavings()
         is AddUserSaving -> addUserSaving()
         is UpdateUserSaving -> updateUserSaving(intent.updatedSaving)
+        is RemoveUserSaving -> removeUserSaving(intent.removedSaving)
 
         is RefreshExchangeRates -> refreshExchangeRates()
         is GetCurrencyCodes -> getCurrencyCodes()
@@ -113,6 +117,15 @@ class CurrencyAdderViewModel @Inject constructor(
     private fun updateUserSaving(updatedUserSaving: UserSavingDisplayable): Flow<PartialState> = flow {
         updateUserSavingUseCase(
             updatedUserSaving.toDomainModel()
+        )
+            .onFailure {
+                emit(Error(it))
+            }
+    }
+
+    private fun removeUserSaving(removedUserSaving: UserSavingDisplayable): Flow<PartialState> = flow {
+        removeUserSavingUseCase(
+            removedUserSaving.toDomainModel()
         )
             .onFailure {
                 emit(Error(it))
