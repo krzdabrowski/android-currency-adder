@@ -8,7 +8,7 @@ fun interface RemoveUserSavingUseCase : suspend (UserSaving) -> Result<Unit>
 
 suspend fun removeUserSaving(
     userSavingsRepository: UserSavingsRepository,
-    userSaving: UserSaving
+    userSaving: UserSaving,
 ): Result<Unit> = resultOf {
     userSavingsRepository.removeUserSaving(userSaving)
 }

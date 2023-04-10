@@ -29,7 +29,7 @@ class CurrencyAdderRouteTest {
         hiltTestRule.inject()
         composeTestRule.activity.setContent {
             CurrencyAdderRoute(
-                viewModel = composeTestRule.getHiltTestViewModel()
+                viewModel = composeTestRule.getHiltTestViewModel(),
             )
         }
     }

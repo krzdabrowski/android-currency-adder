@@ -23,7 +23,7 @@ object UserSavingsModule {
 
     @Provides
     fun provideGetUserSavingsUseCase(
-        userSavingsRepository: UserSavingsRepository
+        userSavingsRepository: UserSavingsRepository,
     ): GetUserSavingsUseCase {
         return GetUserSavingsUseCase {
             getUserSavings(userSavingsRepository)
@@ -32,7 +32,7 @@ object UserSavingsModule {
 
     @Provides
     fun provideAddUserSavingUseCase(
-        userSavingsRepository: UserSavingsRepository
+        userSavingsRepository: UserSavingsRepository,
     ): AddUserSavingUseCase {
         return AddUserSavingUseCase {
             addUserSaving(userSavingsRepository, it)
@@ -41,7 +41,7 @@ object UserSavingsModule {
 
     @Provides
     fun provideUpdateUserSavingUseCase(
-        userSavingsRepository: UserSavingsRepository
+        userSavingsRepository: UserSavingsRepository,
     ): UpdateUserSavingUseCase {
         return UpdateUserSavingUseCase {
             updateUserSaving(userSavingsRepository, it)
@@ -50,7 +50,7 @@ object UserSavingsModule {
 
     @Provides
     fun provideRemoveUserSavingUseCase(
-        userSavingsRepository: UserSavingsRepository
+        userSavingsRepository: UserSavingsRepository,
     ): RemoveUserSavingUseCase {
         return RemoveUserSavingUseCase {
             removeUserSaving(userSavingsRepository, it)

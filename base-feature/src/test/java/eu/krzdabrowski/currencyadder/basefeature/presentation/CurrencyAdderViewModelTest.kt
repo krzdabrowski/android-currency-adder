@@ -72,7 +72,7 @@ class CurrencyAdderViewModelTest {
         val testRocketsFromDomain = listOf(generateTestExchangeRatesFromDomain())
         val testRocketsToPresentation = testRocketsFromDomain.map { it.toPresentationModel() }
         every { getExchangeRatesUseCase() } returns flowOf(
-            Result.success(testRocketsFromDomain)
+            Result.success(testRocketsFromDomain),
         )
         setUpRocketsViewModel()
 
@@ -85,7 +85,7 @@ class CurrencyAdderViewModelTest {
 
             assertEquals(
                 expected = testRocketsToPresentation,
-                actual = actualItem.userSavings
+                actual = actualItem.userSavings,
             )
             assertFalse(actualItem.isLoading)
             assertFalse(actualItem.isError)
@@ -96,7 +96,7 @@ class CurrencyAdderViewModelTest {
     fun `should show error state with no loading state during init rockets retrieval failure`() = runTest {
         // Given
         every { getExchangeRatesUseCase() } returns flowOf(
-            Result.failure(IllegalStateException("Test error"))
+            Result.failure(IllegalStateException("Test error")),
         )
         setUpRocketsViewModel()
 
@@ -118,7 +118,7 @@ class CurrencyAdderViewModelTest {
         val testRocketsFromDomain = listOf(generateTestExchangeRatesFromDomain())
         val testRocketsToPresentation = testRocketsFromDomain.map { it.toPresentationModel() }
         every { getExchangeRatesUseCase() } returns flowOf(
-            Result.success(testRocketsFromDomain)
+            Result.success(testRocketsFromDomain),
         )
         setUpRocketsViewModel()
 
@@ -132,7 +132,7 @@ class CurrencyAdderViewModelTest {
             assertTrue(actualItem.isError)
             assertEquals(
                 expected = testRocketsToPresentation,
-                actual = actualItem.userSavings
+                actual = actualItem.userSavings,
             )
         }
     }
@@ -151,7 +151,7 @@ class CurrencyAdderViewModelTest {
         objectUnderTest.event.test {
             assertEquals(
                 expected = OpenWebBrowserWithDetails(testUri),
-                actual = awaitItem()
+                actual = awaitItem(),
             )
         }
     }
@@ -173,13 +173,13 @@ class CurrencyAdderViewModelTest {
     }
 
     private fun setUpRocketsViewModel(
-        initialUiState: CurrencyAdderUiState = CurrencyAdderUiState()
+        initialUiState: CurrencyAdderUiState = CurrencyAdderUiState(),
     ) {
         objectUnderTest = CurrencyAdderViewModel(
             getExchangeRatesUseCase,
             refreshExchangeRatesUseCase,
             savedStateHandle,
-            initialUiState
+            initialUiState,
         )
     }
 }

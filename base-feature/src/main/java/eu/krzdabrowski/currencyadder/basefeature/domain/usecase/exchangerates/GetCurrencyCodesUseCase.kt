@@ -6,7 +6,7 @@ import eu.krzdabrowski.currencyadder.core.extensions.resultOf
 fun interface GetCurrencyCodesUseCase : suspend () -> Result<List<String>>
 
 suspend fun getCurrencyCodes(
-    exchangeRatesRepository: ExchangeRatesRepository
+    exchangeRatesRepository: ExchangeRatesRepository,
 ): Result<List<String>> = resultOf {
     exchangeRatesRepository.getCurrencyCodes()
 }

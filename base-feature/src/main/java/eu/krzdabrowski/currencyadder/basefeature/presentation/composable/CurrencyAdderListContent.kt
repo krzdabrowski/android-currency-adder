@@ -25,7 +25,7 @@ const val USER_SAVING_DIVIDER_TEST_TAG = "userSavingDividerTestTag"
 private val headerStringResources = listOf(
     R.string.list_header_place,
     R.string.list_header_saving,
-    R.string.list_header_currency
+    R.string.list_header_currency,
 )
 
 @Composable
@@ -33,23 +33,23 @@ fun CurrencyAdderListContent(
     uiState: CurrencyAdderUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier
+        modifier = modifier,
     ) {
         header()
 
         items(
             items = uiState.userSavings,
-            key = { userSaving -> userSaving.id }
+            key = { userSaving -> userSaving.id },
         ) {
             UserSavingItem(
                 item = it,
                 currencyCodes = uiState.currencyCodes,
                 modifier = Modifier.animateItemPlacement(),
                 onItemUpdate = onUpdateUserSaving,
-                onItemRemove = onRemoveUserSaving
+                onItemRemove = onRemoveUserSaving,
             )
 
             Divider(color = Color.Black)
@@ -64,16 +64,16 @@ private fun LazyListScope.header() {
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(
-                    vertical = dimensionResource(R.dimen.dimen_small)
+                    vertical = dimensionResource(R.dimen.dimen_small),
                 ),
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.SpaceAround,
         ) {
             for (headerId in headerStringResources) {
                 Text(
                     text = stringResource(headerId),
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
         }

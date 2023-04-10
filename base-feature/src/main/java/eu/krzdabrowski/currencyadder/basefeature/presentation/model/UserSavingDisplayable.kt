@@ -8,5 +8,5 @@ data class UserSavingDisplayable(
     val id: Int = 0,
     val place: String,
     val saving: String,
-    val currency: String
+    val currency: String,
 ) : Parcelable

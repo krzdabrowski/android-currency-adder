@@ -6,7 +6,7 @@ import eu.krzdabrowski.currencyadder.core.extensions.resultOf
 fun interface RefreshExchangeRatesUseCase : suspend () -> Result<Unit>
 
 suspend fun refreshExchangeRates(
-    exchangeRatesRepository: ExchangeRatesRepository
+    exchangeRatesRepository: ExchangeRatesRepository,
 ): Result<Unit> = resultOf {
     exchangeRatesRepository.refreshExchangeRates()
 }

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.flowOf
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [ExchangeRatesModule::class]
+    replaces = [ExchangeRatesModule::class],
 )
 object FakeRocketModule {
 
@@ -21,7 +21,7 @@ object FakeRocketModule {
     fun provideFakeGetRocketsUseCase(): GetExchangeRatesUseCase {
         return GetExchangeRatesUseCase {
             flowOf(
-                Result.success(generateTestRocketsFromDomain())
+                Result.success(generateTestRocketsFromDomain()),
             )
         }
     }

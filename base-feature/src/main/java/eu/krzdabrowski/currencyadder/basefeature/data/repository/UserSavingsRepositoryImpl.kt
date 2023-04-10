@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UserSavingsRepositoryImpl @Inject constructor(
-    private val userSavingsDao: UserSavingsDao
+    private val userSavingsDao: UserSavingsDao,
 ) : UserSavingsRepository {
 
     override fun getUserSavings(): Flow<List<UserSaving>> {
@@ -24,21 +24,21 @@ class UserSavingsRepositoryImpl @Inject constructor(
     override suspend fun addUserSaving(userSaving: UserSaving) {
         userSavingsDao
             .addUserSaving(
-                userSaving.toEntityModel()
+                userSaving.toEntityModel(),
             )
     }
 
     override suspend fun updateUserSaving(userSaving: UserSaving) {
         userSavingsDao
             .updateUserSaving(
-                userSaving.toEntityModel()
+                userSaving.toEntityModel(),
             )
     }
 
     override suspend fun removeUserSaving(userSaving: UserSaving) {
         userSavingsDao
             .removeUserSaving(
-                userSaving.toEntityModel()
+                userSaving.toEntityModel(),
             )
     }
 }

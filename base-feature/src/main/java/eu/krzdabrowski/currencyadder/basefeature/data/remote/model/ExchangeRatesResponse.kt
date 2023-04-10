@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ExchangeRatesResponse(
     @SerialName("rates")
-    val exchangeRates: List<ExchangeRate> = emptyList()
+    val exchangeRates: List<ExchangeRate> = emptyList(),
 ) {
     @Serializable
     data class ExchangeRate(
@@ -14,6 +14,6 @@ data class ExchangeRatesResponse(
         val code: String = "",
 
         @SerialName("mid")
-        val rate: Double = 0.0
+        val rate: Double = 0.0,
     )
 }

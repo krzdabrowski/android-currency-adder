@@ -15,7 +15,7 @@ private const val RETRY_TIME_IN_MILLIS = 15_000L
 fun interface GetExchangeRatesUseCase : () -> Flow<Result<List<ExchangeRate>>>
 
 fun getExchangeRates(
-    exchangeRatesRepository: ExchangeRatesRepository
+    exchangeRatesRepository: ExchangeRatesRepository,
 ): Flow<Result<List<ExchangeRate>>> = exchangeRatesRepository
     .getExchangeRates()
     .map {

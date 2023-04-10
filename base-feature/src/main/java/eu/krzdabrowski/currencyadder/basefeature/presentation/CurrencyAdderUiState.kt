@@ -11,7 +11,7 @@ data class CurrencyAdderUiState(
     val isLoading: Boolean = false,
     val userSavings: List<UserSavingDisplayable> = emptyList(),
     val currencyCodes: List<String> = emptyList(),
-    val isError: Boolean = false
+    val isError: Boolean = false,
 ) : Parcelable {
 
     sealed class PartialState {

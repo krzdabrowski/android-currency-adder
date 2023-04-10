@@ -11,7 +11,7 @@ private const val DATABASE_VERSION = 1
 
 @Database(
     entities = [ExchangeRateCached::class, UserSavingCached::class],
-    version = DATABASE_VERSION
+    version = DATABASE_VERSION,
 )
 abstract class AppDatabase : RoomDatabase() {
 

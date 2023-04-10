@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun CurrencyAdderRoute(
-    viewModel: CurrencyAdderViewModel = hiltViewModel()
+    viewModel: CurrencyAdderViewModel = hiltViewModel(),
 ) {
     HandleEvents(viewModel.event)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -51,7 +51,7 @@ fun CurrencyAdderRoute(
         },
         onRemoveUserSaving = {
             viewModel.acceptIntent(RemoveUserSaving(it))
-        }
+        },
     )
 }
 
@@ -61,7 +61,7 @@ internal fun CurrencyAdderScreen(
     onRefreshExchangeRates: () -> Unit,
     onAddUserSaving: () -> Unit,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
-    onRemoveUserSaving: (UserSavingDisplayable) -> Unit
+    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -71,25 +71,25 @@ internal fun CurrencyAdderScreen(
             FloatingActionButton(
                 onClick = {
                     onAddUserSaving()
-                }
+                },
             ) {
                 Icon(Icons.Filled.Add, stringResource(R.string.add_user_saving_content_description))
             }
-        }
+        },
     ) {
         // TODO: migrate from accompanist to built-in pull-to-refresh when added to Material3
         SwipeRefresh(
             state = rememberSwipeRefreshState(uiState.isLoading),
             onRefresh = onRefreshExchangeRates,
             modifier = Modifier
-                .padding(it)
+                .padding(it),
         ) {
             if (uiState.userSavings.isNotEmpty()) {
                 CurrencyAdderAvailableContent(
                     snackbarHostState = snackbarHostState,
                     uiState = uiState,
                     onUpdateUserSaving = onUpdateUserSaving,
-                    onRemoveUserSaving = onRemoveUserSaving
+                    onRemoveUserSaving = onRemoveUserSaving,
                 )
             } else {
                 CurrencyAdderNotAvailableContent()
@@ -108,14 +108,14 @@ private fun CurrencyAdderAvailableContent(
     snackbarHostState: SnackbarHostState,
     uiState: CurrencyAdderUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
-    onRemoveUserSaving: (UserSavingDisplayable) -> Unit
+    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
 ) {
     if (uiState.isError) {
         val errorMessage = stringResource(R.string.exchange_rates_error_refreshing)
 
         LaunchedEffect(snackbarHostState) {
             snackbarHostState.showSnackbar(
-                message = errorMessage
+                message = errorMessage,
             )
         }
     }
@@ -123,13 +123,13 @@ private fun CurrencyAdderAvailableContent(
     CurrencyAdderListContent(
         uiState = uiState,
         onUpdateUserSaving = onUpdateUserSaving,
-        onRemoveUserSaving = onRemoveUserSaving
+        onRemoveUserSaving = onRemoveUserSaving,
     )
 }
 
 @Composable
 private fun CurrencyAdderNotAvailableContent() {
     Text(
-        text = "Add some savings!"
+        text = "Add some savings!",
     )
 }

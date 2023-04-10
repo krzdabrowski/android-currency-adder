@@ -8,7 +8,7 @@ fun interface UpdateUserSavingUseCase : suspend (UserSaving) -> Result<Unit>
 
 suspend fun updateUserSaving(
     userSavingsRepository: UserSavingsRepository,
-    userSaving: UserSaving
+    userSaving: UserSaving,
 ): Result<Unit> = resultOf {
     userSavingsRepository.updateUserSaving(userSaving)
 }

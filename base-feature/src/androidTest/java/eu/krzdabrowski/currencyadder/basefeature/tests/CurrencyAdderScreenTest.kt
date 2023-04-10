@@ -38,8 +38,8 @@ class CurrencyAdderScreenTest {
         setUpComposable(
             CurrencyAdderUiState(
                 userSavings = testRockets,
-                isError = true
-            )
+                isError = true,
+            ),
         )
 
         composeTestRule
@@ -52,8 +52,8 @@ class CurrencyAdderScreenTest {
         setUpComposable(
             CurrencyAdderUiState(
                 userSavings = testRockets,
-                isError = true
-            )
+                isError = true,
+            ),
         )
 
         composeTestRule
@@ -64,7 +64,7 @@ class CurrencyAdderScreenTest {
     @Test
     fun rocketsScreen_whenContentNotAvailableAndErrorOccurs_shouldHaveErrorContent() {
         setUpComposable(
-            CurrencyAdderUiState(isError = true)
+            CurrencyAdderUiState(isError = true),
         )
 
         composeTestRule
@@ -73,13 +73,13 @@ class CurrencyAdderScreenTest {
     }
 
     private fun setUpComposable(
-        currencyAdderUiState: CurrencyAdderUiState
+        currencyAdderUiState: CurrencyAdderUiState,
     ) {
         composeTestRule.setContent {
             CurrencyAdderScreen(
                 uiState = currencyAdderUiState,
                 onRefreshExchangeRates = { },
-                onUserSavingCurrencyClicked = { }
+                onUserSavingCurrencyClicked = { },
             )
         }
     }

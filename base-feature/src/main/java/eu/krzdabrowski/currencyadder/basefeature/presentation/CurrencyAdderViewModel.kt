@@ -33,7 +33,7 @@ private const val BASE_EXCHANGE_RATE_CODE = "PLN"
 private val emptyUserSaving = UserSavingDisplayable(
     place = "",
     saving = "0",
-    currency = BASE_EXCHANGE_RATE_CODE
+    currency = BASE_EXCHANGE_RATE_CODE,
 )
 
 @Suppress("LongParameterList")
@@ -46,10 +46,10 @@ class CurrencyAdderViewModel @Inject constructor(
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
     private val getCurrencyCodesUseCase: GetCurrencyCodesUseCase,
     savedStateHandle: SavedStateHandle,
-    currencyAdderInitialState: CurrencyAdderUiState
+    currencyAdderInitialState: CurrencyAdderUiState,
 ) : BaseViewModel<CurrencyAdderUiState, PartialState, CurrencyAdderEvent, CurrencyAdderIntent>(
     savedStateHandle,
-    currencyAdderInitialState
+    currencyAdderInitialState,
 ) {
     init {
         acceptIntent(GetCurrencyCodes)
@@ -69,23 +69,23 @@ class CurrencyAdderViewModel @Inject constructor(
 
     override fun reduceUiState(
         previousState: CurrencyAdderUiState,
-        partialState: PartialState
+        partialState: PartialState,
     ): CurrencyAdderUiState = when (partialState) {
         is Loading -> previousState.copy(
             isLoading = true,
-            isError = false
+            isError = false,
         )
         is UserSavingsFetched -> previousState.copy(
             isLoading = false,
             userSavings = partialState.userSavings,
-            isError = false
+            isError = false,
         )
         is CurrencyCodesFetched -> previousState.copy(
-            currencyCodes = partialState.currencyCodes
+            currencyCodes = partialState.currencyCodes,
         )
         is Error -> previousState.copy(
             isLoading = false,
-            isError = true
+            isError = true,
         )
     }
 
@@ -107,7 +107,7 @@ class CurrencyAdderViewModel @Inject constructor(
 
     private fun addUserSaving(): Flow<PartialState> = flow {
         addUserSavingUseCase(
-            emptyUserSaving.toDomainModel()
+            emptyUserSaving.toDomainModel(),
         )
             .onFailure {
                 emit(Error(it))
@@ -116,7 +116,7 @@ class CurrencyAdderViewModel @Inject constructor(
 
     private fun updateUserSaving(updatedUserSaving: UserSavingDisplayable): Flow<PartialState> = flow {
         updateUserSavingUseCase(
-            updatedUserSaving.toDomainModel()
+            updatedUserSaving.toDomainModel(),
         )
             .onFailure {
                 emit(Error(it))
@@ -125,7 +125,7 @@ class CurrencyAdderViewModel @Inject constructor(
 
     private fun removeUserSaving(removedUserSaving: UserSavingDisplayable): Flow<PartialState> = flow {
         removeUserSavingUseCase(
-            removedUserSaving.toDomainModel()
+            removedUserSaving.toDomainModel(),
         )
             .onFailure {
                 emit(Error(it))

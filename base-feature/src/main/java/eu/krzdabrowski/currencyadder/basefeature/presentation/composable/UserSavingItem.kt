@@ -64,7 +64,7 @@ fun UserSavingItem(
     currencyCodes: List<String>,
     onItemUpdate: (UserSavingDisplayable) -> Unit,
     onItemRemove: (UserSavingDisplayable) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val currentItem by rememberUpdatedState(item)
     val dismissState = rememberDismissState(
@@ -75,7 +75,7 @@ fun UserSavingItem(
             } else {
                 false
             }
-        }
+        },
     )
 
     SwipeToDismiss(
@@ -85,10 +85,10 @@ fun UserSavingItem(
             UserSavingItemContent(
                 item = item,
                 currencyCodes = currencyCodes,
-                onItemUpdate = onItemUpdate
+                onItemUpdate = onItemUpdate,
             )
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -99,9 +99,10 @@ private fun SwipeBackground(dismissState: DismissState) {
     val color by animateColorAsState(
         when (dismissState.targetValue) {
             DismissedToStart,
-            DismissedToEnd -> Color.Red
+            DismissedToEnd,
+            -> Color.Red
             Default -> Color.LightGray
-        }
+        },
     )
 
     val alignment = when (direction) {
@@ -110,21 +111,21 @@ private fun SwipeBackground(dismissState: DismissState) {
     }
 
     val scale by animateFloatAsState(
-        if (dismissState.targetValue == Default) SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE else 1f
+        if (dismissState.targetValue == Default) SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE else 1f,
     )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color)
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
     ) {
         Icon(
             imageVector = Icons.Default.Delete,
             contentDescription = "Remove user saving",
             modifier = Modifier
                 .align(alignment)
-                .scale(scale)
+                .scale(scale),
         )
     }
 }
@@ -134,21 +135,21 @@ private fun UserSavingItemContent(
     item: UserSavingDisplayable,
     currencyCodes: List<String>,
     modifier: Modifier = Modifier,
-    onItemUpdate: (UserSavingDisplayable) -> Unit
+    onItemUpdate: (UserSavingDisplayable) -> Unit,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
             .testTag(
-                stringResource(R.string.user_saving_content_description)
+                stringResource(R.string.user_saving_content_description),
             ),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         UserSavingPlace(
             item = item,
             modifier = Modifier.weight(1f),
-            onItemUpdate = onItemUpdate
+            onItemUpdate = onItemUpdate,
         )
 
         VerticalDivider()
@@ -156,7 +157,7 @@ private fun UserSavingItemContent(
         UserSavingAmount(
             item = item,
             modifier = Modifier.weight(1f),
-            onItemUpdate = onItemUpdate
+            onItemUpdate = onItemUpdate,
         )
 
         VerticalDivider()
@@ -167,9 +168,9 @@ private fun UserSavingItemContent(
             modifier = Modifier.weight(1f),
             onCurrencyChange = {
                 onItemUpdate(
-                    item.copy(currency = it)
+                    item.copy(currency = it),
                 )
-            }
+            },
         )
     }
 }
@@ -178,7 +179,7 @@ private fun UserSavingItemContent(
 private fun UserSavingPlace(
     item: UserSavingDisplayable,
     modifier: Modifier = Modifier,
-    onItemUpdate: (UserSavingDisplayable) -> Unit
+    onItemUpdate: (UserSavingDisplayable) -> Unit,
 ) {
     var input by remember {
         mutableStateOf(item.place)
@@ -189,23 +190,23 @@ private fun UserSavingPlace(
         onValueChange = { input = it },
         modifier = modifier,
         textStyle = LocalTextStyle.current.copy(
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         ),
         singleLine = true,
         shape = RectangleShape,
         colors = TextFieldDefaults.textFieldColors(
             containerColor = MaterialTheme.colorScheme.background,
-            unfocusedIndicatorColor = Color.Transparent
-        )
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
     )
 
     DebounceEffect(
         input = input,
         operation = {
             onItemUpdate(
-                item.copy(place = input)
+                item.copy(place = input),
             )
-        }
+        },
     )
 }
 
@@ -213,7 +214,7 @@ private fun UserSavingPlace(
 private fun UserSavingAmount(
     item: UserSavingDisplayable,
     modifier: Modifier = Modifier,
-    onItemUpdate: (UserSavingDisplayable) -> Unit
+    onItemUpdate: (UserSavingDisplayable) -> Unit,
 ) {
     var currentInput by remember {
         mutableStateOf(item.saving)
@@ -231,26 +232,26 @@ private fun UserSavingAmount(
         },
         modifier = modifier,
         textStyle = LocalTextStyle.current.copy(
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         ),
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal
+            keyboardType = KeyboardType.Decimal,
         ),
         singleLine = true,
         shape = RectangleShape,
         colors = TextFieldDefaults.textFieldColors(
             containerColor = MaterialTheme.colorScheme.background,
-            unfocusedIndicatorColor = Color.Transparent
-        )
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
     )
 
     DebounceEffect(
         input = currentInput,
         operation = {
             onItemUpdate(
-                item.copy(saving = currentInput)
+                item.copy(saving = currentInput),
             )
-        }
+        },
     )
 }
 
@@ -259,14 +260,14 @@ private fun UserSavingCurrencyDropdownMenu(
     value: String,
     currencyCodes: List<String>,
     modifier: Modifier = Modifier,
-    onCurrencyChange: (String) -> Unit
+    onCurrencyChange: (String) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
-        modifier = modifier
+        modifier = modifier,
     ) {
         TextField(
             value = value,
@@ -275,18 +276,18 @@ private fun UserSavingCurrencyDropdownMenu(
             readOnly = true,
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             ),
             shape = RectangleShape,
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = MaterialTheme.colorScheme.background,
-                unfocusedIndicatorColor = Color.Transparent
-            )
+                unfocusedIndicatorColor = Color.Transparent,
+            ),
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
         ) {
             currencyCodes.forEach { code ->
                 DropdownMenuItem(
@@ -294,7 +295,7 @@ private fun UserSavingCurrencyDropdownMenu(
                     onClick = {
                         onCurrencyChange(code)
                         expanded = false
-                    }
+                    },
                 )
             }
         }
@@ -303,12 +304,12 @@ private fun UserSavingCurrencyDropdownMenu(
 
 @Composable
 private fun VerticalDivider(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Divider(
         modifier = modifier
             .fillMaxHeight()
-            .width(1.dp)
+            .width(1.dp),
     )
 }
 

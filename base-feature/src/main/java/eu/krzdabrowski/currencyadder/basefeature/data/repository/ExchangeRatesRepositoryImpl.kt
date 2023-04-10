@@ -17,7 +17,7 @@ private const val BASE_EXCHANGE_RATE_CODE = "PLN"
 
 class ExchangeRatesRepositoryImpl @Inject constructor(
     private val exchangeRatesApi: ExchangeRatesApi,
-    private val exchangeRatesDao: ExchangeRatesDao
+    private val exchangeRatesDao: ExchangeRatesDao,
 ) : ExchangeRatesRepository {
 
     override fun getExchangeRates(): Flow<List<ExchangeRate>> {
@@ -50,7 +50,7 @@ class ExchangeRatesRepositoryImpl @Inject constructor(
             }
             .also { ratesToSave ->
                 exchangeRatesDao.saveExchangeRates(
-                    ratesToSave.sortedBy { it.currencyCode }
+                    ratesToSave.sortedBy { it.currencyCode },
                 )
             }
     }
@@ -60,9 +60,9 @@ class ExchangeRatesRepositoryImpl @Inject constructor(
             listOf(
                 ExchangeRateCached(
                     currencyCode = BASE_EXCHANGE_RATE_CODE,
-                    currencyRate = 1.0
-                )
-            )
+                    currencyRate = 1.0,
+                ),
+            ),
         )
     }
 }

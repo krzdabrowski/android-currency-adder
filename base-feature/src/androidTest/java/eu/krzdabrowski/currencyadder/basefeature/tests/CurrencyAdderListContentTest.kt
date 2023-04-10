@@ -22,7 +22,7 @@ class CurrencyAdderListContentTest {
         composeTestRule.setContent {
             CurrencyAdderListContent(
                 userSavingList = testRockets,
-                onUserSavingClick = { }
+                onUserSavingClick = { },
             )
         }
     }

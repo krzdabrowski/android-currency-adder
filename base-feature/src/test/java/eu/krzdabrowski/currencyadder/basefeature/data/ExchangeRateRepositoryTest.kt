@@ -69,7 +69,7 @@ class ExchangeRateRepositoryTest {
     private fun setUpExchangeRatesRepository() {
         objectUnderTest = ExchangeRatesRepositoryImpl(
             exchangeRatesApi,
-            exchangeRatesDao
+            exchangeRatesDao,
         )
     }
 }

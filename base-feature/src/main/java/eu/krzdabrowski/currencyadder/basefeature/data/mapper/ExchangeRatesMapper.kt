@@ -7,16 +7,16 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.model.ExchangeRate
 fun List<ExchangeRatesResponse>.toDomainModels() = this[0].exchangeRates.map {
     ExchangeRate(
         currencyCode = it.code,
-        currencyRate = it.rate
+        currencyRate = it.rate,
     )
 }
 
 fun ExchangeRateCached.toDomainModel() = ExchangeRate(
     currencyCode = currencyCode,
-    currencyRate = currencyRate
+    currencyRate = currencyRate,
 )
 
 fun ExchangeRate.toEntityModel() = ExchangeRateCached(
     currencyCode = currencyCode,
-    currencyRate = currencyRate
+    currencyRate = currencyRate,
 )

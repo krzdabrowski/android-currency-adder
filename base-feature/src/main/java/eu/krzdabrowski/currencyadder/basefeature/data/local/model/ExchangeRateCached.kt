@@ -12,5 +12,5 @@ data class ExchangeRateCached(
     val currencyCode: String,
 
     @ColumnInfo(name = "currency_rate")
-    val currencyRate: Double
+    val currencyRate: Double,
 )

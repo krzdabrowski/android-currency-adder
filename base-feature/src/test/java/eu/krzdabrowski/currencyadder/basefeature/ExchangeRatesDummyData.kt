@@ -7,13 +7,13 @@ internal fun generateTestExchangeRatesFromRemote() = ExchangeRatesResponse(
     exchangeRates = listOf(
         ExchangeRatesResponse.ExchangeRate(
             code = "USD",
-            rate = 4.5276
-        )
-    )
+            rate = 4.5276,
+        ),
+    ),
 )
 
 internal fun generateTestExchangeRatesFromDomain() = ExchangeRate(
     id = 1,
     currencyCode = "USD",
-    currencyRate = 4.5276
+    currencyRate = 4.5276,
 )

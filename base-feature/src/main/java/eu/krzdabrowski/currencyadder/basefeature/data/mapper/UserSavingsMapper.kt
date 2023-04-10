@@ -7,12 +7,12 @@ fun UserSavingCached.toDomainModel() = UserSaving(
     id = id,
     place = place,
     saving = saving,
-    currency = currency
+    currency = currency,
 )
 
 fun UserSaving.toEntityModel() = UserSavingCached(
     id = id,
     place = place,
     saving = saving,
-    currency = currency
+    currency = currency,
 )

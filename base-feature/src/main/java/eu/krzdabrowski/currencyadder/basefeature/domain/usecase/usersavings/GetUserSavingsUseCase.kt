@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 fun interface GetUserSavingsUseCase : () -> Flow<Result<List<UserSaving>>>
 
 fun getUserSavings(
-    userSavingsRepository: UserSavingsRepository
+    userSavingsRepository: UserSavingsRepository,
 ): Flow<Result<List<UserSaving>>> = userSavingsRepository
     .getUserSavings()
     .map {

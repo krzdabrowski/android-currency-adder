@@ -17,5 +17,5 @@ data class UserSavingCached(
     val saving: Double,
 
     @ColumnInfo(name = "currency")
-    val currency: String
+    val currency: String,
 )
