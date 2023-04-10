@@ -194,8 +194,9 @@ private fun UserSavingPlace(
         ),
         singleLine = true,
         shape = RectangleShape,
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = MaterialTheme.colorScheme.background,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.background,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
             unfocusedIndicatorColor = Color.Transparent,
         ),
     )
@@ -239,8 +240,9 @@ private fun UserSavingAmount(
         ),
         singleLine = true,
         shape = RectangleShape,
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = MaterialTheme.colorScheme.background,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.background,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
             unfocusedIndicatorColor = Color.Transparent,
         ),
     )
@@ -279,8 +281,9 @@ private fun UserSavingCurrencyDropdownMenu(
                 fontWeight = FontWeight.Bold,
             ),
             shape = RectangleShape,
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.background,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.background,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
         )
