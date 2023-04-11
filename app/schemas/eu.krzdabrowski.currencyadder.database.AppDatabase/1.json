@@ -2,21 +2,21 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1e9341e7f066cfc05d18bf69a00b6d60",
+    "identityHash": "e8096dea3ab97cafc8a60fa067659f67",
     "entities": [
       {
         "tableName": "Exchange_Rates",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`currency_code` TEXT NOT NULL, `currency_rate` REAL NOT NULL, PRIMARY KEY(`currency_code`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code` TEXT NOT NULL, `value` REAL NOT NULL, PRIMARY KEY(`code`))",
         "fields": [
           {
             "fieldPath": "currencyCode",
-            "columnName": "currency_code",
+            "columnName": "code",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "currencyRate",
-            "columnName": "currency_rate",
+            "columnName": "value",
             "affinity": "REAL",
             "notNull": true
           }
@@ -24,7 +24,7 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "currency_code"
+            "code"
           ]
         },
         "indices": [],
@@ -32,7 +32,7 @@
       },
       {
         "tableName": "User_Savings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `place` TEXT NOT NULL, `saving` REAL NOT NULL, `currency` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `place` TEXT NOT NULL, `amount` REAL NOT NULL, `currency` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -47,8 +47,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "saving",
-            "columnName": "saving",
+            "fieldPath": "amount",
+            "columnName": "amount",
             "affinity": "REAL",
             "notNull": true
           },
@@ -72,7 +72,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1e9341e7f066cfc05d18bf69a00b6d60')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e8096dea3ab97cafc8a60fa067659f67')"
     ]
   }
 }

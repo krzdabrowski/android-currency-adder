@@ -218,7 +218,7 @@ private fun UserSavingAmount(
     onItemUpdate: (UserSavingDisplayable) -> Unit,
 ) {
     var currentInput by remember {
-        mutableStateOf(item.saving)
+        mutableStateOf(item.amount)
     }
 
     TextField(
@@ -251,7 +251,7 @@ private fun UserSavingAmount(
         input = currentInput,
         operation = {
             onItemUpdate(
-                item.copy(saving = currentInput),
+                item.copy(amount = currentInput),
             )
         },
     )

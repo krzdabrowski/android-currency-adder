@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object CurrencyAdderViewModelModule {
+internal object CurrencyAdderViewModelModule {
 
     @Provides
     fun provideInitialCurrencyAdderUiState(): CurrencyAdderUiState = CurrencyAdderUiState()
@@ -22,7 +22,7 @@ object CurrencyAdderViewModelModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface CurrencyAdderSingletonModule {
+internal interface CurrencyAdderSingletonModule {
 
     @Singleton
     @Binds

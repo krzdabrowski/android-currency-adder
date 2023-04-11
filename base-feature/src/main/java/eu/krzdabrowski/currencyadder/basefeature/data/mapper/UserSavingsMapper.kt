@@ -6,13 +6,13 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
 fun UserSavingCached.toDomainModel() = UserSaving(
     id = id,
     place = place,
-    saving = saving,
+    amount = amount,
     currency = currency,
 )
 
 fun UserSaving.toEntityModel() = UserSavingCached(
     id = id,
     place = place,
-    saving = saving,
+    amount = amount,
     currency = currency,
 )

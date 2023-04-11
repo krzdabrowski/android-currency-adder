@@ -12,7 +12,7 @@ interface ExchangeRatesDao {
     @Query("SELECT * FROM Exchange_Rates")
     fun getExchangeRates(): Flow<List<ExchangeRateCached>>
 
-    @Query("SELECT currency_code FROM Exchange_Rates")
+    @Query("SELECT code FROM Exchange_Rates")
     suspend fun getCurrencyCodes(): List<String>
 
     @Upsert

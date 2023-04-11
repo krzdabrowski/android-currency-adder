@@ -32,7 +32,7 @@ private const val BASE_EXCHANGE_RATE_CODE = "PLN"
 
 private val emptyUserSaving = UserSavingDisplayable(
     place = "",
-    saving = "0",
+    amount = "0",
     currency = BASE_EXCHANGE_RATE_CODE,
 )
 

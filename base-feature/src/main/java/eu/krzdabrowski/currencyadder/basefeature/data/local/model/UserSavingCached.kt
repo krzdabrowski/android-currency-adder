@@ -13,8 +13,8 @@ data class UserSavingCached(
     @ColumnInfo(name = "place")
     val place: String,
 
-    @ColumnInfo(name = "saving")
-    val saving: Double,
+    @ColumnInfo(name = "amount")
+    val amount: Double,
 
     @ColumnInfo(name = "currency")
     val currency: String,

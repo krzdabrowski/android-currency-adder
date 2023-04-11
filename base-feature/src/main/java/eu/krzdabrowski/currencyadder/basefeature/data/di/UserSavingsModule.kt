@@ -8,18 +8,20 @@ import dagger.hilt.components.SingletonComponent
 import eu.krzdabrowski.currencyadder.basefeature.data.repository.UserSavingsRepositoryImpl
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.UserSavingsRepository
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetTotalUserSavingsInChosenCurrencyUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.addUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.getTotalUserSavingsInChosenCurrency
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.getUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.removeUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.updateUserSaving
 import javax.inject.Singleton
 
-@Module(includes = [UserSavingsModule.BindsModule::class])
+@Module
 @InstallIn(SingletonComponent::class)
-object UserSavingsModule {
+internal object UserSavingsModule {
 
     @Provides
     fun provideGetUserSavingsUseCase(
@@ -27,6 +29,18 @@ object UserSavingsModule {
     ): GetUserSavingsUseCase {
         return GetUserSavingsUseCase {
             getUserSavings(userSavingsRepository)
+        }
+    }
+
+    @Provides
+    fun provideGetTotalUserSavingsInChosenCurrencyUseCase(
+        userSavingsRepository: UserSavingsRepository
+    ): GetTotalUserSavingsInChosenCurrencyUseCase {
+        return GetTotalUserSavingsInChosenCurrencyUseCase {
+            getTotalUserSavingsInChosenCurrency(
+                userSavingsRepository,
+                it
+            )
         }
     }
 

@@ -17,9 +17,9 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.re
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-@Module(includes = [ExchangeRatesModule.BindsModule::class])
+@Module
 @InstallIn(SingletonComponent::class)
-object ExchangeRatesModule {
+internal object ExchangeRatesModule {
 
     @Provides
     @Singleton

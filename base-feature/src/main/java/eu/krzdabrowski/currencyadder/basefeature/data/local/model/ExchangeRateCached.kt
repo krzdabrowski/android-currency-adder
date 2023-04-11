@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey
 data class ExchangeRateCached(
 
     @PrimaryKey
-    @ColumnInfo(name = "currency_code")
+    @ColumnInfo(name = "code")
     val currencyCode: String,
 
-    @ColumnInfo(name = "currency_rate")
+    @ColumnInfo(name = "value")
     val currencyRate: Double,
 )

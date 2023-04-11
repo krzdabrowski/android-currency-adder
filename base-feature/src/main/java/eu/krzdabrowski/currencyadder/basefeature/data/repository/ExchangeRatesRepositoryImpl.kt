@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-private const val BASE_EXCHANGE_RATE_CODE = "PLN"
+internal const val BASE_EXCHANGE_RATE_CODE = "PLN"
 
 class ExchangeRatesRepositoryImpl @Inject constructor(
     private val exchangeRatesApi: ExchangeRatesApi,
