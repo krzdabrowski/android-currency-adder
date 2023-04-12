@@ -54,6 +54,7 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDi
 import eu.krzdabrowski.currencyadder.core.extensions.DebounceEffect
 
 private const val SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE = 0.75f
+private const val MAX_TOTAL_DIGITS = 12
 private const val MAX_FRACTIONAL_DIGITS = 2
 private const val FRACTIONAL_LIMITER: Char = '.'
 private const val FRACTIONAL_DEFAULT_VALUE: Char = 'x'
@@ -321,7 +322,7 @@ private fun VerticalDivider(
 }
 
 private fun String.isValidAmount() =
-    toDoubleOrNull() != null
+    toDoubleOrNull() != null && length <= MAX_TOTAL_DIGITS
 
 private fun String.isValidFractional() =
     getOrElse(length - MAX_FRACTIONAL_DIGITS - 2) { FRACTIONAL_DEFAULT_VALUE } != FRACTIONAL_LIMITER
