@@ -10,10 +10,10 @@ private const val INPUT_DEBOUNCE_VALUE_IN_MILLIS = 1000L
 fun DebounceEffect(
     input: String,
     debounceValue: Long = INPUT_DEBOUNCE_VALUE_IN_MILLIS,
-    operation: () -> Unit,
+    operation: (String) -> Unit,
 ) {
     LaunchedEffect(input) {
         delay(debounceValue)
-        operation()
+        operation(input)
     }
 }

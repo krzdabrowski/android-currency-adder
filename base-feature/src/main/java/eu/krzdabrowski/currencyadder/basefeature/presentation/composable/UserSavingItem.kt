@@ -204,9 +204,11 @@ private fun UserSavingPlace(
     DebounceEffect(
         input = input,
         operation = {
-            onItemUpdate(
-                item.copy(place = input),
-            )
+            if (it != item.place) {
+                onItemUpdate(
+                    item.copy(place = input),
+                )
+            }
         },
     )
 }
@@ -250,9 +252,11 @@ private fun UserSavingAmount(
     DebounceEffect(
         input = currentInput,
         operation = {
-            onItemUpdate(
-                item.copy(amount = currentInput),
-            )
+            if (it != item.amount) {
+                onItemUpdate(
+                    item.copy(amount = currentInput),
+                )
+            }
         },
     )
 }
