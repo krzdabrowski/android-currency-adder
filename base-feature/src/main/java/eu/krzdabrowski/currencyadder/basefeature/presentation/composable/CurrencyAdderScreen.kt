@@ -1,29 +1,18 @@
 package eu.krzdabrowski.currencyadder.basefeature.presentation.composable
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.AddUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RemoveUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UpdateChosenCurrencyCodeForTotalSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UpdateUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderViewModel
@@ -52,6 +41,9 @@ fun CurrencyAdderRoute(
         onRemoveUserSaving = {
             viewModel.acceptIntent(RemoveUserSaving(it))
         },
+        onUpdateChosenCurrencyCodeForTotalSavings = {
+            viewModel.acceptIntent(UpdateChosenCurrencyCodeForTotalSavings(it))
+        }
     )
 }
 
@@ -62,74 +54,27 @@ internal fun CurrencyAdderScreen(
     onAddUserSaving: () -> Unit,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+    onUpdateChosenCurrencyCodeForTotalSavings: (String) -> Unit
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
+    Column {
+        CurrencyAdderScreenContent(
+            uiState = uiState,
+            modifier = Modifier.fillMaxHeight(0.85f),
+            onRefreshExchangeRates = onRefreshExchangeRates,
+            onAddUserSaving = onAddUserSaving,
+            onUpdateUserSaving = onUpdateUserSaving,
+            onRemoveUserSaving = onRemoveUserSaving
+        )
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    onAddUserSaving()
-                },
-            ) {
-                Icon(Icons.Filled.Add, stringResource(R.string.add_user_saving_content_description))
-            }
-        },
-    ) {
-        // TODO: migrate from accompanist to built-in pull-to-refresh when added to Material3
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(uiState.isLoading),
-            onRefresh = onRefreshExchangeRates,
-            modifier = Modifier
-                .padding(it),
-        ) {
-            if (uiState.userSavings.isNotEmpty()) {
-                CurrencyAdderAvailableContent(
-                    snackbarHostState = snackbarHostState,
-                    uiState = uiState,
-                    onUpdateUserSaving = onUpdateUserSaving,
-                    onRemoveUserSaving = onRemoveUserSaving,
-                )
-            } else {
-                CurrencyAdderNotAvailableContent()
-            }
-        }
+        CurrencyAdderTotalSavingsContent(
+            uiState = uiState,
+            onGetTotalUserSavingsInChosenCurrency = onUpdateChosenCurrencyCodeForTotalSavings,
+            modifier = Modifier.wrapContentHeight()
+        )
     }
 }
 
 @Composable
 private fun HandleEvents(events: Flow<CurrencyAdderEvent>) {
     events.collectWithLifecycle { }
-}
-
-@Composable
-private fun CurrencyAdderAvailableContent(
-    snackbarHostState: SnackbarHostState,
-    uiState: CurrencyAdderUiState,
-    onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
-    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
-) {
-    if (uiState.isError) {
-        val errorMessage = stringResource(R.string.exchange_rates_error_refreshing)
-
-        LaunchedEffect(snackbarHostState) {
-            snackbarHostState.showSnackbar(
-                message = errorMessage,
-            )
-        }
-    }
-
-    CurrencyAdderListContent(
-        uiState = uiState,
-        onUpdateUserSaving = onUpdateUserSaving,
-        onRemoveUserSaving = onRemoveUserSaving,
-    )
-}
-
-@Composable
-private fun CurrencyAdderNotAvailableContent() {
-    Text(
-        text = "Add some savings!",
-    )
 }

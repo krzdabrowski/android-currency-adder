@@ -1,0 +1,168 @@
+package eu.krzdabrowski.currencyadder.basefeature.presentation.composable
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import eu.krzdabrowski.currencyadder.basefeature.R
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
+import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
+
+const val USER_SAVING_DIVIDER_TEST_TAG = "userSavingDividerTestTag"
+private val headerStringResources = listOf(
+    R.string.list_header_place,
+    R.string.list_header_saving,
+    R.string.list_header_currency,
+)
+
+@Composable
+fun CurrencyAdderScreenContent(
+    uiState: CurrencyAdderUiState,
+    modifier: Modifier = Modifier,
+    onRefreshExchangeRates: () -> Unit,
+    onAddUserSaving: () -> Unit,
+    onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
+    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    Scaffold(
+        modifier = modifier,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    onAddUserSaving()
+                },
+            ) {
+                Icon(Icons.Filled.Add, stringResource(R.string.add_user_saving_content_description))
+            }
+        },
+    ) {
+        // TODO: migrate from accompanist to built-in pull-to-refresh when added to Material3
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(uiState.isLoading),
+            onRefresh = onRefreshExchangeRates,
+            modifier = Modifier
+                .padding(it),
+        ) {
+            if (uiState.userSavings.isNotEmpty()) {
+                CurrencyAdderScreenAvailableContent(
+                    snackbarHostState = snackbarHostState,
+                    uiState = uiState,
+                    onUpdateUserSaving = onUpdateUserSaving,
+                    onRemoveUserSaving = onRemoveUserSaving,
+                )
+            } else {
+                CurrencyAdderScreenNotAvailableContent()
+            }
+        }
+    }
+}
+
+@Composable
+private fun CurrencyAdderScreenAvailableContent(
+    snackbarHostState: SnackbarHostState,
+    uiState: CurrencyAdderUiState,
+    onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
+    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+) {
+    if (uiState.isError) {
+        val errorMessage = stringResource(R.string.exchange_rates_error_refreshing)
+
+        LaunchedEffect(snackbarHostState) {
+            snackbarHostState.showSnackbar(
+                message = errorMessage,
+            )
+        }
+    }
+
+    CurrencyAdderListContent(
+        uiState = uiState,
+        onUpdateUserSaving = onUpdateUserSaving,
+        onRemoveUserSaving = onRemoveUserSaving,
+    )
+}
+
+@Composable
+private fun CurrencyAdderScreenNotAvailableContent() {
+    Text(
+        text = "Add some savings!",
+    )
+}
+
+@Composable
+private fun CurrencyAdderListContent(
+    uiState: CurrencyAdderUiState,
+    onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
+    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier,
+    ) {
+        header()
+
+        items(
+            items = uiState.userSavings,
+            key = { userSaving -> userSaving.id },
+        ) {
+            UserSavingItem(
+                item = it,
+                currencyCodes = uiState.currencyCodes,
+                modifier = Modifier.animateItemPlacement(),
+                onItemUpdate = onUpdateUserSaving,
+                onItemRemove = onRemoveUserSaving,
+            )
+
+            Divider(color = Color.Black)
+        }
+    }
+}
+
+private fun LazyListScope.header() {
+    stickyHeader {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(
+                    vertical = dimensionResource(R.dimen.dimen_small),
+                ),
+            horizontalArrangement = Arrangement.SpaceAround,
+        ) {
+            for (headerId in headerStringResources) {
+                Text(
+                    text = stringResource(headerId),
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            }
+        }
+    }
+}

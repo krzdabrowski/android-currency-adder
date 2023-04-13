@@ -4,22 +4,31 @@ import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.GetChosenCurrencyCodeForTotalSavingsUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.GetTotalUserSavingsUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.UpdateChosenCurrencyCodeForTotalSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.AddUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.GetChosenCurrencyCodeForTotalSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.GetCurrencyCodes
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.GetTotalUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.GetUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RemoveUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UpdateChosenCurrencyCodeForTotalSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.UpdateUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.ChosenCurrencyCodeChanged
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.CurrencyCodesFetched
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.Error
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.Loading
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.TotalUserSavingsFetched
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState.PartialState.UserSavingsFetched
 import eu.krzdabrowski.currencyadder.basefeature.presentation.mapper.toDomainModel
+import eu.krzdabrowski.currencyadder.basefeature.presentation.mapper.toFormattedAmount
 import eu.krzdabrowski.currencyadder.basefeature.presentation.mapper.toPresentationModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
 import eu.krzdabrowski.currencyadder.core.base.BaseViewModel
@@ -36,7 +45,6 @@ private val emptyUserSaving = UserSavingDisplayable(
     currency = BASE_EXCHANGE_RATE_CODE,
 )
 
-@Suppress("LongParameterList")
 @HiltViewModel
 class CurrencyAdderViewModel @Inject constructor(
     private val getUserSavingsUseCase: GetUserSavingsUseCase,
@@ -45,6 +53,9 @@ class CurrencyAdderViewModel @Inject constructor(
     private val removeUserSavingUseCase: RemoveUserSavingUseCase,
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
     private val getCurrencyCodesUseCase: GetCurrencyCodesUseCase,
+    private val getTotalUserSavingsUseCase: GetTotalUserSavingsUseCase,
+    private val getChosenCurrencyCodeForTotalSavingsUseCase: GetChosenCurrencyCodeForTotalSavingsUseCase,
+    private val updateChosenCurrencyCodeForTotalSavingsUseCase: UpdateChosenCurrencyCodeForTotalSavingsUseCase,
     savedStateHandle: SavedStateHandle,
     currencyAdderInitialState: CurrencyAdderUiState,
 ) : BaseViewModel<CurrencyAdderUiState, PartialState, CurrencyAdderEvent, CurrencyAdderIntent>(
@@ -54,6 +65,8 @@ class CurrencyAdderViewModel @Inject constructor(
     init {
         acceptIntent(GetCurrencyCodes)
         acceptIntent(GetUserSavings)
+        acceptIntent(GetTotalUserSavings)
+        acceptIntent(GetChosenCurrencyCodeForTotalSavings)
         acceptIntent(RefreshExchangeRates)
     }
 
@@ -65,6 +78,10 @@ class CurrencyAdderViewModel @Inject constructor(
 
         is RefreshExchangeRates -> refreshExchangeRates()
         is GetCurrencyCodes -> getCurrencyCodes()
+
+        is GetTotalUserSavings -> getTotalUserSavings()
+        is GetChosenCurrencyCodeForTotalSavings -> getChosenCurrencyCodeForTotalSavings()
+        is UpdateChosenCurrencyCodeForTotalSavings -> updateChosenCurrencyCodeForTotalSavings(intent.currencyCode)
     }
 
     override fun reduceUiState(
@@ -80,12 +97,21 @@ class CurrencyAdderViewModel @Inject constructor(
             userSavings = partialState.userSavings,
             isError = false,
         )
-        is CurrencyCodesFetched -> previousState.copy(
-            currencyCodes = partialState.currencyCodes,
-        )
         is Error -> previousState.copy(
             isLoading = false,
             isError = true,
+        )
+
+        is CurrencyCodesFetched -> previousState.copy(
+            currencyCodes = partialState.currencyCodes,
+        )
+
+        is TotalUserSavingsFetched -> previousState.copy(
+            totalUserSavings = partialState.totalUserSavings
+        )
+
+        is ChosenCurrencyCodeChanged -> previousState.copy(
+            chosenCurrencyCode = partialState.currencyCode
         )
     }
 
@@ -144,6 +170,43 @@ class CurrencyAdderViewModel @Inject constructor(
             .onSuccess {
                 emit(CurrencyCodesFetched(it))
             }
+            .onFailure {
+                emit(Error(it))
+            }
+    }
+
+    private fun getTotalUserSavings(): Flow<PartialState> = flow {
+        getTotalUserSavingsUseCase()
+            .collect { result ->
+                result
+                    .onSuccess {
+                        emit(TotalUserSavingsFetched(it.toFormattedAmount()))
+                    }
+                    .onFailure {
+                        emit(Error(it))
+                    }
+            }
+    }
+
+    private fun getChosenCurrencyCodeForTotalSavings(): Flow<PartialState> = flow {
+        getChosenCurrencyCodeForTotalSavingsUseCase()
+            .collect { result ->
+                result
+                    .onSuccess {
+                        if (it.isNotEmpty()) {
+                            emit(ChosenCurrencyCodeChanged(it))
+                        } else {
+                            updateChosenCurrencyCodeForTotalSavingsUseCase(BASE_EXCHANGE_RATE_CODE)
+                        }
+                    }
+                    .onFailure {
+                        emit(Error(it))
+                    }
+            }
+    }
+
+    private fun updateChosenCurrencyCodeForTotalSavings(currencyCode: String): Flow<PartialState> = flow {
+        updateChosenCurrencyCodeForTotalSavingsUseCase(currencyCode)
             .onFailure {
                 emit(Error(it))
             }

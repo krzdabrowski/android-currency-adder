@@ -163,7 +163,7 @@ private fun UserSavingItemContent(
 
         VerticalDivider()
 
-        UserSavingCurrencyDropdownMenu(
+        CurrencyAdderChosenCurrencyDropdownMenu(
             value = item.currency,
             currencyCodes = currencyCodes,
             modifier = Modifier.weight(1f),
@@ -263,7 +263,7 @@ private fun UserSavingAmount(
 }
 
 @Composable
-private fun UserSavingCurrencyDropdownMenu(
+private fun CurrencyAdderChosenCurrencyDropdownMenu(
     value: String,
     currencyCodes: List<String>,
     modifier: Modifier = Modifier,

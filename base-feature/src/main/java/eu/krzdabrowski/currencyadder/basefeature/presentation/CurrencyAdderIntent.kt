@@ -10,4 +10,8 @@ sealed class CurrencyAdderIntent {
 
     object RefreshExchangeRates : CurrencyAdderIntent()
     object GetCurrencyCodes : CurrencyAdderIntent()
+
+    object GetTotalUserSavings : CurrencyAdderIntent()
+    object GetChosenCurrencyCodeForTotalSavings : CurrencyAdderIntent()
+    data class UpdateChosenCurrencyCodeForTotalSavings(val currencyCode: String) : CurrencyAdderIntent()
 }
