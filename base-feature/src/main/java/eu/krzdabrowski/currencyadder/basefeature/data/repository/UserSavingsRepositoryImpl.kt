@@ -21,10 +21,6 @@ class UserSavingsRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getTotalUserSavingsInChosenCurrency(currencyCode: String): Flow<Double> {
-        return userSavingsDao.getTotalUserSavingsInChosenCurrency(currencyCode)
-    }
-
     override suspend fun addUserSaving(userSaving: UserSaving) {
         userSavingsDao
             .addUserSaving(

@@ -7,8 +7,6 @@ interface UserSavingsRepository {
 
     fun getUserSavings(): Flow<List<UserSaving>>
 
-    fun getTotalUserSavingsInChosenCurrency(currencyCode: String): Flow<Double>
-
     suspend fun addUserSaving(userSaving: UserSaving)
 
     suspend fun updateUserSaving(userSaving: UserSaving)
