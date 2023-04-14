@@ -21,6 +21,8 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSa
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.composable.UserSavingsContent
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 
+private const val USER_SAVINGS_SCREEN_HEIGHT_FRACTION = 0.8f
+
 @Composable
 fun CurrencyAdderRoute(
     userSavingsViewModel: UserSavingsViewModel = hiltViewModel(),
@@ -63,7 +65,7 @@ private fun CurrencyAdderScreen(
     Column {
         UserSavingsContent(
             uiState = userSavingsUiState,
-            modifier = Modifier.fillMaxHeight(0.85f),
+            modifier = Modifier.fillMaxHeight(USER_SAVINGS_SCREEN_HEIGHT_FRACTION),
             onAddUserSaving = onAddUserSaving,
             onUpdateUserSaving = onUpdateUserSaving,
             onRemoveUserSaving = onRemoveUserSaving,

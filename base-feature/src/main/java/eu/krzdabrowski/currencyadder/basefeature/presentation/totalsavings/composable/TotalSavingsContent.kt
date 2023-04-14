@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -41,18 +40,20 @@ fun TotalSavingsContent(
         Row(
             modifier = modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(start = 16.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = stringResource(R.string.total_amount),
+                fontWeight = FontWeight.Light,
                 style = MaterialTheme.typography.displaySmall
             )
 
             Text(
                 text = uiState.totalUserSavings,
-                modifier = Modifier.weight(3f),
+                modifier = Modifier.weight(2f),
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Right,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
@@ -88,9 +89,9 @@ private fun TotalSavingsChosenCurrencyDropdownMenu(
             onValueChange = { },
             modifier = Modifier.menuAnchor(),
             readOnly = true,
-            textStyle = LocalTextStyle.current.copy(
+            textStyle = MaterialTheme.typography.headlineLarge.copy(
                 textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.SemiBold,
             ),
             shape = RectangleShape,
             colors = TextFieldDefaults.colors(
