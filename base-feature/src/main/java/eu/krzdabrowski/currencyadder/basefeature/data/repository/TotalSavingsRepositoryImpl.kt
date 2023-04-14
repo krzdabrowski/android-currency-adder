@@ -23,7 +23,7 @@ class TotalSavingsRepositoryImpl @Inject constructor(
             .flatMapLatest { currencyCode ->
                 combine(
                     userSavingsDao.getTotalUserSavingsInBaseCurrency(),
-                    exchangeRatesDao.getExchangeRateForChosenCurrency(currencyCode)
+                    exchangeRatesDao.getExchangeRateForChosenCurrency(currencyCode),
                 ) { totalUserSavingsInBaseCurrency, exchangeRateForChosenCurrency ->
 
                     if (exchangeRateForChosenCurrency != DEFAULT_VALUE_FOR_DOUBLE) {

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 fun interface GetChosenCurrencyCodeForTotalSavingsUseCase : () -> Flow<Result<String>>
 
 fun getChosenCurrencyCodeForTotalSavings(
-    totalSavingsRepository: TotalSavingsRepository
+    totalSavingsRepository: TotalSavingsRepository,
 ): Flow<Result<String>> = totalSavingsRepository
     .getChosenCurrencyCodeForTotalSavings()
     .map {

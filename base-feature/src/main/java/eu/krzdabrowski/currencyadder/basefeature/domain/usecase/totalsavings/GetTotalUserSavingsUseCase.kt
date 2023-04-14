@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 fun interface GetTotalUserSavingsUseCase : () -> Flow<Result<Double>>
 
 fun getTotalUserSavings(
-    totalSavingsRepository: TotalSavingsRepository
+    totalSavingsRepository: TotalSavingsRepository,
 ): Flow<Result<Double>> = totalSavingsRepository
     .getTotalUserSavings()
     .map {

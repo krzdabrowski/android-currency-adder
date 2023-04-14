@@ -48,7 +48,7 @@ fun CurrencyAdderRoute(
         },
         onUpdateChosenCurrencyCodeForTotalSavings = {
             totalSavingsViewModel.acceptIntent(UpdateChosenCurrencyCodeForTotalSavings(it))
-        }
+        },
     )
 }
 
@@ -60,7 +60,7 @@ private fun CurrencyAdderScreen(
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
     onRefreshExchangeRates: () -> Unit,
-    onUpdateChosenCurrencyCodeForTotalSavings: (String) -> Unit
+    onUpdateChosenCurrencyCodeForTotalSavings: (String) -> Unit,
 ) {
     Column {
         UserSavingsContent(
@@ -75,7 +75,7 @@ private fun CurrencyAdderScreen(
         TotalSavingsContent(
             uiState = totalSavingsUiState,
             onGetTotalUserSavingsInChosenCurrency = onUpdateChosenCurrencyCodeForTotalSavings,
-            modifier = Modifier.wrapContentHeight()
+            modifier = Modifier.wrapContentHeight(),
         )
     }
 }

@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class TotalSavingsUiState(
     val totalUserSavings: String = "",
     val currencyCodes: List<String> = emptyList(),
-    val chosenCurrencyCode: String = ""
+    val chosenCurrencyCode: String = "",
 ) : Parcelable {
 
     sealed interface PartialState {

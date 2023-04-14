@@ -8,9 +8,9 @@ import eu.krzdabrowski.currencyadder.basefeature.generateTestExchangeRatesFromDo
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsEvent.OpenWebBrowserWithDetails
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.ChooseUserSavingCurrency
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RefreshExchangeRates
-import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper.toPresentationModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsViewModel
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper.toPresentationModel
 import eu.krzdabrowski.currencyadder.core.utils.MainDispatcherExtension
 import io.mockk.MockKAnnotations
 import io.mockk.every

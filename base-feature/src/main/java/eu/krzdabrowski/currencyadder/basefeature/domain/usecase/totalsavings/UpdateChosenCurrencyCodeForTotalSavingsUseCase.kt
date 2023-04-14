@@ -7,7 +7,7 @@ fun interface UpdateChosenCurrencyCodeForTotalSavingsUseCase : suspend (String) 
 
 suspend fun updateChosenCurrencyCodeForTotalSavings(
     totalSavingsRepository: TotalSavingsRepository,
-    currencyCode: String
+    currencyCode: String,
 ): Result<Unit> = resultOf {
     totalSavingsRepository.updateChosenCurrencyCodeForTotalSavings(currencyCode)
 }

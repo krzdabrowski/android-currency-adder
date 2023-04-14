@@ -21,34 +21,34 @@ internal object TotalSavingsModule {
 
     @Provides
     fun provideGetTotalUserSavingsUseCase(
-        totalSavingsRepository: TotalSavingsRepository
+        totalSavingsRepository: TotalSavingsRepository,
     ): GetTotalUserSavingsUseCase {
         return GetTotalUserSavingsUseCase {
             getTotalUserSavings(
-                totalSavingsRepository
+                totalSavingsRepository,
             )
         }
     }
 
     @Provides
     fun provideGetChosenCurrencyCodeForTotalSavingsUseCase(
-        totalSavingsRepository: TotalSavingsRepository
+        totalSavingsRepository: TotalSavingsRepository,
     ): GetChosenCurrencyCodeForTotalSavingsUseCase {
         return GetChosenCurrencyCodeForTotalSavingsUseCase {
             getChosenCurrencyCodeForTotalSavings(
-                totalSavingsRepository
+                totalSavingsRepository,
             )
         }
     }
 
     @Provides
     fun provideUpdateChosenCurrencyCodeForTotalSavingsUseCase(
-        totalSavingsRepository: TotalSavingsRepository
+        totalSavingsRepository: TotalSavingsRepository,
     ): UpdateChosenCurrencyCodeForTotalSavingsUseCase {
         return UpdateChosenCurrencyCodeForTotalSavingsUseCase {
             updateChosenCurrencyCodeForTotalSavings(
                 totalSavingsRepository,
-                it
+                it,
             )
         }
     }

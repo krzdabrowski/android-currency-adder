@@ -52,7 +52,7 @@ class TotalSavingsViewModel @Inject constructor(
         partialState: PartialState,
     ): TotalSavingsUiState = when (partialState) {
         is TotalUserSavingsFetched -> previousState.copy(
-            totalUserSavings = partialState.totalUserSavings
+            totalUserSavings = partialState.totalUserSavings,
         )
 
         is CurrencyCodesFetched -> previousState.copy(
@@ -60,7 +60,7 @@ class TotalSavingsViewModel @Inject constructor(
         )
 
         is ChosenCurrencyCodeChanged -> previousState.copy(
-            chosenCurrencyCode = partialState.currencyCode
+            chosenCurrencyCode = partialState.currencyCode,
         )
     }
 
@@ -91,7 +91,7 @@ class TotalSavingsViewModel @Inject constructor(
                                 emit(ChosenCurrencyCodeChanged(it))
                             } else {
                                 updateChosenCurrencyCodeForTotalSavingsUseCase(
-                                    BASE_EXCHANGE_RATE_CODE
+                                    BASE_EXCHANGE_RATE_CODE,
                                 )
                             }
                         }

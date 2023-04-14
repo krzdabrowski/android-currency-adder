@@ -32,22 +32,22 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.Total
 fun TotalSavingsContent(
     uiState: TotalSavingsUiState,
     onGetTotalUserSavingsInChosenCurrency: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Surface(
-        tonalElevation = 3.dp
+        tonalElevation = 3.dp,
     ) {
         Row(
             modifier = modifier
                 .fillMaxSize()
                 .padding(start = 16.dp),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(R.string.total_amount),
                 fontWeight = FontWeight.Light,
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.displaySmall,
             )
 
             Text(
@@ -57,14 +57,14 @@ fun TotalSavingsContent(
                 textAlign = TextAlign.Right,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.displaySmall,
             )
 
             TotalSavingsChosenCurrencyDropdownMenu(
                 value = uiState.chosenCurrencyCode,
                 currencyCodes = uiState.currencyCodes,
                 modifier = Modifier.weight(1f),
-                onCurrencyChange = onGetTotalUserSavingsInChosenCurrency
+                onCurrencyChange = onGetTotalUserSavingsInChosenCurrency,
             )
         }
     }

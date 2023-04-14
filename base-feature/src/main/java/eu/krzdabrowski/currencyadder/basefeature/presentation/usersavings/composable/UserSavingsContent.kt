@@ -42,11 +42,11 @@ private val headerStringResources = listOf(
 @Composable
 fun UserSavingsContent(
     uiState: UserSavingsUiState,
-    modifier: Modifier = Modifier,
-    onRefreshExchangeRates: () -> Unit,
     onAddUserSaving: () -> Unit,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+    onRefreshExchangeRates: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 

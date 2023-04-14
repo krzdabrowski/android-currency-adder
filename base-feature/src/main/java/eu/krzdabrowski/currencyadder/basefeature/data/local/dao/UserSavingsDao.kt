@@ -17,7 +17,7 @@ interface UserSavingsDao {
     @Query(
         "SELECT SUM(savings.amount * rates.value) " +
             "FROM User_Savings savings " +
-            "JOIN Exchange_Rates rates ON rates.code = savings.currency"
+            "JOIN Exchange_Rates rates ON rates.code = savings.currency",
     )
     fun getTotalUserSavingsInBaseCurrency(): Flow<Double>
 

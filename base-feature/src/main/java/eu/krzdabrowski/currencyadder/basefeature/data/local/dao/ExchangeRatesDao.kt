@@ -15,7 +15,7 @@ interface ExchangeRatesDao {
     @Query(
         "SELECT rates.value " +
             "FROM Exchange_Rates rates " +
-            "WHERE code = :currencyCode "
+            "WHERE code = :currencyCode ",
     )
     fun getExchangeRateForChosenCurrency(currencyCode: String): Flow<Double>
 
