@@ -6,7 +6,7 @@ import androidx.compose.ui.test.onNodeWithText
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import eu.krzdabrowski.currencyadder.basefeature.data.generateTestRocketsFromDomain
-import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.CurrencyAdderRoute
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.composable.CurrencyAdderRoute
 import eu.krzdabrowski.currencyadder.core.MainActivity
 import eu.krzdabrowski.currencyadder.core.utils.getHiltTestViewModel
 import org.junit.Before

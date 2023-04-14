@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.basefeature.presentation.composable
+package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,8 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import eu.krzdabrowski.currencyadder.basefeature.R
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
-import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 
 const val USER_SAVING_DIVIDER_TEST_TAG = "userSavingDividerTestTag"
 private val headerStringResources = listOf(
@@ -40,8 +40,8 @@ private val headerStringResources = listOf(
 )
 
 @Composable
-fun CurrencyAdderScreenContent(
-    uiState: CurrencyAdderUiState,
+fun UserSavingsContent(
+    uiState: UserSavingsUiState,
     modifier: Modifier = Modifier,
     onRefreshExchangeRates: () -> Unit,
     onAddUserSaving: () -> Unit,
@@ -71,23 +71,23 @@ fun CurrencyAdderScreenContent(
                 .padding(it),
         ) {
             if (uiState.userSavings.isNotEmpty()) {
-                CurrencyAdderScreenAvailableContent(
+                UserSavingsAvailableContent(
                     snackbarHostState = snackbarHostState,
                     uiState = uiState,
                     onUpdateUserSaving = onUpdateUserSaving,
                     onRemoveUserSaving = onRemoveUserSaving,
                 )
             } else {
-                CurrencyAdderScreenNotAvailableContent()
+                UserSavingsNotAvailableContent()
             }
         }
     }
 }
 
 @Composable
-private fun CurrencyAdderScreenAvailableContent(
+private fun UserSavingsAvailableContent(
     snackbarHostState: SnackbarHostState,
-    uiState: CurrencyAdderUiState,
+    uiState: UserSavingsUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
 ) {
@@ -101,7 +101,7 @@ private fun CurrencyAdderScreenAvailableContent(
         }
     }
 
-    CurrencyAdderListContent(
+    UserSavingsListContent(
         uiState = uiState,
         onUpdateUserSaving = onUpdateUserSaving,
         onRemoveUserSaving = onRemoveUserSaving,
@@ -109,15 +109,15 @@ private fun CurrencyAdderScreenAvailableContent(
 }
 
 @Composable
-private fun CurrencyAdderScreenNotAvailableContent() {
+private fun UserSavingsNotAvailableContent() {
     Text(
         text = "Add some savings!",
     )
 }
 
 @Composable
-private fun CurrencyAdderListContent(
-    uiState: CurrencyAdderUiState,
+private fun UserSavingsListContent(
+    uiState: UserSavingsUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
     modifier: Modifier = Modifier,

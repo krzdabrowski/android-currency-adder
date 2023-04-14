@@ -5,10 +5,12 @@ import app.cash.turbine.test
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.GetExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.generateTestExchangeRatesFromDomain
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderEvent.OpenWebBrowserWithDetails
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.ChooseUserSavingCurrency
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderIntent.RefreshExchangeRates
-import eu.krzdabrowski.currencyadder.basefeature.presentation.mapper.toPresentationModel
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsEvent.OpenWebBrowserWithDetails
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.ChooseUserSavingCurrency
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RefreshExchangeRates
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper.toPresentationModel
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsViewModel
 import eu.krzdabrowski.currencyadder.core.utils.MainDispatcherExtension
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -24,7 +26,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class CurrencyAdderViewModelTest {
+class UserSavingsViewModelTest {
 
     @JvmField
     @RegisterExtension
@@ -41,7 +43,7 @@ class CurrencyAdderViewModelTest {
     @SpyK
     private var savedStateHandle = SavedStateHandle()
 
-    private lateinit var objectUnderTest: CurrencyAdderViewModel
+    private lateinit var objectUnderTest: UserSavingsViewModel
 
     @BeforeEach
     fun setUp() {
@@ -173,9 +175,9 @@ class CurrencyAdderViewModelTest {
     }
 
     private fun setUpRocketsViewModel(
-        initialUiState: CurrencyAdderUiState = CurrencyAdderUiState(),
+        initialUiState: UserSavingsUiState = UserSavingsUiState(),
     ) {
-        objectUnderTest = CurrencyAdderViewModel(
+        objectUnderTest = UserSavingsViewModel(
             getExchangeRatesUseCase,
             refreshExchangeRatesUseCase,
             savedStateHandle,

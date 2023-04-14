@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.basefeature.presentation.composable
+package eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -27,11 +27,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.krzdabrowski.currencyadder.basefeature.R
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
+import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsUiState
 
 @Composable
-fun CurrencyAdderTotalSavingsContent(
-    uiState: CurrencyAdderUiState,
+fun TotalSavingsContent(
+    uiState: TotalSavingsUiState,
     onGetTotalUserSavingsInChosenCurrency: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -59,7 +59,7 @@ fun CurrencyAdderTotalSavingsContent(
                 style = MaterialTheme.typography.displaySmall
             )
 
-            CurrencyAdderChosenCurrencyDropdownMenu(
+            TotalSavingsChosenCurrencyDropdownMenu(
                 value = uiState.chosenCurrencyCode,
                 currencyCodes = uiState.currencyCodes,
                 modifier = Modifier.weight(1f),
@@ -70,7 +70,7 @@ fun CurrencyAdderTotalSavingsContent(
 }
 
 @Composable
-private fun CurrencyAdderChosenCurrencyDropdownMenu(
+private fun TotalSavingsChosenCurrencyDropdownMenu(
     value: String,
     currencyCodes: List<String>,
     modifier: Modifier = Modifier,

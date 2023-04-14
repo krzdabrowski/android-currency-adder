@@ -7,8 +7,8 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.data.generateTestRocketsFromPresentation
-import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderUiState
-import eu.krzdabrowski.currencyadder.basefeature.presentation.composable.CurrencyAdderScreen
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.composable.CurrencyAdderScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -36,7 +36,7 @@ class CurrencyAdderScreenTest {
     @Test
     fun rocketsScreen_whenContentAvailableAndErrorOccurs_shouldKeepContent() {
         setUpComposable(
-            CurrencyAdderUiState(
+            UserSavingsUiState(
                 userSavings = testRockets,
                 isError = true,
             ),
@@ -50,7 +50,7 @@ class CurrencyAdderScreenTest {
     @Test
     fun rocketsScreen_whenContentAvailableAndErrorOccurs_shouldShowErrorSnackbar() {
         setUpComposable(
-            CurrencyAdderUiState(
+            UserSavingsUiState(
                 userSavings = testRockets,
                 isError = true,
             ),
@@ -64,7 +64,7 @@ class CurrencyAdderScreenTest {
     @Test
     fun rocketsScreen_whenContentNotAvailableAndErrorOccurs_shouldHaveErrorContent() {
         setUpComposable(
-            CurrencyAdderUiState(isError = true),
+            UserSavingsUiState(isError = true),
         )
 
         composeTestRule
@@ -73,11 +73,11 @@ class CurrencyAdderScreenTest {
     }
 
     private fun setUpComposable(
-        currencyAdderUiState: CurrencyAdderUiState,
+        userSavingsUiState: UserSavingsUiState,
     ) {
         composeTestRule.setContent {
             CurrencyAdderScreen(
-                uiState = currencyAdderUiState,
+                uiState = userSavingsUiState,
                 onRefreshExchangeRates = { },
                 onUserSavingCurrencyClicked = { },
             )

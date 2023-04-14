@@ -1,7 +1,7 @@
 package eu.krzdabrowski.currencyadder.basefeature.data
 
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.ExchangeRate
-import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 import java.time.LocalDate
 
 internal fun generateTestRocketsFromPresentation() = listOf(

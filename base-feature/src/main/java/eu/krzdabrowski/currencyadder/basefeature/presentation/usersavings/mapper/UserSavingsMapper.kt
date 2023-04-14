@@ -1,8 +1,8 @@
-package eu.krzdabrowski.currencyadder.basefeature.presentation.mapper
+package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper
 
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
-import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
-import java.util.Locale
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
+import eu.krzdabrowski.currencyadder.core.extensions.toFormattedAmount
 
 private const val DEFAULT_SAVING_VALUE: Double = 0.0
 
@@ -23,6 +23,3 @@ fun UserSavingDisplayable.toDomainModel() = UserSaving(
     amount = amount.toDoubleOrNull() ?: 0.0,
     currency = currency,
 )
-
-fun Double.toFormattedAmount() =
-    String.format(Locale.ENGLISH, "%.2f", this)

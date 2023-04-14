@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.basefeature.presentation.composable
+package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.composable
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -50,7 +50,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.krzdabrowski.currencyadder.basefeature.R
-import eu.krzdabrowski.currencyadder.basefeature.presentation.model.UserSavingDisplayable
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 import eu.krzdabrowski.currencyadder.core.extensions.DebounceEffect
 
 private const val SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE = 0.75f
@@ -163,7 +163,7 @@ private fun UserSavingItemContent(
 
         VerticalDivider()
 
-        CurrencyAdderChosenCurrencyDropdownMenu(
+        UserSavingChosenCurrencyDropdownMenu(
             value = item.currency,
             currencyCodes = currencyCodes,
             modifier = Modifier.weight(1f),
@@ -263,7 +263,7 @@ private fun UserSavingAmount(
 }
 
 @Composable
-private fun CurrencyAdderChosenCurrencyDropdownMenu(
+private fun UserSavingChosenCurrencyDropdownMenu(
     value: String,
     currencyCodes: List<String>,
     modifier: Modifier = Modifier,
