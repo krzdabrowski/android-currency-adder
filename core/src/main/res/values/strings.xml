@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Currency Adder</string>
+    <string name="dialog_title">Verify it’s you</string>
+    <string name="dialog_biometric_subtitle">Use your biometric to continue</string>
+    <string name="dialog_credentials_subtitle">Use your credentials to continue</string>
+    <string name="dialog_negative_button">Cancel</string>
+    <string name="dialog_cancelled_snackbar_text">Currency Adder is only available after authentication</string>
 </resources>
