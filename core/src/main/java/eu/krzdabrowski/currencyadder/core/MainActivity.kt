@@ -1,7 +1,6 @@
 package eu.krzdabrowski.currencyadder.core
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -13,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import eu.krzdabrowski.currencyadder.core.extensions.collectWithLifecycle
@@ -24,7 +24,7 @@ import eu.krzdabrowski.currencyadder.core.ui.CurrencyAdderTheme
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
 
     @Inject
     lateinit var navigationFactories: @JvmSuppressWildcards Set<NavigationFactory>

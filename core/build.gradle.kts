@@ -56,6 +56,7 @@ android {
 
 dependencies {
     implementation(platform(libs.compose.bom))
+    implementation(libs.biometric)
     implementation(libs.compose.material3)
     implementation(libs.datastore)
     implementation(libs.hilt)
