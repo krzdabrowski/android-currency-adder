@@ -2,11 +2,15 @@ package eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates
 
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRatesRepository
 import eu.krzdabrowski.currencyadder.core.extensions.resultOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-fun interface GetCurrencyCodesUseCase : suspend () -> Result<List<String>>
+fun interface GetCurrencyCodesUseCase : () -> Flow<Result<List<String>>>
 
-suspend fun getCurrencyCodes(
+fun getCurrencyCodes(
     exchangeRatesRepository: ExchangeRatesRepository,
-): Result<List<String>> = resultOf {
+): Flow<Result<List<String>>> =
     exchangeRatesRepository.getCurrencyCodes()
-}
+        .map {
+            resultOf { it }
+        }

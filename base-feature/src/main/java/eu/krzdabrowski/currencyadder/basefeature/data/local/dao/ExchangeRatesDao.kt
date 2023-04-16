@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ExchangeRatesDao {
 
-    @Query("SELECT * FROM Exchange_Rates")
-    fun getExchangeRates(): Flow<List<ExchangeRateCached>>
+    @Query("SELECT code FROM Exchange_Rates")
+    fun getCurrencyCodes(): Flow<List<String>>
 
     @Query(
         "SELECT rates.value " +
@@ -18,9 +18,6 @@ interface ExchangeRatesDao {
             "WHERE code = :currencyCode ",
     )
     fun getExchangeRateForChosenCurrency(currencyCode: String): Flow<Double>
-
-    @Query("SELECT code FROM Exchange_Rates")
-    suspend fun getCurrencyCodes(): List<String>
 
     @Upsert
     suspend fun saveExchangeRates(exchangeRates: List<ExchangeRateCached>)

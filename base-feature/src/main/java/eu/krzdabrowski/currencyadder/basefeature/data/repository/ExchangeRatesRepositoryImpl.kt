@@ -2,15 +2,11 @@ package eu.krzdabrowski.currencyadder.basefeature.data.repository
 
 import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.ExchangeRatesDao
 import eu.krzdabrowski.currencyadder.basefeature.data.local.model.ExchangeRateCached
-import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toDomainModel
 import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toDomainModels
 import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toEntityModel
 import eu.krzdabrowski.currencyadder.basefeature.data.remote.api.ExchangeRatesApi
-import eu.krzdabrowski.currencyadder.basefeature.domain.model.ExchangeRate
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRatesRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 internal const val BASE_EXCHANGE_RATE_CODE = "PLN"
@@ -20,20 +16,7 @@ class ExchangeRatesRepositoryImpl @Inject constructor(
     private val exchangeRatesDao: ExchangeRatesDao,
 ) : ExchangeRatesRepository {
 
-    override fun getExchangeRates(): Flow<List<ExchangeRate>> {
-        return exchangeRatesDao
-            .getExchangeRates()
-            .map { exchangeRates ->
-                exchangeRates.map { it.toDomainModel() }
-            }
-            .onEach { exchangeRates ->
-                if (exchangeRates.isEmpty()) {
-                    refreshExchangeRates()
-                }
-            }
-    }
-
-    override suspend fun getCurrencyCodes(): List<String> {
+    override fun getCurrencyCodes(): Flow<List<String>> {
         return exchangeRatesDao
             .getCurrencyCodes()
     }

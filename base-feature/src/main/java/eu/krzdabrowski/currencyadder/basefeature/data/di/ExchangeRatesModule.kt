@@ -9,10 +9,8 @@ import eu.krzdabrowski.currencyadder.basefeature.data.remote.api.ExchangeRatesAp
 import eu.krzdabrowski.currencyadder.basefeature.data.repository.ExchangeRatesRepositoryImpl
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRatesRepository
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.getCurrencyCodes
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.getExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.refreshExchangeRates
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -27,15 +25,6 @@ internal object ExchangeRatesModule {
         retrofit: Retrofit,
     ): ExchangeRatesApi {
         return retrofit.create(ExchangeRatesApi::class.java)
-    }
-
-    @Provides
-    fun provideGetExchangeRatesUseCase(
-        exchangeRatesRepository: ExchangeRatesRepository,
-    ): GetExchangeRatesUseCase {
-        return GetExchangeRatesUseCase {
-            getExchangeRates(exchangeRatesRepository)
-        }
     }
 
     @Provides

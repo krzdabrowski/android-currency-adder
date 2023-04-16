@@ -11,11 +11,6 @@ fun List<ExchangeRatesResponse>.toDomainModels() = this[0].exchangeRates.map {
     )
 }
 
-fun ExchangeRateCached.toDomainModel() = ExchangeRate(
-    currencyCode = currencyCode,
-    currencyRate = currencyRate,
-)
-
 fun ExchangeRate.toEntityModel() = ExchangeRateCached(
     currencyCode = currencyCode,
     currencyRate = currencyRate,

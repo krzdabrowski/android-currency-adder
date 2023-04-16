@@ -144,11 +144,16 @@ class UserSavingsViewModel @Inject constructor(
 
     private fun getCurrencyCodes(): Flow<PartialState> = flow {
         getCurrencyCodesUseCase()
-            .onSuccess {
-                emit(CurrencyCodesFetched(it))
-            }
-            .onFailure {
-                emit(Error(it))
+            .collect { result ->
+                result
+                    .onSuccess {
+                        if (it.isNotEmpty()) {
+                            emit(CurrencyCodesFetched(it))
+                        }
+                    }
+                    .onFailure {
+                        emit(Error(it))
+                    }
             }
     }
 }

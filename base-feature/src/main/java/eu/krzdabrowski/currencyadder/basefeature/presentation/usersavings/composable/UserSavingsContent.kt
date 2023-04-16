@@ -119,7 +119,7 @@ private fun UserSavingsNotAvailableContent() {
     ) {
         Text(
             text = stringResource(R.string.list_empty_message),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
         )
     }
 }
