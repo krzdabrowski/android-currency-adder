@@ -58,9 +58,7 @@ fun UserSavingsContent(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    onAddUserSaving()
-                },
+                onClick = onAddUserSaving,
             ) {
                 Icon(Icons.Filled.Add, stringResource(R.string.add_user_saving_content_description))
             }

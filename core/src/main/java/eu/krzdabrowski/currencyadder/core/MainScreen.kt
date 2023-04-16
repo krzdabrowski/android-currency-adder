@@ -29,7 +29,7 @@ import eu.krzdabrowski.currencyadder.core.navigation.NavigationManager
 fun MainScreen(
     navigationFactories: Set<NavigationFactory>,
     navigationManager: NavigationManager,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }

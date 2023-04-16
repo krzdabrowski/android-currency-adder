@@ -8,10 +8,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsIntent
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsIntent.UpdateChosenCurrencyCodeForTotalSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsViewModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.composable.TotalSavingsContent
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.AddUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RemoveUserSaving
@@ -19,7 +21,6 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSa
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsViewModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.composable.UserSavingsContent
-import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 
 private const val USER_SAVINGS_SCREEN_HEIGHT_FRACTION = 0.8f
 
@@ -34,21 +35,8 @@ fun CurrencyAdderRoute(
     CurrencyAdderScreen(
         userSavingsUiState = userSavingsUiState,
         totalSavingsUiState = totalSavingsUiState,
-        onAddUserSaving = {
-            userSavingsViewModel.acceptIntent(AddUserSaving)
-        },
-        onUpdateUserSaving = {
-            userSavingsViewModel.acceptIntent(UpdateUserSaving(it))
-        },
-        onRemoveUserSaving = {
-            userSavingsViewModel.acceptIntent(RemoveUserSaving(it))
-        },
-        onRefreshExchangeRates = {
-            userSavingsViewModel.acceptIntent(RefreshExchangeRates)
-        },
-        onUpdateChosenCurrencyCodeForTotalSavings = {
-            totalSavingsViewModel.acceptIntent(UpdateChosenCurrencyCodeForTotalSavings(it))
-        },
+        onUserSavingsIntent = userSavingsViewModel::acceptIntent,
+        onTotalSavingsIntent = totalSavingsViewModel::acceptIntent,
     )
 }
 
@@ -56,25 +44,32 @@ fun CurrencyAdderRoute(
 private fun CurrencyAdderScreen(
     userSavingsUiState: UserSavingsUiState,
     totalSavingsUiState: TotalSavingsUiState,
-    onAddUserSaving: () -> Unit,
-    onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
-    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
-    onRefreshExchangeRates: () -> Unit,
-    onUpdateChosenCurrencyCodeForTotalSavings: (String) -> Unit,
+    onUserSavingsIntent: (UserSavingsIntent) -> Unit,
+    onTotalSavingsIntent: (TotalSavingsIntent) -> Unit,
 ) {
     Column {
         UserSavingsContent(
             uiState = userSavingsUiState,
             modifier = Modifier.fillMaxHeight(USER_SAVINGS_SCREEN_HEIGHT_FRACTION),
-            onAddUserSaving = onAddUserSaving,
-            onUpdateUserSaving = onUpdateUserSaving,
-            onRemoveUserSaving = onRemoveUserSaving,
-            onRefreshExchangeRates = onRefreshExchangeRates,
+            onAddUserSaving = {
+                onUserSavingsIntent(AddUserSaving)
+            },
+            onUpdateUserSaving = {
+                onUserSavingsIntent(UpdateUserSaving(it))
+            },
+            onRemoveUserSaving = {
+                onUserSavingsIntent(RemoveUserSaving(it))
+            },
+            onRefreshExchangeRates = {
+                onUserSavingsIntent(RefreshExchangeRates)
+            },
         )
 
         TotalSavingsContent(
             uiState = totalSavingsUiState,
-            onGetTotalUserSavingsInChosenCurrency = onUpdateChosenCurrencyCodeForTotalSavings,
+            onGetTotalUserSavingsInChosenCurrency = {
+                onTotalSavingsIntent(UpdateChosenCurrencyCodeForTotalSavings(it))
+            },
             modifier = Modifier.wrapContentHeight(),
         )
     }
