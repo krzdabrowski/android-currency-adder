@@ -10,8 +10,6 @@ import eu.krzdabrowski.currencyadder.basefeature.data.repository.ExchangeRatesRe
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRatesRepository
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.getCurrencyCodes
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.refreshExchangeRates
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -23,27 +21,17 @@ internal object ExchangeRatesModule {
     @Singleton
     fun provideExchangeRatesApi(
         retrofit: Retrofit,
-    ): ExchangeRatesApi {
-        return retrofit.create(ExchangeRatesApi::class.java)
-    }
+    ): ExchangeRatesApi = retrofit.create(ExchangeRatesApi::class.java)
 
     @Provides
     fun provideGetCurrencyCodesUseCase(
         exchangeRatesRepository: ExchangeRatesRepository,
-    ): GetCurrencyCodesUseCase {
-        return GetCurrencyCodesUseCase {
-            getCurrencyCodes(exchangeRatesRepository)
-        }
-    }
+    ) = GetCurrencyCodesUseCase(exchangeRatesRepository::getCurrencyCodes)
 
     @Provides
     fun provideRefreshExchangeRatesUseCase(
         exchangeRatesRepository: ExchangeRatesRepository,
-    ): RefreshExchangeRatesUseCase {
-        return RefreshExchangeRatesUseCase {
-            refreshExchangeRates(exchangeRatesRepository)
-        }
-    }
+    ) = RefreshExchangeRatesUseCase(exchangeRatesRepository::refreshExchangeRates)
 
     @Module
     @InstallIn(SingletonComponent::class)

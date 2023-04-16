@@ -10,9 +10,6 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.repository.TotalSavingsR
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.GetChosenCurrencyCodeForTotalSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.GetTotalUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.UpdateChosenCurrencyCodeForTotalSavingsUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.getChosenCurrencyCodeForTotalSavings
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.getTotalUserSavings
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.updateChosenCurrencyCodeForTotalSavings
 import javax.inject.Singleton
 
 @Module
@@ -22,36 +19,17 @@ internal object TotalSavingsModule {
     @Provides
     fun provideGetTotalUserSavingsUseCase(
         totalSavingsRepository: TotalSavingsRepository,
-    ): GetTotalUserSavingsUseCase {
-        return GetTotalUserSavingsUseCase {
-            getTotalUserSavings(
-                totalSavingsRepository,
-            )
-        }
-    }
+    ) = GetTotalUserSavingsUseCase(totalSavingsRepository::getTotalUserSavings)
 
     @Provides
     fun provideGetChosenCurrencyCodeForTotalSavingsUseCase(
         totalSavingsRepository: TotalSavingsRepository,
-    ): GetChosenCurrencyCodeForTotalSavingsUseCase {
-        return GetChosenCurrencyCodeForTotalSavingsUseCase {
-            getChosenCurrencyCodeForTotalSavings(
-                totalSavingsRepository,
-            )
-        }
-    }
+    ) = GetChosenCurrencyCodeForTotalSavingsUseCase(totalSavingsRepository::getChosenCurrencyCodeForTotalSavings)
 
     @Provides
     fun provideUpdateChosenCurrencyCodeForTotalSavingsUseCase(
         totalSavingsRepository: TotalSavingsRepository,
-    ): UpdateChosenCurrencyCodeForTotalSavingsUseCase {
-        return UpdateChosenCurrencyCodeForTotalSavingsUseCase {
-            updateChosenCurrencyCodeForTotalSavings(
-                totalSavingsRepository,
-                it,
-            )
-        }
-    }
+    ) = UpdateChosenCurrencyCodeForTotalSavingsUseCase(totalSavingsRepository::updateChosenCurrencyCodeForTotalSavings)
 
     @Module
     @InstallIn(SingletonComponent::class)

@@ -11,10 +11,6 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddU
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.addUserSaving
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.getUserSavings
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.removeUserSaving
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.updateUserSaving
 import javax.inject.Singleton
 
 @Module
@@ -24,38 +20,22 @@ internal object UserSavingsModule {
     @Provides
     fun provideGetUserSavingsUseCase(
         userSavingsRepository: UserSavingsRepository,
-    ): GetUserSavingsUseCase {
-        return GetUserSavingsUseCase {
-            getUserSavings(userSavingsRepository)
-        }
-    }
+    ) = GetUserSavingsUseCase(userSavingsRepository::getUserSavings)
 
     @Provides
     fun provideAddUserSavingUseCase(
         userSavingsRepository: UserSavingsRepository,
-    ): AddUserSavingUseCase {
-        return AddUserSavingUseCase {
-            addUserSaving(userSavingsRepository, it)
-        }
-    }
+    ) = AddUserSavingUseCase(userSavingsRepository::addUserSaving)
 
     @Provides
     fun provideUpdateUserSavingUseCase(
         userSavingsRepository: UserSavingsRepository,
-    ): UpdateUserSavingUseCase {
-        return UpdateUserSavingUseCase {
-            updateUserSaving(userSavingsRepository, it)
-        }
-    }
+    ) = UpdateUserSavingUseCase(userSavingsRepository::updateUserSaving)
 
     @Provides
     fun provideRemoveUserSavingUseCase(
         userSavingsRepository: UserSavingsRepository,
-    ): RemoveUserSavingUseCase {
-        return RemoveUserSavingUseCase {
-            removeUserSaving(userSavingsRepository, it)
-        }
-    }
+    ) = RemoveUserSavingUseCase(userSavingsRepository::removeUserSaving)
 
     @Module
     @InstallIn(SingletonComponent::class)

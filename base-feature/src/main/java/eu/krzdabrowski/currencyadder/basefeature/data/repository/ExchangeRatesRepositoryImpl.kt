@@ -6,22 +6,25 @@ import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toDomainModels
 import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toEntityModel
 import eu.krzdabrowski.currencyadder.basefeature.data.remote.api.ExchangeRatesApi
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRatesRepository
+import eu.krzdabrowski.currencyadder.core.extensions.resultOf
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal const val BASE_EXCHANGE_RATE_CODE = "PLN"
+private const val BASE_EXCHANGE_RATE_CODE = "PLN"
 
 class ExchangeRatesRepositoryImpl @Inject constructor(
     private val exchangeRatesApi: ExchangeRatesApi,
     private val exchangeRatesDao: ExchangeRatesDao,
 ) : ExchangeRatesRepository {
 
-    override fun getCurrencyCodes(): Flow<List<String>> {
+    override fun getCurrencyCodes(): Flow<Result<List<String>>> {
         return exchangeRatesDao
             .getCurrencyCodes()
+            .map { Result.success(it) }
     }
 
-    override suspend fun refreshExchangeRates() {
+    override suspend fun refreshExchangeRates(): Result<Unit> = resultOf {
         exchangeRatesApi
             .getExchangeRates()
             .toDomainModels()
@@ -38,7 +41,7 @@ class ExchangeRatesRepositoryImpl @Inject constructor(
             }
     }
 
-    private suspend fun saveBaseExchangeRate() {
+    private suspend fun saveBaseExchangeRate(): Result<Unit> = resultOf {
         exchangeRatesDao.saveExchangeRates(
             listOf(
                 ExchangeRateCached(

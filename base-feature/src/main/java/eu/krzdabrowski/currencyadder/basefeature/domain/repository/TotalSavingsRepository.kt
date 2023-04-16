@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface TotalSavingsRepository {
 
-    fun getTotalUserSavings(): Flow<Double>
+    fun getTotalUserSavings(): Flow<Result<Double>>
 
-    fun getChosenCurrencyCodeForTotalSavings(): Flow<String>
+    fun getChosenCurrencyCodeForTotalSavings(): Flow<Result<String>>
 
-    suspend fun updateChosenCurrencyCodeForTotalSavings(currencyCode: String)
+    suspend fun updateChosenCurrencyCodeForTotalSavings(currencyCode: String): Result<Unit>
 }
