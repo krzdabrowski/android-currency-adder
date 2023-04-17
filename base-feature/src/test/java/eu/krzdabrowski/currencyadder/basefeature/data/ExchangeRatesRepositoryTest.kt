@@ -1,12 +1,12 @@
 package eu.krzdabrowski.currencyadder.basefeature.data
 
 import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.ExchangeRatesDao
-import eu.krzdabrowski.currencyadder.basefeature.data.local.model.ExchangeRateCached
 import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toDomainModels
 import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toEntityModel
 import eu.krzdabrowski.currencyadder.basefeature.data.remote.api.ExchangeRatesApi
 import eu.krzdabrowski.currencyadder.basefeature.data.repository.ExchangeRatesRepositoryImpl
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRatesRepository
+import eu.krzdabrowski.currencyadder.basefeature.generateTestBaseExchangeRateCached
 import eu.krzdabrowski.currencyadder.basefeature.generateTestExchangeRatesFromRemote
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -35,10 +35,7 @@ class ExchangeRatesRepositoryTest {
     @Test
     fun `should save sorted exchange rates locally with base exchange rate first`() = runTest {
         // Given
-        val testBaseExchangeRateCached = ExchangeRateCached(
-            currencyCode = "PLN",
-            currencyRate = 1.0
-        )
+        val testBaseExchangeRateCached = listOf(generateTestBaseExchangeRateCached())
         val testExchangeRatesFromRemote = listOf(generateTestExchangeRatesFromRemote())
         val testExchangeRatesToCacheSorted = testExchangeRatesFromRemote
             .toDomainModels()
@@ -53,7 +50,7 @@ class ExchangeRatesRepositoryTest {
         // Then
         coVerifyOrder {
             exchangeRatesDao.saveExchangeRates(
-                listOf(testBaseExchangeRateCached)
+                testBaseExchangeRateCached
             )
             exchangeRatesDao.saveExchangeRates(
                 testExchangeRatesToCacheSorted
