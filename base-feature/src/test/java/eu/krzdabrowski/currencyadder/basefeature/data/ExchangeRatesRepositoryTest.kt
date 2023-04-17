@@ -1,6 +1,7 @@
 package eu.krzdabrowski.currencyadder.basefeature.data
 
 import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.ExchangeRatesDao
+import eu.krzdabrowski.currencyadder.basefeature.data.local.model.ExchangeRateCached
 import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toDomainModels
 import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toEntityModel
 import eu.krzdabrowski.currencyadder.basefeature.data.remote.api.ExchangeRatesApi
@@ -9,17 +10,13 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.generateTestExchangeRatesFromRemote
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.coVerifyOrder
-import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class ExchangeRateRepositoryTest {
+class ExchangeRatesRepositoryTest {
 
     @RelaxedMockK
     private lateinit var exchangeRatesApi: ExchangeRatesApi
@@ -36,34 +33,32 @@ class ExchangeRateRepositoryTest {
     }
 
     @Test
-    fun `should refresh exchange rates if local database is empty`() = runTest {
+    fun `should save sorted exchange rates locally with base exchange rate first`() = runTest {
         // Given
+        val testBaseExchangeRateCached = ExchangeRateCached(
+            currencyCode = "PLN",
+            currencyRate = 1.0
+        )
         val testExchangeRatesFromRemote = listOf(generateTestExchangeRatesFromRemote())
-        every { exchangeRatesDao.getExchangeRates() } returns flowOf(emptyList())
-        coEvery { exchangeRatesApi.getExchangeRates() } returns testExchangeRatesFromRemote
+        val testExchangeRatesToCacheSorted = testExchangeRatesFromRemote
+            .toDomainModels()
+            .map { it.toEntityModel() }
+            .sortedBy { it.currencyCode }
 
-        // When
-        objectUnderTest.getExchangeRates().collect()
-
-        // Then
-        coVerifyOrder {
-            exchangeRatesApi.getExchangeRates()
-            exchangeRatesDao.saveExchangeRates(any())
-        }
-    }
-
-    @Test
-    fun `should save mapped exchange rates locally if retrieved from remote`() = runTest {
-        // Given
-        val testExchangeRatesFromRemote = listOf(generateTestExchangeRatesFromRemote())
-        val testExchangeRatesToCache = testExchangeRatesFromRemote.toDomainModels().map { it.toEntityModel() }
         coEvery { exchangeRatesApi.getExchangeRates() } returns testExchangeRatesFromRemote
 
         // When
         objectUnderTest.refreshExchangeRates()
 
         // Then
-        coVerify { exchangeRatesDao.saveExchangeRates(testExchangeRatesToCache) }
+        coVerifyOrder {
+            exchangeRatesDao.saveExchangeRates(
+                listOf(testBaseExchangeRateCached)
+            )
+            exchangeRatesDao.saveExchangeRates(
+                testExchangeRatesToCacheSorted
+            )
+        }
     }
 
     private fun setUpExchangeRatesRepository() {
