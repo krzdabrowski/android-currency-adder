@@ -16,7 +16,7 @@ class UserSavingsMapperTest {
             id = 1,
             place = "home",
             amount = 123.456789,
-            currency = "EUR"
+            currency = "EUR",
         )
 
         // When
@@ -28,9 +28,9 @@ class UserSavingsMapperTest {
                 id = 1,
                 place = "home",
                 amount = "123.46",
-                currency = "EUR"
+                currency = "EUR",
             ),
-            actual = presentationModel
+            actual = presentationModel,
         )
     }
 
@@ -41,7 +41,7 @@ class UserSavingsMapperTest {
             id = 2,
             place = "bank",
             amount = 100.0,
-            currency = "GBP"
+            currency = "GBP",
         )
 
         // When
@@ -53,9 +53,9 @@ class UserSavingsMapperTest {
                 id = 2,
                 place = "bank",
                 amount = "100",
-                currency = "GBP"
+                currency = "GBP",
             ),
-            actual = presentationModel
+            actual = presentationModel,
         )
     }
 
@@ -66,7 +66,7 @@ class UserSavingsMapperTest {
             id = 3,
             place = "nowhere",
             amount = 0.0,
-            currency = "USD"
+            currency = "USD",
         )
 
         // When
@@ -78,9 +78,9 @@ class UserSavingsMapperTest {
                 id = 3,
                 place = "nowhere",
                 amount = "",
-                currency = "USD"
+                currency = "USD",
             ),
-            actual = presentationModel
+            actual = presentationModel,
         )
     }
 
@@ -91,7 +91,7 @@ class UserSavingsMapperTest {
             id = 4,
             place = "mattress",
             amount = "567.89",
-            currency = "CHF"
+            currency = "CHF",
         )
 
         // When
@@ -103,9 +103,9 @@ class UserSavingsMapperTest {
                 id = 4,
                 place = "mattress",
                 amount = 567.89,
-                currency = "CHF"
+                currency = "CHF",
             ),
-            actual = domainModel
+            actual = domainModel,
         )
     }
 
@@ -116,7 +116,7 @@ class UserSavingsMapperTest {
             id = 5,
             place = "family",
             amount = "987,65",
-            currency = "HUF"
+            currency = "HUF",
         )
 
         // When
@@ -128,9 +128,9 @@ class UserSavingsMapperTest {
                 id = 5,
                 place = "family",
                 amount = 0.0,
-                currency = "HUF"
+                currency = "HUF",
             ),
-            actual = domainModel
+            actual = domainModel,
         )
     }
 }

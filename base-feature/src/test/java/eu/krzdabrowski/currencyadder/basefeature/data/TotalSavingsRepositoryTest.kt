@@ -60,7 +60,7 @@ class TotalSavingsRepositoryTest {
         totalSavingsFlow.test {
             assertEquals(
                 expected = Result.success(20.0),
-                actual = awaitItem()
+                actual = awaitItem(),
             )
 
             cancelAndIgnoreRemainingEvents()
@@ -94,7 +94,7 @@ class TotalSavingsRepositoryTest {
             totalSavingsFlow.test {
                 assertEquals(
                     expected = Result.success(0.0),
-                    actual = awaitItem()
+                    actual = awaitItem(),
                 )
 
                 cancelAndIgnoreRemainingEvents()

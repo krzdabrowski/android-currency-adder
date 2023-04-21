@@ -50,10 +50,10 @@ class ExchangeRatesRepositoryTest {
         // Then
         coVerifyOrder {
             exchangeRatesDao.saveExchangeRates(
-                testBaseExchangeRateCached
+                testBaseExchangeRateCached,
             )
             exchangeRatesDao.saveExchangeRates(
-                testExchangeRatesToCacheSorted
+                testExchangeRatesToCacheSorted,
             )
         }
     }
