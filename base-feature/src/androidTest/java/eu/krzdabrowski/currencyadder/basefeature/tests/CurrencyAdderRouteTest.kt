@@ -5,8 +5,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import eu.krzdabrowski.currencyadder.basefeature.data.generateTestRocketsFromDomain
-import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.composable.CurrencyAdderRoute
+import eu.krzdabrowski.currencyadder.basefeature.data.dummy.generateTestUserSavingsFromDomain
+import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderRoute
 import eu.krzdabrowski.currencyadder.core.MainActivity
 import eu.krzdabrowski.currencyadder.core.utils.getHiltTestViewModel
 import org.junit.Before
@@ -22,23 +22,24 @@ class CurrencyAdderRouteTest {
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-    private val testRockets = generateTestRocketsFromDomain()
+    private val testUserSavings = generateTestUserSavingsFromDomain()
 
     @Before
     fun setUp() {
         hiltTestRule.inject()
         composeTestRule.activity.setContent {
             CurrencyAdderRoute(
-                viewModel = composeTestRule.getHiltTestViewModel(),
+                userSavingsViewModel = composeTestRule.getHiltTestViewModel(),
+                totalSavingsViewModel = composeTestRule.getHiltTestViewModel(),
             )
         }
     }
 
     @Test
-    fun rocketsRoute_whenHappyPath_shouldShowAllFakeRockets() {
-        testRockets.forEach { rocket ->
+    fun currencyAdderRoute_whenHappyPath_shouldShowAllUserSavings() {
+        testUserSavings.forEach { userSaving ->
             composeTestRule
-                .onNodeWithText(rocket.currencyCode)
+                .onNodeWithText(userSaving.place)
                 .assertExists()
         }
     }

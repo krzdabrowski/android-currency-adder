@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.timber)
     testImplementation(libs.bundles.common.test)
     androidTestImplementation(libs.bundles.common.android.test)
+    androidTestImplementation(libs.datastore) // needed for Hilt tests
     debugImplementation(libs.debug.compose.manifest)
 
     kapt(libs.hilt.compiler)
