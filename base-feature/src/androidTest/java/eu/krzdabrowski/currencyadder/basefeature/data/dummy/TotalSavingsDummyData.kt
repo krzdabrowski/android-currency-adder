@@ -1,5 +1,5 @@
 package eu.krzdabrowski.currencyadder.basefeature.data.dummy
 
-internal fun generateTestTotalUserSavings() = 125.17
+internal fun generateTestTotalUserSavingsFromPresentation() = "21.37"
 
-internal fun generateTestChosenCurrencyCodeForTotalSavings() = "USD"
+internal fun generateTestChosenCurrencyCodeForTotalSavingsFromPresentation() = "USD"

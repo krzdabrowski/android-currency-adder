@@ -1,5 +1,6 @@
 package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.composable
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,7 +36,6 @@ import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 
-const val USER_SAVING_DIVIDER_TEST_TAG = "userSavingDividerTestTag"
 private val headerStringResources = listOf(
     R.string.list_header_place,
     R.string.list_header_saving,
@@ -122,8 +122,9 @@ private fun UserSavingsNotAvailableContent() {
     }
 }
 
+@VisibleForTesting
 @Composable
-private fun UserSavingsListContent(
+internal fun UserSavingsListContent(
     uiState: UserSavingsUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
