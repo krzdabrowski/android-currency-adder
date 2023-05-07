@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.core.extensions
+package eu.krzdabrowski.currencyadder.core.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

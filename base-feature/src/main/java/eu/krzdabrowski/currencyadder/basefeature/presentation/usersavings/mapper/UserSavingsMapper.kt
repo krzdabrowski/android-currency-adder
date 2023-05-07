@@ -2,7 +2,7 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mappe
 
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
-import eu.krzdabrowski.currencyadder.core.extensions.toFormattedAmount
+import eu.krzdabrowski.currencyadder.core.utils.toFormattedAmount
 
 private const val DEFAULT_SAVING_VALUE: Double = 0.0
 

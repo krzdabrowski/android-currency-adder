@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.core.extensions
+package eu.krzdabrowski.currencyadder.core.utils
 
 import android.app.Activity
 import android.content.Context

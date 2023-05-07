@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import eu.krzdabrowski.currencyadder.core.extensions.findActivity
+import eu.krzdabrowski.currencyadder.core.utils.findActivity
 
 @Composable
 fun BiometricPrompt(

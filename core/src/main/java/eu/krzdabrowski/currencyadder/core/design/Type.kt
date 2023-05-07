@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.core.ui
+package eu.krzdabrowski.currencyadder.core.design
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

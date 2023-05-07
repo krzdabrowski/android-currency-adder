@@ -51,7 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
-import eu.krzdabrowski.currencyadder.core.extensions.DebounceEffect
+import eu.krzdabrowski.currencyadder.core.utils.DebounceEffect
 
 private const val SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE = 0.75f
 private const val MAX_TOTAL_DIGITS = 12

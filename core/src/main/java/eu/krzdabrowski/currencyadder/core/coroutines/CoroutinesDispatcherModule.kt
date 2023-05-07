@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.core.di
+package eu.krzdabrowski.currencyadder.core.coroutines
 
 import dagger.Module
 import dagger.Provides

@@ -14,8 +14,8 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.Total
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsUiState.PartialState.ChosenCurrencyCodeChanged
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsUiState.PartialState.CurrencyCodesFetched
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsUiState.PartialState.TotalUserSavingsFetched
-import eu.krzdabrowski.currencyadder.core.base.BaseViewModel
-import eu.krzdabrowski.currencyadder.core.extensions.toFormattedAmount
+import eu.krzdabrowski.currencyadder.core.BaseViewModel
+import eu.krzdabrowski.currencyadder.core.utils.toFormattedAmount
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

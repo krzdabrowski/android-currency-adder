@@ -6,7 +6,7 @@ import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toDomainModels
 import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toEntityModel
 import eu.krzdabrowski.currencyadder.basefeature.data.remote.api.ExchangeRatesApi
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRatesRepository
-import eu.krzdabrowski.currencyadder.core.extensions.resultOf
+import eu.krzdabrowski.currencyadder.core.utils.resultOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

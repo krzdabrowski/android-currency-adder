@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.core.ui
+package eu.krzdabrowski.currencyadder.core.design
 
 import android.app.Activity
 import android.os.Build

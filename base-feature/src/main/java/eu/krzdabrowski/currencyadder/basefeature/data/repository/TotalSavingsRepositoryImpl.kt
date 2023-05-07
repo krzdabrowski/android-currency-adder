@@ -4,7 +4,7 @@ import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.ExchangeRatesDao
 import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.UserSavingsDao
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.TotalSavingsRepository
 import eu.krzdabrowski.currencyadder.core.datastore.DataStoreManager
-import eu.krzdabrowski.currencyadder.core.extensions.resultOf
+import eu.krzdabrowski.currencyadder.core.utils.resultOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest

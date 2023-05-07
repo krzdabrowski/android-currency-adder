@@ -5,7 +5,7 @@ import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toDomainModel
 import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toEntityModel
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.UserSavingsRepository
-import eu.krzdabrowski.currencyadder.core.extensions.resultOf
+import eu.krzdabrowski.currencyadder.core.utils.resultOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

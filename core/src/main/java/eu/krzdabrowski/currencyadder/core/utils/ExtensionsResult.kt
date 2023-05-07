@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.core.extensions
+package eu.krzdabrowski.currencyadder.core.utils
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
