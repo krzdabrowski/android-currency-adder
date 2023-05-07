@@ -40,7 +40,7 @@ fun TotalSavingsContent(
         Row(
             modifier = modifier
                 .fillMaxSize()
-                .padding(start = 16.dp),
+                .padding(horizontal = 8.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -93,12 +93,11 @@ private fun TotalSavingsChosenCurrencyDropdownMenu(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.SemiBold,
             ),
+            singleLine = true,
             shape = RectangleShape,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
             ),
         )
 
