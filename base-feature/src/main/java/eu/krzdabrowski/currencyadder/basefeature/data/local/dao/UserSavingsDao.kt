@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import eu.krzdabrowski.currencyadder.basefeature.data.local.model.UserSavingCached
 import kotlinx.coroutines.flow.Flow
@@ -29,4 +30,26 @@ interface UserSavingsDao {
 
     @Delete
     suspend fun removeUserSaving(userSaving: UserSavingCached)
+
+    @Transaction
+    suspend fun swapUserSavings(fromIndex: Long, toIndex: Long) {
+        // to prevent violation of an unique id constraint
+
+        setSwappedUserSavingsIdsNegative(fromIndex, toIndex)
+        setSwappedUserSavingsIdsPositive()
+    }
+
+    @Query(
+        "UPDATE User_Savings " +
+            "SET id = (CASE WHEN id = :fromIndex THEN -:toIndex else -:fromIndex END) " +
+            "WHERE id in (:fromIndex, :toIndex)",
+    )
+    suspend fun setSwappedUserSavingsIdsNegative(fromIndex: Long, toIndex: Long)
+
+    @Query(
+        "UPDATE User_Savings " +
+            "SET id = -id " +
+            "WHERE id < 0",
+    )
+    suspend fun setSwappedUserSavingsIdsPositive()
 }

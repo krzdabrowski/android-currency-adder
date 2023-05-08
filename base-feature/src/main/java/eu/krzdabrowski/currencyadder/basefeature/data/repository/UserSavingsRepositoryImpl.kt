@@ -44,4 +44,8 @@ class UserSavingsRepositoryImpl @Inject constructor(
                 userSaving.toEntityModel(),
             )
     }
+
+    override suspend fun swapUserSavings(fromIndex: Long, toIndex: Long): Result<Unit> = resultOf {
+        userSavingsDao.swapUserSavings(fromIndex, toIndex)
+    }
 }
