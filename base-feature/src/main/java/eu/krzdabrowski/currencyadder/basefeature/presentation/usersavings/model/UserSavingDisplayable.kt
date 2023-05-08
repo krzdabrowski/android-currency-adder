@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class UserSavingDisplayable(
-    val id: Int = 0,
+    val id: Long? = null,
     val place: String,
     val amount: String,
     val currency: String,
