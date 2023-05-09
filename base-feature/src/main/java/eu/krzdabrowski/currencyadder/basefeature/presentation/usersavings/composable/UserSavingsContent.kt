@@ -2,15 +2,18 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.compo
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Divider
@@ -35,6 +38,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
+import eu.krzdabrowski.currencyadder.core.utils.DraggableItem
+import eu.krzdabrowski.currencyadder.core.utils.dragContainer
+import eu.krzdabrowski.currencyadder.core.utils.rememberDragDropState
 
 private val headerStringResources = listOf(
     R.string.list_header_place,
@@ -48,6 +54,7 @@ fun UserSavingsContent(
     onAddUserSaving: () -> Unit,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+    onDragAndDropUserSaving: (Int, Int) -> Unit,
     onRefreshExchangeRates: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -77,6 +84,7 @@ fun UserSavingsContent(
                     uiState = uiState,
                     onUpdateUserSaving = onUpdateUserSaving,
                     onRemoveUserSaving = onRemoveUserSaving,
+                    onDragAndDropUserSaving = onDragAndDropUserSaving,
                 )
             } else {
                 UserSavingsNotAvailableContent()
@@ -91,6 +99,7 @@ private fun UserSavingsAvailableContent(
     uiState: UserSavingsUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+    onDragAndDropUserSaving: (Int, Int) -> Unit,
 ) {
     if (uiState.isError) {
         val errorMessage = stringResource(R.string.exchange_rates_error_refreshing)
@@ -102,11 +111,16 @@ private fun UserSavingsAvailableContent(
         }
     }
 
-    UserSavingsListContent(
-        uiState = uiState,
-        onUpdateUserSaving = onUpdateUserSaving,
-        onRemoveUserSaving = onRemoveUserSaving,
-    )
+    Column {
+        UserSavingsHeader()
+
+        UserSavingsListContent(
+            uiState = uiState,
+            onUpdateUserSaving = onUpdateUserSaving,
+            onRemoveUserSaving = onRemoveUserSaving,
+            onDragAndDropUserSaving = onDragAndDropUserSaving,
+        )
+    }
 }
 
 @Composable
@@ -122,55 +136,76 @@ private fun UserSavingsNotAvailableContent() {
     }
 }
 
+@Composable
+private fun UserSavingsHeader(
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(
+                vertical = dimensionResource(R.dimen.dimen_small),
+            ),
+        horizontalArrangement = Arrangement.SpaceAround,
+    ) {
+        for (headerId in headerStringResources) {
+            Text(
+                text = stringResource(headerId),
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+    }
+}
+
 @VisibleForTesting
 @Composable
 internal fun UserSavingsListContent(
     uiState: UserSavingsUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+    onDragAndDropUserSaving: (Int, Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val listState = rememberLazyListState()
+    val dragDropState = rememberDragDropState(
+        lazyListState = listState,
+        onMove = onDragAndDropUserSaving,
+    )
+
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier
+            .dragContainer(dragDropState),
+        state = listState,
     ) {
-        header()
-
-        items(
+        itemsIndexed(
             items = uiState.userSavings,
-            key = { userSaving -> userSaving.id },
-        ) {
-            UserSavingItem(
-                item = it,
-                currencyCodes = uiState.currencyCodes,
-                modifier = Modifier.animateItemPlacement(),
-                onItemUpdate = onUpdateUserSaving,
-                onItemRemove = onRemoveUserSaving,
-            )
-
-            Divider(color = Color.Black)
-        }
-    }
-}
-
-private fun LazyListScope.header() {
-    stickyHeader {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(
-                    vertical = dimensionResource(R.dimen.dimen_small),
-                ),
-            horizontalArrangement = Arrangement.SpaceAround,
-        ) {
-            for (headerId in headerStringResources) {
-                Text(
-                    text = stringResource(headerId),
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium,
+            key = { _, userSaving -> userSaving },
+        ) { index, item ->
+            DraggableItem(
+                dragDropState = dragDropState,
+                index = index,
+            ) { isDragging ->
+                UserSavingItem(
+                    item = item,
+                    currencyCodes = uiState.currencyCodes,
+                    onItemUpdate = onUpdateUserSaving,
+                    onItemRemove = onRemoveUserSaving,
+                    modifier = Modifier
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            enabled = !isDragging,
+                        ) { /* no-op */ }
+                        .background(
+                            if (isDragging) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
+                        ),
                 )
             }
+
+            Divider(color = Color.Black)
         }
     }
 }

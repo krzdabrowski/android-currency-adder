@@ -7,12 +7,12 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.Re
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.SwapUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.AddUserSaving
-import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.GetCurrencyCodes
-import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.GetUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RemoveUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.SwapUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.CurrencyCodesFetched
@@ -25,6 +25,7 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.
 import eu.krzdabrowski.currencyadder.core.BaseViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
@@ -42,6 +43,7 @@ class UserSavingsViewModel @Inject constructor(
     private val addUserSavingUseCase: AddUserSavingUseCase,
     private val updateUserSavingUseCase: UpdateUserSavingUseCase,
     private val removeUserSavingUseCase: RemoveUserSavingUseCase,
+    private val swapUserSavingsUseCase: SwapUserSavingsUseCase,
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
     private val getCurrencyCodesUseCase: GetCurrencyCodesUseCase,
     savedStateHandle: SavedStateHandle,
@@ -51,18 +53,17 @@ class UserSavingsViewModel @Inject constructor(
     userSavingsInitialState,
 ) {
     init {
-        acceptIntent(GetCurrencyCodes)
-        acceptIntent(GetUserSavings)
+        observeContinuousChanges(getCurrencyCodes())
+        observeContinuousChanges(getUserSavings())
         acceptIntent(RefreshExchangeRates)
     }
 
     override fun mapIntents(intent: UserSavingsIntent): Flow<PartialState> = when (intent) {
-        is GetUserSavings -> getUserSavings()
         is AddUserSaving -> addUserSaving()
         is UpdateUserSaving -> updateUserSaving(intent.updatedSaving)
         is RemoveUserSaving -> removeUserSaving(intent.removedSaving)
+        is SwapUserSavings -> swapUserSavings(intent.fromListItemIndex, intent.toListItemIndex)
         is RefreshExchangeRates -> refreshExchangeRates()
-        is GetCurrencyCodes -> getCurrencyCodes()
     }
 
     override fun reduceUiState(
@@ -90,21 +91,19 @@ class UserSavingsViewModel @Inject constructor(
         )
     }
 
-    private fun getUserSavings(): Flow<PartialState> = flow {
+    private fun getUserSavings(): Flow<PartialState> =
         getUserSavingsUseCase()
-            .onStart {
-                emit(Loading)
+            .onStart { Loading }
+            .map {
+                it.fold(
+                    onSuccess = { userSavingList ->
+                        UserSavingsFetched(userSavingList.map { it.toPresentationModel() })
+                    },
+                    onFailure = { throwable ->
+                        Error(throwable)
+                    },
+                )
             }
-            .collect { result ->
-                result
-                    .onSuccess { userSavingList ->
-                        emit(UserSavingsFetched(userSavingList.map { it.toPresentationModel() }))
-                    }
-                    .onFailure {
-                        emit(Error(it))
-                    }
-            }
-    }
 
     private fun addUserSaving(): Flow<PartialState> = flow {
         addUserSavingUseCase(
@@ -115,25 +114,39 @@ class UserSavingsViewModel @Inject constructor(
             }
     }
 
-    private fun updateUserSaving(updatedUserSaving: UserSavingDisplayable): Flow<PartialState> =
-        flow {
-            updateUserSavingUseCase(
-                updatedUserSaving.toDomainModel(),
-            )
-                .onFailure {
-                    emit(Error(it))
-                }
-        }
+    private fun updateUserSaving(userSaving: UserSavingDisplayable): Flow<PartialState> = flow {
+        updateUserSavingUseCase(
+            userSaving.toDomainModel(),
+        )
+            .onFailure {
+                emit(Error(it))
+            }
+    }
 
-    private fun removeUserSaving(removedUserSaving: UserSavingDisplayable): Flow<PartialState> =
-        flow {
-            removeUserSavingUseCase(
-                removedUserSaving.toDomainModel(),
-            )
-                .onFailure {
-                    emit(Error(it))
-                }
+    private fun removeUserSaving(userSaving: UserSavingDisplayable): Flow<PartialState> = flow {
+        removeUserSavingUseCase(
+            userSaving.toDomainModel(),
+        )
+            .onFailure {
+                emit(Error(it))
+            }
+    }
+
+    private fun swapUserSavings(
+        fromListItemIndex: Int,
+        toListItemIndex: Int,
+    ): Flow<PartialState> = flow {
+        // SQLite starts indexing from 1; the whole CS world starts indexing from 0
+        val fromDatabaseIndex = fromListItemIndex + 1L
+        val toDatabaseIndex = toListItemIndex + 1L
+
+        swapUserSavingsUseCase(
+            fromDatabaseIndex,
+            toDatabaseIndex,
+        ).onFailure {
+            emit(Error(it))
         }
+    }
 
     private fun refreshExchangeRates(): Flow<PartialState> = flow {
         refreshExchangeRatesUseCase()
@@ -142,18 +155,20 @@ class UserSavingsViewModel @Inject constructor(
             }
     }
 
-    private fun getCurrencyCodes(): Flow<PartialState> = flow {
+    private fun getCurrencyCodes(): Flow<PartialState> =
         getCurrencyCodesUseCase()
-            .collect { result ->
-                result
-                    .onSuccess {
-                        if (it.isNotEmpty()) {
-                            emit(CurrencyCodesFetched(it))
+            .map {
+                it.fold(
+                    onSuccess = { currencyCodes ->
+                        if (currencyCodes.isNotEmpty()) {
+                            CurrencyCodesFetched(currencyCodes)
+                        } else {
+                            Error(IllegalStateException("Empty currency codes list"))
                         }
-                    }
-                    .onFailure {
-                        emit(Error(it))
-                    }
+                    },
+                    onFailure = { throwable ->
+                        Error(throwable)
+                    },
+                )
             }
-    }
 }

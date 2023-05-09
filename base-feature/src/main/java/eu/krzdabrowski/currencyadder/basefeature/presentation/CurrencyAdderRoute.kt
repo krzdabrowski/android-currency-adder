@@ -17,6 +17,7 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSa
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.AddUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RemoveUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.SwapUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsViewModel
@@ -59,6 +60,9 @@ private fun CurrencyAdderScreen(
             },
             onRemoveUserSaving = {
                 onUserSavingsIntent(RemoveUserSaving(it))
+            },
+            onDragAndDropUserSaving = { fromListItemIndex, toListItemIndex ->
+                onUserSavingsIntent(SwapUserSavings(fromListItemIndex, toListItemIndex))
             },
             onRefreshExchangeRates = {
                 onUserSavingsIntent(RefreshExchangeRates)
