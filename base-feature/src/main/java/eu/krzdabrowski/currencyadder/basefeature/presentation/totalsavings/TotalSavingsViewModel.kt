@@ -6,18 +6,17 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.Ge
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.GetChosenCurrencyCodeForTotalSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.GetTotalUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.UpdateChosenCurrencyCodeForTotalSavingsUseCase
-import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsIntent.GetChosenCurrencyCodeForTotalSavings
-import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsIntent.GetCurrencyCodes
-import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsIntent.GetTotalUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsIntent.UpdateChosenCurrencyCodeForTotalSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsUiState.PartialState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsUiState.PartialState.ChosenCurrencyCodeChanged
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsUiState.PartialState.CurrencyCodesFetched
+import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsUiState.PartialState.Error
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.TotalSavingsUiState.PartialState.TotalUserSavingsFetched
 import eu.krzdabrowski.currencyadder.core.BaseViewModel
 import eu.krzdabrowski.currencyadder.core.utils.toFormattedAmount
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 private const val BASE_EXCHANGE_RATE_CODE = "PLN"
@@ -35,15 +34,12 @@ class TotalSavingsViewModel @Inject constructor(
     totalSavingsInitialState,
 ) {
     init {
-        acceptIntent(GetCurrencyCodes)
-        acceptIntent(GetTotalUserSavings)
-        acceptIntent(GetChosenCurrencyCodeForTotalSavings)
+        observeContinuousChanges(getCurrencyCodes())
+        observeContinuousChanges(getTotalUserSavings())
+        observeContinuousChanges(getChosenCurrencyCodeForTotalSavings())
     }
 
     override fun mapIntents(intent: TotalSavingsIntent): Flow<PartialState> = when (intent) {
-        is GetTotalUserSavings -> getTotalUserSavings()
-        is GetCurrencyCodes -> getCurrencyCodes()
-        is GetChosenCurrencyCodeForTotalSavings -> getChosenCurrencyCodeForTotalSavings()
         is UpdateChosenCurrencyCodeForTotalSavings -> updateChosenCurrencyCodeForTotalSavings(intent.currencyCode)
     }
 
@@ -62,49 +58,61 @@ class TotalSavingsViewModel @Inject constructor(
         is ChosenCurrencyCodeChanged -> previousState.copy(
             chosenCurrencyCode = partialState.currencyCode,
         )
+
+        is Error -> previousState
     }
 
-    private fun getCurrencyCodes(): Flow<PartialState> = flow {
+    private fun getCurrencyCodes(): Flow<PartialState> =
         getCurrencyCodesUseCase()
-            .collect { result ->
-                result
-                    .onSuccess {
-                        if (it.isNotEmpty()) {
-                            emit(CurrencyCodesFetched(it))
+            .map {
+                it.fold(
+                    onSuccess = { currencyCodes ->
+                        if (currencyCodes.isNotEmpty()) {
+                            CurrencyCodesFetched(currencyCodes)
+                        } else {
+                            Error
                         }
-                    }
+                    },
+                    onFailure = {
+                        Error
+                    },
+                )
             }
-    }
 
-    private fun getTotalUserSavings(): Flow<PartialState> = flow {
+    private fun getTotalUserSavings(): Flow<PartialState> =
         getTotalUserSavingsUseCase()
-            .collect { result ->
-                result
-                    .onSuccess {
-                        emit(TotalUserSavingsFetched(it.toFormattedAmount()))
-                    }
+            .map {
+                it.fold(
+                    onSuccess = { total ->
+                        TotalUserSavingsFetched(total.toFormattedAmount())
+                    },
+                    onFailure = {
+                        Error
+                    },
+                )
             }
-    }
 
     private fun getChosenCurrencyCodeForTotalSavings(): Flow<PartialState> =
-        flow {
-            getChosenCurrencyCodeForTotalSavingsUseCase()
-                .collect { result ->
-                    result
-                        .onSuccess {
-                            if (it.isNotEmpty()) {
-                                emit(ChosenCurrencyCodeChanged(it))
-                            } else {
-                                updateChosenCurrencyCodeForTotalSavingsUseCase(
-                                    BASE_EXCHANGE_RATE_CODE,
-                                )
-                            }
+        getChosenCurrencyCodeForTotalSavingsUseCase()
+            .map {
+                it.fold(
+                    onSuccess = { chosenCode ->
+                        if (chosenCode.isNotEmpty()) {
+                            ChosenCurrencyCodeChanged(chosenCode)
+                        } else {
+                            updateChosenCurrencyCodeForTotalSavingsUseCase(
+                                BASE_EXCHANGE_RATE_CODE,
+                            )
+                            ChosenCurrencyCodeChanged(BASE_EXCHANGE_RATE_CODE)
                         }
-                }
-        }
+                    },
+                    onFailure = {
+                        Error
+                    },
+                )
+            }
 
-    private fun updateChosenCurrencyCodeForTotalSavings(currencyCode: String): Flow<PartialState> =
-        flow {
-            updateChosenCurrencyCodeForTotalSavingsUseCase(currencyCode)
-        }
+    private fun updateChosenCurrencyCodeForTotalSavings(code: String): Flow<PartialState> = flow {
+        updateChosenCurrencyCodeForTotalSavingsUseCase(code)
+    }
 }
