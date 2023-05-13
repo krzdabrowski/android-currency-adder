@@ -93,7 +93,6 @@ class UserSavingsViewModel @Inject constructor(
 
     private fun getUserSavings(): Flow<PartialState> =
         getUserSavingsUseCase()
-            .onStart { Loading }
             .map {
                 it.fold(
                     onSuccess = { userSavingList ->
@@ -104,6 +103,7 @@ class UserSavingsViewModel @Inject constructor(
                     },
                 )
             }
+            .onStart { emit(Loading) }
 
     private fun addUserSaving(): Flow<PartialState> = flow {
         addUserSavingUseCase(
