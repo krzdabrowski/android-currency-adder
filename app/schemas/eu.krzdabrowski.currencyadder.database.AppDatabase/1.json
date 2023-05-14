@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9729598a2d07646a31b96bf45e3fefbe",
+    "identityHash": "b200b65650012ca497e1c5e800d2e37b",
     "entities": [
       {
         "tableName": "Exchange_Rates",
@@ -32,13 +32,19 @@
       },
       {
         "tableName": "User_Savings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `place` TEXT NOT NULL, `amount` REAL NOT NULL, `currency` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `timestamp` INTEGER NOT NULL, `place` TEXT NOT NULL, `amount` REAL NOT NULL, `currency` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "place",
@@ -72,7 +78,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9729598a2d07646a31b96bf45e3fefbe')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b200b65650012ca497e1c5e800d2e37b')"
     ]
   }
 }

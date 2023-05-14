@@ -16,6 +16,7 @@ datastore                           = "1.0.0"
 hilt                                = "2.46.1"
 kotlin                              = "1.8.21"
 kotlin-coroutines                   = "1.7.1"
+kotlin-datetime                     = "0.4.0"
 kotlin-serialization                = "1.5.1"
 kotlin-serialization-converter      = "1.0.0"
 lifecycle                           = "2.6.1"
@@ -60,6 +61,7 @@ detekt-compose-rules                = { module = "io.nlopez.compose.rules:detekt
 hilt                                = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler                       = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 kotlin-coroutines                   = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
+kotlin-datetime                     = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlin-datetime" }
 kotlin-serialization                = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 kotlin-serialization-converter      = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "kotlin-serialization-converter" }
 lifecycle-runtime-compose           = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }

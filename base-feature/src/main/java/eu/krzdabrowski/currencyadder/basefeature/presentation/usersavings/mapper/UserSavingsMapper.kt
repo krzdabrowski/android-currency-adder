@@ -8,6 +8,7 @@ private const val DEFAULT_SAVING_VALUE: Double = 0.0
 
 fun UserSaving.toPresentationModel() = UserSavingDisplayable(
     id = id,
+    timestamp = timestamp,
     place = place,
     amount = if (amount != DEFAULT_SAVING_VALUE) {
         amount.toFormattedAmount().removeSuffix(".00")
@@ -19,6 +20,7 @@ fun UserSaving.toPresentationModel() = UserSavingDisplayable(
 
 fun UserSavingDisplayable.toDomainModel() = UserSaving(
     id = id,
+    timestamp = timestamp,
     place = place,
     amount = amount.toDoubleOrNull() ?: 0.0,
     currency = currency,

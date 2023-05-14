@@ -182,7 +182,7 @@ internal fun UserSavingsListContent(
     ) {
         itemsIndexed(
             items = uiState.userSavings,
-            key = { _, userSaving -> userSaving },
+            key = { _, userSaving -> (userSaving.id ?: 0L) to userSaving.timestamp },
         ) { index, item ->
             DraggableItem(
                 dragDropState = dragDropState,

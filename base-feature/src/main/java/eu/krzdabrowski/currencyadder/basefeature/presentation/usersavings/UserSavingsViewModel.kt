@@ -27,11 +27,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.datetime.Clock
 import javax.inject.Inject
 
 private const val BASE_EXCHANGE_RATE_CODE = "PLN"
 
-private val emptyUserSaving = UserSavingDisplayable(
+private val emptyUserSavingTemplate = UserSavingDisplayable(
     place = "",
     amount = "0",
     currency = BASE_EXCHANGE_RATE_CODE,
@@ -106,6 +107,10 @@ class UserSavingsViewModel @Inject constructor(
             .onStart { emit(Loading) }
 
     private fun addUserSaving(): Flow<PartialState> = flow {
+        val emptyUserSaving = emptyUserSavingTemplate.copy(
+            timestamp = Clock.System.now().toEpochMilliseconds(),
+        )
+
         addUserSavingUseCase(
             emptyUserSaving.toDomainModel(),
         )
