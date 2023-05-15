@@ -90,7 +90,10 @@ fun UserSavingItem(
                 onItemUpdate = onItemUpdate,
             )
         },
-        modifier = modifier,
+        modifier = modifier
+            .testTag(
+                stringResource(R.string.user_saving_content_description),
+            ),
     )
 }
 
@@ -142,10 +145,7 @@ private fun UserSavingItemContent(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .testTag(
-                stringResource(R.string.user_saving_content_description),
-            ),
+            .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         UserSavingPlace(

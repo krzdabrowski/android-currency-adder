@@ -8,6 +8,7 @@ import eu.krzdabrowski.currencyadder.basefeature.data.dummy.generateTestUserSavi
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.SwapUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
 import kotlinx.coroutines.flow.flowOf
 
@@ -37,6 +38,11 @@ internal object FakeUserSavingsModule {
 
     @Provides
     fun provideNoopRemoveUserSavingUseCase() = RemoveUserSavingUseCase {
+        Result.success(Unit)
+    }
+
+    @Provides
+    fun provideNoopSwapUserSavingsUseCase() = SwapUserSavingsUseCase { _, _ ->
         Result.success(Unit)
     }
 }

@@ -15,6 +15,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+private val headerStrings = listOf(
+    "Place",
+    "Saving",
+    "Currency",
+)
+
 class UserSavingsContentTest {
 
     @get:Rule
@@ -33,6 +39,21 @@ class UserSavingsContentTest {
             userSavingContentDescription = getString(R.string.user_saving_content_description)
             userSavingsEmptyMessage = getString(R.string.list_empty_message)
             errorRefreshingMessage = getString(R.string.exchange_rates_error_refreshing)
+        }
+    }
+
+    @Test
+    fun userSavingsContent_whenContentAvailable_shouldShowTheHeader() {
+        setUpComposable(
+            UserSavingsUiState(
+                userSavings = testUserSavings,
+            ),
+        )
+
+        headerStrings.forEach {
+            composeTestRule
+                .onNodeWithText(it)
+                .assertExists()
         }
     }
 
@@ -102,6 +123,7 @@ class UserSavingsContentTest {
                 onAddUserSaving = { },
                 onUpdateUserSaving = { },
                 onRemoveUserSaving = { },
+                onDragAndDropUserSaving = { _, _ -> },
                 onRefreshExchangeRates = { },
             )
         }
