@@ -62,7 +62,7 @@ class UserSavingsViewModel @Inject constructor(
     override fun mapIntents(intent: UserSavingsIntent): Flow<PartialState> = when (intent) {
         is AddUserSaving -> addUserSaving()
         is UpdateUserSaving -> updateUserSaving(intent.updatedSaving)
-        is RemoveUserSaving -> removeUserSaving(intent.removedSaving)
+        is RemoveUserSaving -> removeUserSaving(intent.removedUserSaving)
         is SwapUserSavings -> swapUserSavings(intent.fromListItemIndex, intent.toListItemIndex)
         is RefreshExchangeRates -> refreshExchangeRates()
     }
@@ -128,10 +128,8 @@ class UserSavingsViewModel @Inject constructor(
             }
     }
 
-    private fun removeUserSaving(userSaving: UserSavingDisplayable): Flow<PartialState> = flow {
-        removeUserSavingUseCase(
-            userSaving.toDomainModel(),
-        )
+    private fun removeUserSaving(userSavingId: Long): Flow<PartialState> = flow {
+        removeUserSavingUseCase(userSavingId)
             .onFailure {
                 emit(Error(it))
             }

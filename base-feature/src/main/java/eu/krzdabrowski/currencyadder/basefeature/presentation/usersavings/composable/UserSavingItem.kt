@@ -63,18 +63,20 @@ fun UserSavingItem(
     item: UserSavingDisplayable,
     currencyCodes: List<String>,
     onItemUpdate: (UserSavingDisplayable) -> Unit,
-    onItemRemove: (UserSavingDisplayable) -> Unit,
+    onItemRemove: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val currentItem by rememberUpdatedState(item)
     val dismissState = rememberDismissState(
-        confirmValueChange = {
-            if (it != Default) {
-                onItemRemove(currentItem)
-                true
-            } else {
-                false
-            }
+        confirmValueChange = { dismissValue ->
+            currentItem.id?.let { userSavingId ->
+                if (dismissValue != Default) {
+                    onItemRemove(userSavingId)
+                    true
+                } else {
+                    false
+                }
+            } ?: false
         },
     )
 

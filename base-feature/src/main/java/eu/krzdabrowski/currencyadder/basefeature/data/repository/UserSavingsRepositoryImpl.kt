@@ -38,11 +38,9 @@ class UserSavingsRepositoryImpl @Inject constructor(
             )
     }
 
-    override suspend fun removeUserSaving(userSaving: UserSaving): Result<Unit> = resultOf {
+    override suspend fun removeUserSaving(userSavingId: Long): Result<Unit> = resultOf {
         userSavingsDao
-            .removeUserSaving(
-                userSaving.toEntityModel(),
-            )
+            .removeUserSaving(userSavingId)
     }
 
     override suspend fun swapUserSavings(fromIndex: Long, toIndex: Long): Result<Unit> = resultOf {

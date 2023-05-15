@@ -53,7 +53,7 @@ fun UserSavingsContent(
     uiState: UserSavingsUiState,
     onAddUserSaving: () -> Unit,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
-    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+    onRemoveUserSaving: (Long) -> Unit,
     onDragAndDropUserSaving: (Int, Int) -> Unit,
     onRefreshExchangeRates: () -> Unit,
     modifier: Modifier = Modifier,
@@ -98,7 +98,7 @@ private fun UserSavingsAvailableContent(
     snackbarHostState: SnackbarHostState,
     uiState: UserSavingsUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
-    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+    onRemoveUserSaving: (Long) -> Unit,
     onDragAndDropUserSaving: (Int, Int) -> Unit,
 ) {
     if (uiState.isError) {
@@ -165,7 +165,7 @@ private fun UserSavingsHeader(
 internal fun UserSavingsListContent(
     uiState: UserSavingsUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
-    onRemoveUserSaving: (UserSavingDisplayable) -> Unit,
+    onRemoveUserSaving: (Long) -> Unit,
     onDragAndDropUserSaving: (Int, Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {

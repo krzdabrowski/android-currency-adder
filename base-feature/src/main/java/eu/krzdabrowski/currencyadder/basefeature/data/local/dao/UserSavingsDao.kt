@@ -1,7 +1,6 @@
 package eu.krzdabrowski.currencyadder.basefeature.data.local.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
@@ -12,6 +11,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UserSavingsDao {
 
+    // region [C]reate operations
+    @Insert
+    suspend fun addUserSaving(userSaving: UserSavingCached)
+    // endregion
+
+    // region [R]ead operations
     @Query("SELECT * FROM User_Savings")
     fun getUserSavings(): Flow<List<UserSavingCached>>
 
@@ -21,15 +26,11 @@ interface UserSavingsDao {
             "JOIN Exchange_Rates rates ON rates.code = savings.currency",
     )
     fun getTotalUserSavingsInBaseCurrency(): Flow<Double>
+    // endregion
 
-    @Insert
-    suspend fun addUserSaving(userSaving: UserSavingCached)
-
+    // region [U]pdate operations
     @Update
     suspend fun updateUserSaving(userSaving: UserSavingCached)
-
-    @Delete
-    suspend fun removeUserSaving(userSaving: UserSavingCached)
 
     @Transaction
     suspend fun swapUserSavings(fromIndex: Long, toIndex: Long) {
@@ -52,4 +53,26 @@ interface UserSavingsDao {
             "WHERE id < 0",
     )
     suspend fun setSwappedUserSavingsIdsPositive()
+    // endregion
+
+    // region [D]elete operations
+    @Transaction
+    suspend fun removeUserSaving(userSavingId: Long) {
+        deleteUserSaving(userSavingId)
+        updateUserSavingsIdsGreaterThan(userSavingId)
+    }
+
+    @Query(
+        "DELETE FROM User_Savings " +
+            "WHERE id = :userSavingId",
+    )
+    suspend fun deleteUserSaving(userSavingId: Long)
+
+    @Query(
+        "UPDATE User_Savings " +
+            "SET id = id - 1 " +
+            "WHERE id > :userSavingId",
+    )
+    suspend fun updateUserSavingsIdsGreaterThan(userSavingId: Long)
+    // endregion
 }
