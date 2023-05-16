@@ -26,7 +26,11 @@ internal object DatabaseModule {
             context,
             AppDatabase::class.java,
             APP_DATABASE_NAME,
-        ).build()
+        )
+            // it is quite impossible to migrate data between v1.0 and v1.1 app versions
+            // and make app not bugged due to lack of information when user saving was added in v1.0 (timestamp)
+            .fallbackToDestructiveMigrationFrom(1)
+            .build()
     }
 
     @Singleton

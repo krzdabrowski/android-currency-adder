@@ -7,11 +7,11 @@ import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.UserSavingsDao
 import eu.krzdabrowski.currencyadder.basefeature.data.local.model.ExchangeRateCached
 import eu.krzdabrowski.currencyadder.basefeature.data.local.model.UserSavingCached
 
-private const val DATABASE_VERSION = 1
+private const val DATABASE_VERSION = 2
 
 @Database(
-    entities = [ExchangeRateCached::class, UserSavingCached::class],
     version = DATABASE_VERSION,
+    entities = [ExchangeRateCached::class, UserSavingCached::class],
 )
 abstract class AppDatabase : RoomDatabase() {
 
