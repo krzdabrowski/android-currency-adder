@@ -7,12 +7,14 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.Re
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.SwapUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.generateEmptyTestUserSavingsFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.generateTestCurrencyCodesFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.generateTestUserSavingsFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.AddUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RemoveUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.SwapUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsViewModel
@@ -27,6 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -52,6 +55,9 @@ class UserSavingsViewModelTest {
     @RelaxedMockK
     private lateinit var removeUserSavingUseCase: RemoveUserSavingUseCase
 
+    @RelaxedMockK
+    private lateinit var swapUserSavingsUseCase: SwapUserSavingsUseCase
+
     // there is some issue with mocking functional interface with kotlin.Result(Unit)
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase = RefreshExchangeRatesUseCase {
         Result.success(Unit)
@@ -59,6 +65,9 @@ class UserSavingsViewModelTest {
 
     @RelaxedMockK
     private lateinit var getCurrencyCodesUseCase: GetCurrencyCodesUseCase
+
+    @RelaxedMockK
+    private lateinit var systemClock: Clock.System
 
     private lateinit var objectUnderTest: UserSavingsViewModel
 
@@ -153,11 +162,31 @@ class UserSavingsViewModelTest {
         setUpUserSavingsViewModel()
 
         // When
-        objectUnderTest.acceptIntent(RemoveUserSaving(testUserSavingFromPresentation))
+        objectUnderTest.acceptIntent(RemoveUserSaving(testUserSavingFromPresentation.id!!))
 
         // Then
         coVerify(exactly = 1) {
-            removeUserSavingUseCase(testUserSavingFromDomain)
+            removeUserSavingUseCase(testUserSavingFromDomain.id!!)
+        }
+    }
+
+    @Test
+    fun `should call proper use case with increased parameters during swapping user savings`() = runTest {
+        // Given
+        val fromListIndex = 0
+        val toListIndex = 1
+
+        val fromDatabaseIndex = fromListIndex + 1L
+        val toDatabaseIndex = toListIndex + 1L
+
+        setUpUserSavingsViewModel()
+
+        // When
+        objectUnderTest.acceptIntent(SwapUserSavings(fromListIndex, toListIndex))
+
+        // Then
+        coVerify(exactly = 1) {
+            swapUserSavingsUseCase(fromDatabaseIndex, toDatabaseIndex)
         }
     }
 
@@ -193,14 +222,17 @@ class UserSavingsViewModelTest {
     ) {
         every { getCurrencyCodesUseCase() } returns getCurrencyCodes
         every { getUserSavingsUseCase() } returns getUserSavings
+        every { systemClock.now().toEpochMilliseconds() } returns 1684178192635L
 
         objectUnderTest = UserSavingsViewModel(
             getUserSavingsUseCase = getUserSavingsUseCase,
             addUserSavingUseCase = addUserSavingUseCase,
             updateUserSavingUseCase = updateUserSavingUseCase,
             removeUserSavingUseCase = removeUserSavingUseCase,
+            swapUserSavingsUseCase = swapUserSavingsUseCase,
             refreshExchangeRatesUseCase = refreshExchangeRatesUseCase,
             getCurrencyCodesUseCase = getCurrencyCodesUseCase,
+            systemClock = systemClock,
             savedStateHandle = spyk(),
             userSavingsInitialState = initialUiState,
         )

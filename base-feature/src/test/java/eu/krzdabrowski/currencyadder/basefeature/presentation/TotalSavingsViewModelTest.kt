@@ -154,6 +154,29 @@ class TotalSavingsViewModelTest {
         }
     }
 
+    @Test
+    fun `should not update ui state when error occurs`() = runTest {
+        // Given
+        setUpTotalSavingsViewModel(
+            getChosenCurrency = flowOf(
+                Result.failure(IllegalStateException("Test exception")),
+            ),
+        )
+
+        // When
+        // init
+
+        // Then
+        objectUnderTest.uiState.test {
+            val initialUiState = TotalSavingsUiState()
+
+            assertEquals(
+                expected = initialUiState,
+                actual = awaitItem(),
+            )
+        }
+    }
+
     private fun setUpTotalSavingsViewModel(
         getCurrencyCodes: Flow<Result<List<String>>> = emptyFlow(),
         getTotalSavings: Flow<Result<Double>> = emptyFlow(),
@@ -174,3 +197,5 @@ class TotalSavingsViewModelTest {
         )
     }
 }
+
+// TODO: new error state

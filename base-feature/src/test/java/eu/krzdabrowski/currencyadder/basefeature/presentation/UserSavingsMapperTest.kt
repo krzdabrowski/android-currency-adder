@@ -14,6 +14,7 @@ class UserSavingsMapperTest {
         // Given
         val domainModel = UserSaving(
             id = 1,
+            timestamp = 1684178192634L,
             place = "home",
             amount = 123.456789,
             currency = "EUR",
@@ -26,6 +27,7 @@ class UserSavingsMapperTest {
         assertEquals(
             expected = UserSavingDisplayable(
                 id = 1,
+                timestamp = 1684178192634L,
                 place = "home",
                 amount = "123.46",
                 currency = "EUR",
@@ -39,6 +41,7 @@ class UserSavingsMapperTest {
         // Given
         val domainModel = UserSaving(
             id = 2,
+            timestamp = 1684178192635L,
             place = "bank",
             amount = 100.0,
             currency = "GBP",
@@ -51,6 +54,7 @@ class UserSavingsMapperTest {
         assertEquals(
             expected = UserSavingDisplayable(
                 id = 2,
+                timestamp = 1684178192635L,
                 place = "bank",
                 amount = "100",
                 currency = "GBP",
@@ -64,6 +68,7 @@ class UserSavingsMapperTest {
         // Given
         val domainModel = UserSaving(
             id = 3,
+            timestamp = 1684178192636L,
             place = "nowhere",
             amount = 0.0,
             currency = "USD",
@@ -76,6 +81,7 @@ class UserSavingsMapperTest {
         assertEquals(
             expected = UserSavingDisplayable(
                 id = 3,
+                timestamp = 1684178192636L,
                 place = "nowhere",
                 amount = "",
                 currency = "USD",
@@ -89,6 +95,7 @@ class UserSavingsMapperTest {
         // Given
         val presentationModel = UserSavingDisplayable(
             id = 4,
+            timestamp = 1684178192637L,
             place = "mattress",
             amount = "567.89",
             currency = "CHF",
@@ -101,6 +108,7 @@ class UserSavingsMapperTest {
         assertEquals(
             expected = UserSaving(
                 id = 4,
+                timestamp = 1684178192637L,
                 place = "mattress",
                 amount = 567.89,
                 currency = "CHF",
@@ -114,6 +122,7 @@ class UserSavingsMapperTest {
         // Given
         val presentationModel = UserSavingDisplayable(
             id = 5,
+            timestamp = 1684178192638L,
             place = "family",
             amount = "987,65",
             currency = "HUF",
@@ -126,6 +135,7 @@ class UserSavingsMapperTest {
         assertEquals(
             expected = UserSaving(
                 id = 5,
+                timestamp = 1684178192638L,
                 place = "family",
                 amount = 0.0,
                 currency = "HUF",

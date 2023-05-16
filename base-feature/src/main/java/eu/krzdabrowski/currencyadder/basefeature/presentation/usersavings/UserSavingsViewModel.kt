@@ -47,6 +47,7 @@ class UserSavingsViewModel @Inject constructor(
     private val swapUserSavingsUseCase: SwapUserSavingsUseCase,
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
     private val getCurrencyCodesUseCase: GetCurrencyCodesUseCase,
+    private val systemClock: Clock.System,
     savedStateHandle: SavedStateHandle,
     userSavingsInitialState: UserSavingsUiState,
 ) : BaseViewModel<UserSavingsUiState, PartialState, Nothing, UserSavingsIntent>(
@@ -108,7 +109,7 @@ class UserSavingsViewModel @Inject constructor(
 
     private fun addUserSaving(): Flow<PartialState> = flow {
         val emptyUserSaving = emptyUserSavingTemplate.copy(
-            timestamp = Clock.System.now().toEpochMilliseconds(),
+            timestamp = systemClock.now().toEpochMilliseconds(),
         )
 
         addUserSavingUseCase(
