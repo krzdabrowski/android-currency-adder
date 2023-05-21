@@ -149,29 +149,40 @@ private fun UserSavingItemContent(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         UserSavingPlace(
-            item = item,
+            place = item.place,
             modifier = Modifier.weight(1f),
-            onItemUpdate = onItemUpdate,
+            onPlaceUpdate = {
+                onItemUpdate(
+                    item.copy(place = it),
+                )
+            },
         )
 
         VerticalDivider()
 
         UserSavingAmount(
-            item = item,
+            amount = item.amount,
             modifier = Modifier.weight(1f),
-            onItemUpdate = onItemUpdate,
+            onAmountUpdate = {
+                onItemUpdate(
+                    item.copy(amount = it),
+                )
+            },
         )
 
         VerticalDivider()
 
         UserSavingChosenCurrencyDropdownMenu(
-            value = item.currency,
+            currency = item.currency,
             currencyCodes = currencyCodes,
             modifier = Modifier.weight(1f),
-            onCurrencyChange = {
+            onCurrencyUpdate = {
                 onItemUpdate(
                     item.copy(currency = it),
                 )
+            },
+            onCurrencyCodesUpdate = {
+                // TODO
             },
         )
     }
@@ -179,17 +190,17 @@ private fun UserSavingItemContent(
 
 @Composable
 private fun UserSavingPlace(
-    item: UserSavingDisplayable,
+    place: String,
     modifier: Modifier = Modifier,
-    onItemUpdate: (UserSavingDisplayable) -> Unit,
+    onPlaceUpdate: (String) -> Unit,
 ) {
-    var input by remember {
-        mutableStateOf(item.place)
+    var currentInput by remember {
+        mutableStateOf(place)
     }
 
     TextField(
-        value = input,
-        onValueChange = { input = it },
+        value = currentInput,
+        onValueChange = { currentInput = it },
         modifier = modifier,
         textStyle = LocalTextStyle.current.copy(
             textAlign = TextAlign.Center,
@@ -204,25 +215,19 @@ private fun UserSavingPlace(
     )
 
     DebounceEffect(
-        input = input,
-        operation = {
-            if (it != item.place) {
-                onItemUpdate(
-                    item.copy(place = input),
-                )
-            }
-        },
+        input = currentInput,
+        operation = onPlaceUpdate,
     )
 }
 
 @Composable
 private fun UserSavingAmount(
-    item: UserSavingDisplayable,
+    amount: String,
     modifier: Modifier = Modifier,
-    onItemUpdate: (UserSavingDisplayable) -> Unit,
+    onAmountUpdate: (String) -> Unit,
 ) {
     var currentInput by remember {
-        mutableStateOf(item.amount)
+        mutableStateOf(amount)
     }
 
     TextField(
@@ -253,24 +258,22 @@ private fun UserSavingAmount(
 
     DebounceEffect(
         input = currentInput,
-        operation = {
-            if (it != item.amount) {
-                onItemUpdate(
-                    item.copy(amount = currentInput),
-                )
-            }
-        },
+        operation = onAmountUpdate,
     )
 }
 
 @Composable
 private fun UserSavingChosenCurrencyDropdownMenu(
-    value: String,
+    currency: String,
     currencyCodes: List<String>,
+    onCurrencyUpdate: (String) -> Unit,
+    onCurrencyCodesUpdate: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onCurrencyChange: (String) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var currentInput by remember {
+        mutableStateOf(currency)
+    }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -278,10 +281,9 @@ private fun UserSavingChosenCurrencyDropdownMenu(
         modifier = modifier,
     ) {
         TextField(
-            value = value,
-            onValueChange = {},
+            value = currency,
+            onValueChange = { currentInput = it },
             modifier = Modifier.menuAnchor(),
-            readOnly = true,
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
@@ -302,13 +304,18 @@ private fun UserSavingChosenCurrencyDropdownMenu(
                 DropdownMenuItem(
                     text = { Text(code) },
                     onClick = {
-                        onCurrencyChange(code)
+                        onCurrencyUpdate(code)
                         expanded = false
                     },
                 )
             }
         }
     }
+
+    DebounceEffect(
+        input = currentInput,
+        operation = onCurrencyCodesUpdate,
+    )
 }
 
 @Composable
