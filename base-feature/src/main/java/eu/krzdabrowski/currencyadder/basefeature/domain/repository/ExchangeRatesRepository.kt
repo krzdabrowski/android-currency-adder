@@ -4,7 +4,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface ExchangeRatesRepository {
 
-    fun getCurrencyCodes(): Flow<Result<List<String>>>
+    fun getAllCurrencyCodes(): Flow<Result<List<String>>>
+
+    suspend fun getCurrencyCodesThatStartWith(searchPhrase: String): Result<List<String>>
 
     suspend fun refreshExchangeRates(): Result<Unit>
 }

@@ -10,12 +10,19 @@ import kotlinx.coroutines.flow.Flow
 interface ExchangeRatesDao {
 
     @Query("SELECT code FROM Exchange_Rates")
-    fun getCurrencyCodes(): Flow<List<String>>
+    fun getAllCurrencyCodes(): Flow<List<String>>
+
+    @Query(
+        "SELECT code " +
+            "FROM Exchange_Rates " +
+            "WHERE code LIKE :searchPhraseWithWildcard"
+    )
+    suspend fun getCurrencyCodesThatStartWith(searchPhraseWithWildcard: String): List<String>
 
     @Query(
         "SELECT rates.value " +
             "FROM Exchange_Rates rates " +
-            "WHERE code = :currencyCode ",
+            "WHERE code = :currencyCode",
     )
     fun getExchangeRateForChosenCurrency(currencyCode: String): Flow<Double>
 

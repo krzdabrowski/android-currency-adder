@@ -18,10 +18,15 @@ class ExchangeRatesRepositoryImpl @Inject constructor(
     private val exchangeRatesDao: ExchangeRatesDao,
 ) : ExchangeRatesRepository {
 
-    override fun getCurrencyCodes(): Flow<Result<List<String>>> {
+    override fun getAllCurrencyCodes(): Flow<Result<List<String>>> {
         return exchangeRatesDao
-            .getCurrencyCodes()
+            .getAllCurrencyCodes()
             .map { Result.success(it) }
+    }
+
+    override suspend fun getCurrencyCodesThatStartWith(searchPhrase: String): Result<List<String>> = resultOf {
+        exchangeRatesDao
+            .getCurrencyCodesThatStartWith("$searchPhrase%")
     }
 
     override suspend fun refreshExchangeRates(): Result<Unit> = resultOf {

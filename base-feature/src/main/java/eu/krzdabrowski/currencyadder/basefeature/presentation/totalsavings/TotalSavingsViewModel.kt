@@ -2,7 +2,7 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings
 
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetAllCurrencyCodesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.GetChosenCurrencyCodeForTotalSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.GetTotalUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.UpdateChosenCurrencyCodeForTotalSavingsUseCase
@@ -24,7 +24,7 @@ private const val BASE_EXCHANGE_RATE_CODE = "PLN"
 @HiltViewModel
 class TotalSavingsViewModel @Inject constructor(
     private val getTotalUserSavingsUseCase: GetTotalUserSavingsUseCase,
-    private val getCurrencyCodesUseCase: GetCurrencyCodesUseCase,
+    private val getCurrencyCodesUseCase: GetAllCurrencyCodesUseCase,
     private val getChosenCurrencyCodeForTotalSavingsUseCase: GetChosenCurrencyCodeForTotalSavingsUseCase,
     private val updateChosenCurrencyCodeForTotalSavingsUseCase: UpdateChosenCurrencyCodeForTotalSavingsUseCase,
     savedStateHandle: SavedStateHandle,

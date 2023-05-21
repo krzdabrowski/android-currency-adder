@@ -2,7 +2,7 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings
 
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetAllCurrencyCodesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
@@ -46,7 +46,7 @@ class UserSavingsViewModel @Inject constructor(
     private val removeUserSavingUseCase: RemoveUserSavingUseCase,
     private val swapUserSavingsUseCase: SwapUserSavingsUseCase,
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
-    private val getCurrencyCodesUseCase: GetCurrencyCodesUseCase,
+    private val getCurrencyCodesUseCase: GetAllCurrencyCodesUseCase,
     private val systemClock: Clock.System,
     savedStateHandle: SavedStateHandle,
     userSavingsInitialState: UserSavingsUiState,
