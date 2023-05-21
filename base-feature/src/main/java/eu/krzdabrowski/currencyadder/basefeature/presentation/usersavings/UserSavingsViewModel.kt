@@ -3,6 +3,7 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetAllCurrencyCodesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesThatStartWithUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
@@ -10,12 +11,14 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.Remo
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.SwapUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.AddUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.GetCurrencyCodesThatStartWith
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RemoveUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.SwapUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.CurrencyCodesFetched
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.CurrencyCodesFiltered
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.UserSavingsPartialState.Error
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.UserSavingsPartialState.Loading
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.UserSavingsPartialState.UserSavingsFetched
@@ -36,6 +39,7 @@ private val emptyUserSavingTemplate = UserSavingDisplayable(
     place = "",
     amount = "0",
     currency = BASE_EXCHANGE_RATE_CODE,
+    currencyPossibilities = emptyList(),
 )
 
 @HiltViewModel
@@ -46,7 +50,8 @@ class UserSavingsViewModel @Inject constructor(
     private val removeUserSavingUseCase: RemoveUserSavingUseCase,
     private val swapUserSavingsUseCase: SwapUserSavingsUseCase,
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
-    private val getCurrencyCodesUseCase: GetAllCurrencyCodesUseCase,
+    private val getAllCurrencyCodesUseCase: GetAllCurrencyCodesUseCase,
+    private val getCurrencyCodesThatStartWithUseCase: GetCurrencyCodesThatStartWithUseCase,
     private val systemClock: Clock.System,
     savedStateHandle: SavedStateHandle,
     userSavingsInitialState: UserSavingsUiState,
@@ -55,7 +60,7 @@ class UserSavingsViewModel @Inject constructor(
     userSavingsInitialState,
 ) {
     init {
-        observeContinuousChanges(getCurrencyCodes())
+        observeContinuousChanges(getAllCurrencyCodes())
         observeContinuousChanges(getUserSavings())
         acceptIntent(RefreshExchangeRates)
     }
@@ -63,8 +68,9 @@ class UserSavingsViewModel @Inject constructor(
     override fun mapIntents(intent: UserSavingsIntent): Flow<PartialState> = when (intent) {
         is AddUserSaving -> addUserSaving()
         is UpdateUserSaving -> updateUserSaving(intent.updatedSaving)
-        is RemoveUserSaving -> removeUserSaving(intent.removedUserSaving)
+        is RemoveUserSaving -> removeUserSaving(intent.removedUserSavingId)
         is SwapUserSavings -> swapUserSavings(intent.fromListItemIndex, intent.toListItemIndex)
+        is GetCurrencyCodesThatStartWith -> getCurrencyCodesThatStartWith(intent.searchPhrase, intent.userSavingId)
         is RefreshExchangeRates -> refreshExchangeRates()
     }
 
@@ -77,15 +83,36 @@ class UserSavingsViewModel @Inject constructor(
             isError = false,
         )
 
-        is UserSavingsFetched -> previousState.copy(
-            isLoading = false,
-            userSavings = partialState.userSavings,
-            isError = false,
-        )
+        is UserSavingsFetched -> {
+            previousState.copy(
+                isLoading = false,
+                userSavings = partialState.userSavings,
+                isError = false,
+            )
+        }
 
-        is CurrencyCodesFetched -> previousState.copy(
-            currencyCodes = partialState.currencyCodes,
-        )
+        is CurrencyCodesFetched -> {
+            previousState.copy(
+                userSavings = previousState.userSavings.map {
+                    it.copy(
+                        currencyPossibilities = partialState.currencyCodes,
+                    )
+                },
+            )
+        }
+
+        is CurrencyCodesFiltered -> {
+            val (matchedSavings, restSavings) = previousState.userSavings.partition { it.id == partialState.userSavingId }
+            val updatedSavings = matchedSavings.map {
+                it.copy(
+                    currencyPossibilities = partialState.filteredCurrencyCodes,
+                )
+            }
+
+            previousState.copy(
+                userSavings = (updatedSavings + restSavings).sortedBy { it.id },
+            )
+        }
 
         is Error -> previousState.copy(
             isLoading = false,
@@ -159,8 +186,8 @@ class UserSavingsViewModel @Inject constructor(
             }
     }
 
-    private fun getCurrencyCodes(): Flow<PartialState> =
-        getCurrencyCodesUseCase()
+    private fun getAllCurrencyCodes(): Flow<PartialState> =
+        getAllCurrencyCodesUseCase()
             .map {
                 it.fold(
                     onSuccess = { currencyCodes ->
@@ -175,4 +202,17 @@ class UserSavingsViewModel @Inject constructor(
                     },
                 )
             }
+
+    private fun getCurrencyCodesThatStartWith(
+        searchPhrase: String,
+        userSavingId: Long,
+    ): Flow<PartialState> = flow {
+        getCurrencyCodesThatStartWithUseCase(searchPhrase)
+            .onSuccess { currencyCodes ->
+                emit(CurrencyCodesFiltered(currencyCodes, userSavingId))
+            }
+            .onFailure {
+                emit(Error(it))
+            }
+    }
 }

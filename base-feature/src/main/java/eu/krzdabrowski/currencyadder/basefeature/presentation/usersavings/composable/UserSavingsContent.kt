@@ -55,6 +55,7 @@ fun UserSavingsContent(
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (Long) -> Unit,
     onDragAndDropUserSaving: (Int, Int) -> Unit,
+    getCurrencyCodesThatStartWith: (String, Long) -> Unit,
     onRefreshExchangeRates: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -85,6 +86,7 @@ fun UserSavingsContent(
                     onUpdateUserSaving = onUpdateUserSaving,
                     onRemoveUserSaving = onRemoveUserSaving,
                     onDragAndDropUserSaving = onDragAndDropUserSaving,
+                    getCurrencyCodesThatStartWith = getCurrencyCodesThatStartWith,
                 )
             } else {
                 UserSavingsNotAvailableContent()
@@ -100,6 +102,7 @@ private fun UserSavingsAvailableContent(
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (Long) -> Unit,
     onDragAndDropUserSaving: (Int, Int) -> Unit,
+    getCurrencyCodesThatStartWith: (String, Long) -> Unit,
 ) {
     if (uiState.isError) {
         val errorMessage = stringResource(R.string.exchange_rates_error_refreshing)
@@ -119,6 +122,7 @@ private fun UserSavingsAvailableContent(
             onUpdateUserSaving = onUpdateUserSaving,
             onRemoveUserSaving = onRemoveUserSaving,
             onDragAndDropUserSaving = onDragAndDropUserSaving,
+            getCurrencyCodesThatStartWith = getCurrencyCodesThatStartWith,
         )
     }
 }
@@ -167,6 +171,7 @@ internal fun UserSavingsListContent(
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (Long) -> Unit,
     onDragAndDropUserSaving: (Int, Int) -> Unit,
+    getCurrencyCodesThatStartWith: (String, Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -190,9 +195,11 @@ internal fun UserSavingsListContent(
             ) { isDragging ->
                 UserSavingItem(
                     item = item,
-                    currencyCodes = uiState.currencyCodes,
                     onItemUpdate = onUpdateUserSaving,
                     onItemRemove = onRemoveUserSaving,
+                    onCurrencyCodesUpdate = {
+                        getCurrencyCodesThatStartWith(it, item.id ?: 0L)
+                    },
                     modifier = Modifier
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },

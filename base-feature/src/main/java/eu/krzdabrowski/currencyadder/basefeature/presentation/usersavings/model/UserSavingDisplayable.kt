@@ -10,4 +10,5 @@ data class UserSavingDisplayable(
     val place: String,
     val amount: String,
     val currency: String,
+    val currencyPossibilities: List<String>,
 ) : Parcelable

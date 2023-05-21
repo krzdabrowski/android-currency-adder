@@ -16,6 +16,7 @@ fun UserSaving.toPresentationModel() = UserSavingDisplayable(
         ""
     },
     currency = currency,
+    currencyPossibilities = emptyList(),
 )
 
 fun UserSavingDisplayable.toDomainModel() = UserSaving(

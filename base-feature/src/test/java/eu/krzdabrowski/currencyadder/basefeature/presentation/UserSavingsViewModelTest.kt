@@ -2,7 +2,7 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation
 
 import app.cash.turbine.test
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetAllCurrencyCodesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
@@ -64,7 +64,7 @@ class UserSavingsViewModelTest {
     }
 
     @RelaxedMockK
-    private lateinit var getCurrencyCodesUseCase: GetCurrencyCodesUseCase
+    private lateinit var getAllCurrencyCodesUseCase: GetAllCurrencyCodesUseCase
 
     @RelaxedMockK
     private lateinit var systemClock: Clock.System
@@ -220,7 +220,7 @@ class UserSavingsViewModelTest {
         getUserSavings: Flow<Result<List<UserSaving>>> = emptyFlow(),
         initialUiState: UserSavingsUiState = UserSavingsUiState(),
     ) {
-        every { getCurrencyCodesUseCase() } returns getCurrencyCodes
+        every { getAllCurrencyCodesUseCase() } returns getCurrencyCodes
         every { getUserSavingsUseCase() } returns getUserSavings
         every { systemClock.now().toEpochMilliseconds() } returns 1684178192635L
 
@@ -231,7 +231,7 @@ class UserSavingsViewModelTest {
             removeUserSavingUseCase = removeUserSavingUseCase,
             swapUserSavingsUseCase = swapUserSavingsUseCase,
             refreshExchangeRatesUseCase = refreshExchangeRatesUseCase,
-            getCurrencyCodesUseCase = getCurrencyCodesUseCase,
+            getAllCurrencyCodesUseCase = getAllCurrencyCodesUseCase,
             systemClock = systemClock,
             savedStateHandle = spyk(),
             userSavingsInitialState = initialUiState,

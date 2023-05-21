@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetAllCurrencyCodesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
 import kotlinx.coroutines.flow.flowOf
 
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flowOf
 internal object FakeExchangeRatesModule {
 
     @Provides
-    fun provideNoopGetCurrencyCodesUseCase() = GetCurrencyCodesUseCase {
+    fun provideNoopGetAllCurrencyCodesUseCase() = GetAllCurrencyCodesUseCase {
         flowOf(
             Result.success(listOf()),
         )

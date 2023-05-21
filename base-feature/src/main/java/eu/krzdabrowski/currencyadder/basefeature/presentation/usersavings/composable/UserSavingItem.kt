@@ -32,6 +32,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,11 +41,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -61,9 +64,9 @@ private const val FRACTIONAL_DEFAULT_VALUE: Char = 'x'
 @Composable
 fun UserSavingItem(
     item: UserSavingDisplayable,
-    currencyCodes: List<String>,
     onItemUpdate: (UserSavingDisplayable) -> Unit,
     onItemRemove: (Long) -> Unit,
+    onCurrencyCodesUpdate: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val currentItem by rememberUpdatedState(item)
@@ -86,8 +89,8 @@ fun UserSavingItem(
         dismissContent = {
             UserSavingItemContent(
                 item = item,
-                currencyCodes = currencyCodes,
                 onItemUpdate = onItemUpdate,
+                onCurrencyCodesUpdate = onCurrencyCodesUpdate,
             )
         },
         modifier = modifier
@@ -138,9 +141,9 @@ private fun SwipeBackground(dismissState: DismissState) {
 @Composable
 private fun UserSavingItemContent(
     item: UserSavingDisplayable,
-    currencyCodes: List<String>,
-    modifier: Modifier = Modifier,
     onItemUpdate: (UserSavingDisplayable) -> Unit,
+    onCurrencyCodesUpdate: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -174,16 +177,14 @@ private fun UserSavingItemContent(
 
         UserSavingChosenCurrencyDropdownMenu(
             currency = item.currency,
-            currencyCodes = currencyCodes,
+            currencyCodes = item.currencyPossibilities,
             modifier = Modifier.weight(1f),
             onCurrencyUpdate = {
                 onItemUpdate(
                     item.copy(currency = it),
                 )
             },
-            onCurrencyCodesUpdate = {
-                // TODO
-            },
+            onCurrencyCodesUpdate = onCurrencyCodesUpdate,
         )
     }
 }
@@ -281,12 +282,24 @@ private fun UserSavingChosenCurrencyDropdownMenu(
         modifier = modifier,
     ) {
         TextField(
-            value = currency,
-            onValueChange = { currentInput = it },
-            modifier = Modifier.menuAnchor(),
+            value = currentInput,
+            onValueChange = {
+                currentInput = it.uppercase()
+                expanded = true
+            },
+            modifier = Modifier
+                .menuAnchor()
+                .onFocusChanged {
+                    if (!it.isFocused && currentInput != currency) {
+                        currentInput = currency
+                    }
+                },
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
+            ),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Characters,
             ),
             shape = RectangleShape,
             colors = TextFieldDefaults.colors(
@@ -304,6 +317,7 @@ private fun UserSavingChosenCurrencyDropdownMenu(
                 DropdownMenuItem(
                     text = { Text(code) },
                     onClick = {
+                        currentInput = code
                         onCurrencyUpdate(code)
                         expanded = false
                     },
@@ -312,10 +326,9 @@ private fun UserSavingChosenCurrencyDropdownMenu(
         }
     }
 
-    DebounceEffect(
-        input = currentInput,
-        operation = onCurrencyCodesUpdate,
-    )
+    LaunchedEffect(currentInput) {
+        onCurrencyCodesUpdate(currentInput)
+    }
 }
 
 @Composable

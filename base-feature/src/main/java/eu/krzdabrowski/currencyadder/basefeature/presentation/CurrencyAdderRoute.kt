@@ -15,6 +15,7 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.Total
 import eu.krzdabrowski.currencyadder.basefeature.presentation.totalsavings.composable.TotalSavingsContent
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.AddUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.GetCurrencyCodesThatStartWith
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RemoveUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.SwapUserSavings
@@ -63,6 +64,9 @@ private fun CurrencyAdderScreen(
             },
             onDragAndDropUserSaving = { fromListItemIndex, toListItemIndex ->
                 onUserSavingsIntent(SwapUserSavings(fromListItemIndex, toListItemIndex))
+            },
+            getCurrencyCodesThatStartWith = { searchPhrase, itemId ->
+                onUserSavingsIntent(GetCurrencyCodesThatStartWith(searchPhrase, itemId))
             },
             onRefreshExchangeRates = {
                 onUserSavingsIntent(RefreshExchangeRates)

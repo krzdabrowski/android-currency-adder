@@ -1,7 +1,7 @@
 package eu.krzdabrowski.currencyadder.basefeature.presentation
 
 import app.cash.turbine.test
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetAllCurrencyCodesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.GetChosenCurrencyCodeForTotalSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.GetTotalUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.totalsavings.UpdateChosenCurrencyCodeForTotalSavingsUseCase
@@ -34,7 +34,7 @@ class TotalSavingsViewModelTest {
     private lateinit var getTotalUserSavingsUseCase: GetTotalUserSavingsUseCase
 
     @RelaxedMockK
-    private lateinit var getCurrencyCodesUseCase: GetCurrencyCodesUseCase
+    private lateinit var getAllCurrencyCodesUseCase: GetAllCurrencyCodesUseCase
 
     @RelaxedMockK
     private lateinit var getChosenCurrencyCodeForTotalSavingsUseCase: GetChosenCurrencyCodeForTotalSavingsUseCase
@@ -183,13 +183,13 @@ class TotalSavingsViewModelTest {
         getChosenCurrency: Flow<Result<String>> = emptyFlow(),
         initialUiState: TotalSavingsUiState = TotalSavingsUiState(),
     ) {
-        every { getCurrencyCodesUseCase() } returns getCurrencyCodes
+        every { getAllCurrencyCodesUseCase() } returns getCurrencyCodes
         every { getTotalUserSavingsUseCase() } returns getTotalSavings
         every { getChosenCurrencyCodeForTotalSavingsUseCase() } returns getChosenCurrency
 
         objectUnderTest = TotalSavingsViewModel(
             getTotalUserSavingsUseCase = getTotalUserSavingsUseCase,
-            getCurrencyCodesUseCase = getCurrencyCodesUseCase,
+            getAllCurrencyCodesUseCase = getAllCurrencyCodesUseCase,
             getChosenCurrencyCodeForTotalSavingsUseCase = getChosenCurrencyCodeForTotalSavingsUseCase,
             updateChosenCurrencyCodeForTotalSavingsUseCase = updateChosenCurrencyCodeForTotalSavingsUseCase,
             savedStateHandle = spyk(),

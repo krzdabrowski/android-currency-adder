@@ -24,7 +24,7 @@ private const val BASE_EXCHANGE_RATE_CODE = "PLN"
 @HiltViewModel
 class TotalSavingsViewModel @Inject constructor(
     private val getTotalUserSavingsUseCase: GetTotalUserSavingsUseCase,
-    private val getCurrencyCodesUseCase: GetAllCurrencyCodesUseCase,
+    private val getAllCurrencyCodesUseCase: GetAllCurrencyCodesUseCase,
     private val getChosenCurrencyCodeForTotalSavingsUseCase: GetChosenCurrencyCodeForTotalSavingsUseCase,
     private val updateChosenCurrencyCodeForTotalSavingsUseCase: UpdateChosenCurrencyCodeForTotalSavingsUseCase,
     savedStateHandle: SavedStateHandle,
@@ -34,7 +34,7 @@ class TotalSavingsViewModel @Inject constructor(
     totalSavingsInitialState,
 ) {
     init {
-        observeContinuousChanges(getCurrencyCodes())
+        observeContinuousChanges(getAllCurrencyCodes())
         observeContinuousChanges(getTotalUserSavings())
         observeContinuousChanges(getChosenCurrencyCodeForTotalSavings())
     }
@@ -62,8 +62,8 @@ class TotalSavingsViewModel @Inject constructor(
         is Error -> previousState
     }
 
-    private fun getCurrencyCodes(): Flow<PartialState> =
-        getCurrencyCodesUseCase()
+    private fun getAllCurrencyCodes(): Flow<PartialState> =
+        getAllCurrencyCodesUseCase()
             .map {
                 it.fold(
                     onSuccess = { currencyCodes ->

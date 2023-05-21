@@ -15,7 +15,7 @@ interface ExchangeRatesDao {
     @Query(
         "SELECT code " +
             "FROM Exchange_Rates " +
-            "WHERE code LIKE :searchPhraseWithWildcard"
+            "WHERE code LIKE :searchPhraseWithWildcard",
     )
     suspend fun getCurrencyCodesThatStartWith(searchPhraseWithWildcard: String): List<String>
 
