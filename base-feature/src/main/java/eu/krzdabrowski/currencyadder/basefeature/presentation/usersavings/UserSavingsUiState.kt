@@ -16,11 +16,12 @@ data class UserSavingsUiState(
     sealed interface PartialState {
         sealed interface UserSavingsPartialState : PartialState {
             object Loading : UserSavingsPartialState // for simplicity: initial loading & refreshing
-            data class UserSavingsFetched(val userSavings: List<UserSavingDisplayable>) : UserSavingsPartialState
+            data class UserSavingsWithCurrencyCodesFetched(
+                val userSavings: List<UserSavingDisplayable>,
+                val currencyCodes: List<String>,
+            ) : UserSavingsPartialState
             data class Error(val throwable: Throwable) : UserSavingsPartialState
         }
-
-        data class CurrencyCodesFetched(val currencyCodes: List<String>) : PartialState
 
         data class CurrencyCodesFiltered(
             val filteredCurrencyCodes: List<String>,
