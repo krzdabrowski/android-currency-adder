@@ -301,6 +301,7 @@ private fun UserSavingChosenCurrencyDropdownMenu(
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Characters,
             ),
+            singleLine = true,
             shape = RectangleShape,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
