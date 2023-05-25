@@ -197,5 +197,3 @@ class TotalSavingsViewModelTest {
         )
     }
 }
-
-// TODO: new error state

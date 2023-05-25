@@ -31,6 +31,7 @@ class UserSavingsMapperTest {
                 place = "home",
                 amount = "123.46",
                 currency = "EUR",
+                currencyPossibilities = emptyList(),
             ),
             actual = presentationModel,
         )
@@ -58,6 +59,7 @@ class UserSavingsMapperTest {
                 place = "bank",
                 amount = "100",
                 currency = "GBP",
+                currencyPossibilities = emptyList(),
             ),
             actual = presentationModel,
         )
@@ -85,6 +87,7 @@ class UserSavingsMapperTest {
                 place = "nowhere",
                 amount = "",
                 currency = "USD",
+                currencyPossibilities = emptyList(),
             ),
             actual = presentationModel,
         )
@@ -99,6 +102,7 @@ class UserSavingsMapperTest {
             place = "mattress",
             amount = "567.89",
             currency = "CHF",
+            currencyPossibilities = emptyList(),
         )
 
         // When
@@ -126,6 +130,7 @@ class UserSavingsMapperTest {
             place = "family",
             amount = "987,65",
             currency = "HUF",
+            currencyPossibilities = emptyList(),
         )
 
         // When

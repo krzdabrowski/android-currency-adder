@@ -3,6 +3,7 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation
 import app.cash.turbine.test
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetAllCurrencyCodesUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.GetCurrencyCodesThatStartWithUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.RefreshExchangeRatesUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
@@ -13,6 +14,7 @@ import eu.krzdabrowski.currencyadder.basefeature.generateEmptyTestUserSavingsFro
 import eu.krzdabrowski.currencyadder.basefeature.generateTestCurrencyCodesFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.generateTestUserSavingsFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.AddUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.GetCurrencyCodesThatStartWith
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RemoveUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.SwapUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSaving
@@ -39,6 +41,8 @@ import kotlin.test.assertTrue
 
 class UserSavingsViewModelTest {
 
+    private val testCurrencyCodesThatStartOnLetterP = listOf("PLN", "PHP")
+
     @JvmField
     @RegisterExtension
     val mainDispatcherExtension = MainDispatcherExtension()
@@ -58,10 +62,15 @@ class UserSavingsViewModelTest {
     @RelaxedMockK
     private lateinit var swapUserSavingsUseCase: SwapUserSavingsUseCase
 
-    // there is some issue with mocking functional interface with kotlin.Result(Unit)
+    // TODO: https://github.com/mockk/mockk/issues/1073
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase = RefreshExchangeRatesUseCase {
         Result.success(Unit)
     }
+
+    private val getCurrencyCodesThatStartWithUseCase: GetCurrencyCodesThatStartWithUseCase =
+        GetCurrencyCodesThatStartWithUseCase {
+            Result.success(testCurrencyCodesThatStartOnLetterP)
+        }
 
     @RelaxedMockK
     private lateinit var getAllCurrencyCodesUseCase: GetAllCurrencyCodesUseCase
@@ -77,13 +86,51 @@ class UserSavingsViewModelTest {
     }
 
     @Test
-    fun `should show fetched user savings with no loading & error state during init user savings retrieval success`() = runTest {
+    fun `should show combined user savings & currency codes during init user savings & currency codes retrieval success`() =
+        runTest {
+            // Given
+            val testUserSavingsFromDomain = listOf(generateTestUserSavingsFromDomain())
+            val testUserSavingsToPresentation = testUserSavingsFromDomain.map { it.toPresentationModel() }
+            val testCurrencyCodesFromDomain = generateTestCurrencyCodesFromDomain()
+            val testUserSavingsWithCurrencyCodes = testUserSavingsToPresentation.map {
+                it.copy(
+                    currencyPossibilities = testCurrencyCodesFromDomain,
+                )
+            }
+            setUpUserSavingsViewModel(
+                getUserSavings = flowOf(
+                    Result.success(testUserSavingsFromDomain),
+                ),
+                getCurrencyCodes = flowOf(
+                    Result.success(testCurrencyCodesFromDomain),
+                ),
+            )
+
+            // When
+            // init
+
+            // Then
+            objectUnderTest.uiState.test {
+                val actualItem = awaitItem()
+
+                assertEquals(
+                    expected = testUserSavingsWithCurrencyCodes,
+                    actual = actualItem.userSavings,
+                )
+            }
+        }
+
+    @Test
+    fun `should show no loading & error state during init user savings & currency codes retrieval success`() = runTest {
         // Given
         val testUserSavingsFromDomain = listOf(generateTestUserSavingsFromDomain())
-        val testUserSavingsToPresentation = testUserSavingsFromDomain.map { it.toPresentationModel() }
+        val testCurrencyCodesFromDomain = generateTestCurrencyCodesFromDomain()
         setUpUserSavingsViewModel(
             getUserSavings = flowOf(
                 Result.success(testUserSavingsFromDomain),
+            ),
+            getCurrencyCodes = flowOf(
+                Result.success(testCurrencyCodesFromDomain),
             ),
         )
 
@@ -94,10 +141,6 @@ class UserSavingsViewModelTest {
         objectUnderTest.uiState.test {
             val actualItem = awaitItem()
 
-            assertEquals(
-                expected = testUserSavingsToPresentation,
-                actual = actualItem.userSavings,
-            )
             assertFalse(actualItem.isLoading)
             assertFalse(actualItem.isError)
         }
@@ -106,8 +149,37 @@ class UserSavingsViewModelTest {
     @Test
     fun `should show error state with no loading state during init user savings retrieval failure`() = runTest {
         // Given
+        val testCurrencyCodesFromDomain = generateTestCurrencyCodesFromDomain()
         setUpUserSavingsViewModel(
             getUserSavings = flowOf(
+                Result.failure(IllegalStateException("Test error")),
+            ),
+            getCurrencyCodes = flowOf(
+                Result.success(testCurrencyCodesFromDomain),
+            ),
+        )
+
+        // When
+        // init
+
+        // Then
+        objectUnderTest.uiState.test {
+            val actualItem = awaitItem()
+
+            assertTrue(actualItem.isError)
+            assertFalse(actualItem.isLoading)
+        }
+    }
+
+    @Test
+    fun `should show error state with no loading state during init currency codes retrieval failure`() = runTest {
+        // Given
+        val testUserSavingsFromDomain = listOf(generateTestUserSavingsFromDomain())
+        setUpUserSavingsViewModel(
+            getUserSavings = flowOf(
+                Result.success(testUserSavingsFromDomain),
+            ),
+            getCurrencyCodes = flowOf(
                 Result.failure(IllegalStateException("Test error")),
             ),
         )
@@ -191,37 +263,54 @@ class UserSavingsViewModelTest {
     }
 
     @Test
-    fun `should show fetched currency codes during init currency codes retrieval success`() = runTest {
+    fun `should update filtered currency codes only for user saving with defined test id`() = runTest {
         // Given
-        val testCurrencyCodesFromDomain = generateTestCurrencyCodesFromDomain()
+        val searchPhrase = "P"
+        val testUserSaving = generateTestUserSavingsFromDomain()
+        val testUserSavingId = 2L
+        val testUserSavingsFromDomain = listOf(
+            testUserSaving.copy(id = 1),
+            testUserSaving.copy(id = testUserSavingId),
+            testUserSaving.copy(id = 3),
+        )
+        val testUserSavingsFromPresentation = testUserSavingsFromDomain.map { it.toPresentationModel() }
         setUpUserSavingsViewModel(
-            getCurrencyCodes = flowOf(
-                Result.success(testCurrencyCodesFromDomain),
+            initialUiState = UserSavingsUiState(
+                userSavings = testUserSavingsFromPresentation,
             ),
         )
 
         // When
-        // init
+        objectUnderTest.acceptIntent(GetCurrencyCodesThatStartWith(searchPhrase, testUserSavingId))
 
         // Then
         objectUnderTest.uiState.test {
             val actualItem = awaitItem()
 
             assertEquals(
-                expected = testCurrencyCodesFromDomain,
-                actual = actualItem.currencyCodes,
+                expected = emptyList(),
+                actual = actualItem.userSavings[0].currencyPossibilities,
             )
-            assertFalse(actualItem.isError)
+
+            assertEquals(
+                expected = testCurrencyCodesThatStartOnLetterP,
+                actual = actualItem.userSavings[1].currencyPossibilities,
+            )
+
+            assertEquals(
+                expected = emptyList(),
+                actual = actualItem.userSavings[2].currencyPossibilities,
+            )
         }
     }
 
     private fun setUpUserSavingsViewModel(
-        getCurrencyCodes: Flow<Result<List<String>>> = emptyFlow(),
         getUserSavings: Flow<Result<List<UserSaving>>> = emptyFlow(),
+        getCurrencyCodes: Flow<Result<List<String>>> = emptyFlow(),
         initialUiState: UserSavingsUiState = UserSavingsUiState(),
     ) {
-        every { getAllCurrencyCodesUseCase() } returns getCurrencyCodes
         every { getUserSavingsUseCase() } returns getUserSavings
+        every { getAllCurrencyCodesUseCase() } returns getCurrencyCodes
         every { systemClock.now().toEpochMilliseconds() } returns 1684178192635L
 
         objectUnderTest = UserSavingsViewModel(
@@ -232,6 +321,7 @@ class UserSavingsViewModelTest {
             swapUserSavingsUseCase = swapUserSavingsUseCase,
             refreshExchangeRatesUseCase = refreshExchangeRatesUseCase,
             getAllCurrencyCodesUseCase = getAllCurrencyCodesUseCase,
+            getCurrencyCodesThatStartWithUseCase = getCurrencyCodesThatStartWithUseCase,
             systemClock = systemClock,
             savedStateHandle = spyk(),
             userSavingsInitialState = initialUiState,

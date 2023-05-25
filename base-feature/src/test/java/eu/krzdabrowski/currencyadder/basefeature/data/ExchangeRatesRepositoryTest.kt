@@ -10,6 +10,7 @@ import eu.krzdabrowski.currencyadder.basefeature.generateTestBaseExchangeRateCac
 import eu.krzdabrowski.currencyadder.basefeature.generateTestExchangeRatesFromRemote
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.coVerifyOrder
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.test.runTest
@@ -55,6 +56,21 @@ class ExchangeRatesRepositoryTest {
             exchangeRatesDao.saveExchangeRates(
                 testExchangeRatesToCacheSorted,
             )
+        }
+    }
+
+    @Test
+    fun `should add percentage symbol at the end of search phrase when filtering currency codes`() = runTest {
+        // Given
+        val testPhrase = "PL"
+        val testPhraseWithPercentageSymbol = "$testPhrase%"
+
+        // When
+        objectUnderTest.getCurrencyCodesThatStartWith(testPhrase)
+
+        // Then
+        coVerify {
+            exchangeRatesDao.getCurrencyCodesThatStartWith(testPhraseWithPercentageSymbol)
         }
     }
 
