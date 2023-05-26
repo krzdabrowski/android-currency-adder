@@ -2,7 +2,8 @@
 
 Android project, generated using [Android Starter](https://github.com/krzdabrowski/android-starter-2022).
 
-![Demo file](demo.gif)
+![Demo file 1](demo1.gif)
+![Demo file 2](demo2.gif)
 
 ### **Features**
 * manage your savings in multiple currencies
