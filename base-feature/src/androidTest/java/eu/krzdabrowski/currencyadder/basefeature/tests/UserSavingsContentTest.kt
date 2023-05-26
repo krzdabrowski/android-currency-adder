@@ -7,7 +7,6 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import eu.krzdabrowski.currencyadder.basefeature.R
-import eu.krzdabrowski.currencyadder.basefeature.data.dummy.generateTestCurrencyCodesFromPresentation
 import eu.krzdabrowski.currencyadder.basefeature.data.dummy.generateTestUserSavingsFromPresentation
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.composable.UserSavingsContent
@@ -27,7 +26,6 @@ class UserSavingsContentTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val testUserSavings = generateTestUserSavingsFromPresentation()
-    private val testCurrencyCodes = generateTestCurrencyCodesFromPresentation()
 
     private lateinit var userSavingContentDescription: String
     private lateinit var userSavingsEmptyMessage: String
@@ -86,11 +84,10 @@ class UserSavingsContentTest {
     }
 
     @Test
-    fun userSavingsContent_whenContentAvailableAndCurrencyMenuClicked_shouldShowCodeFromCurrencyList() {
+    fun userSavingsContent_whenContentAvailableAndCurrencyMenuClicked_shouldShowCodeFromCurrencyPossibilities() {
         setUpComposable(
             UserSavingsUiState(
                 userSavings = testUserSavings,
-                currencyCodes = testCurrencyCodes,
             ),
         )
 
@@ -124,6 +121,7 @@ class UserSavingsContentTest {
                 onUpdateUserSaving = { },
                 onRemoveUserSaving = { },
                 onDragAndDropUserSaving = { _, _ -> },
+                getCurrencyCodesThatStartWith = { _, _ -> },
                 onRefreshExchangeRates = { },
             )
         }

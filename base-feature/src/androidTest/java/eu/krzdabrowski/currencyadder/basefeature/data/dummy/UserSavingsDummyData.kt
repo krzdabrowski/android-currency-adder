@@ -10,6 +10,7 @@ internal fun generateTestUserSavingsFromPresentation() = listOf(
         place = "home",
         amount = "10.00",
         currency = "PLN",
+        currencyPossibilities = generateTestCurrencyCodesFromPresentation(),
     ),
     UserSavingDisplayable(
         id = 2,
@@ -17,6 +18,7 @@ internal fun generateTestUserSavingsFromPresentation() = listOf(
         place = "bank",
         amount = "20.00",
         currency = "EUR",
+        currencyPossibilities = listOf("GBP"),
     ),
     UserSavingDisplayable(
         id = 3,
@@ -24,6 +26,7 @@ internal fun generateTestUserSavingsFromPresentation() = listOf(
         place = "mattress",
         amount = "30.00",
         currency = "USD",
+        currencyPossibilities = generateTestCurrencyCodesFromPresentation(),
     ),
 )
 
