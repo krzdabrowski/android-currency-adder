@@ -15,7 +15,7 @@ data class UserSavingsUiState(
 
     sealed interface PartialState {
         sealed interface UserSavingsPartialState : PartialState {
-            object Loading : UserSavingsPartialState // for simplicity: initial loading & refreshing
+            data object Loading : UserSavingsPartialState // for simplicity: initial loading & refreshing
             data class UserSavingsWithCurrencyCodesFetched(
                 val userSavings: List<UserSavingDisplayable>,
                 val currencyCodes: List<String>,

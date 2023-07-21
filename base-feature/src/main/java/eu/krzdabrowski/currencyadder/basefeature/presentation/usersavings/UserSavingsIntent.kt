@@ -3,7 +3,7 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 
 sealed interface UserSavingsIntent {
-    object AddUserSaving : UserSavingsIntent
+    data object AddUserSaving : UserSavingsIntent
 
     data class UpdateUserSaving(val updatedSaving: UserSavingDisplayable) : UserSavingsIntent
 
@@ -13,5 +13,5 @@ sealed interface UserSavingsIntent {
 
     data class GetCurrencyCodesThatStartWith(val searchPhrase: String, val userSavingId: Long) : UserSavingsIntent
 
-    object RefreshExchangeRates : UserSavingsIntent
+    data object RefreshExchangeRates : UserSavingsIntent
 }

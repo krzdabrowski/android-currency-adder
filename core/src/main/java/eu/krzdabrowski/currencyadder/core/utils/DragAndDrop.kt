@@ -95,9 +95,9 @@ class DragDropState internal constructor(
             .firstOrNull { item ->
                 offset.y.toInt() in item.offset..(item.offset + item.size)
             }?.also {
-            draggingItemIndex = it.index
-            draggingItemInitialOffset = it.offset
-        }
+                draggingItemIndex = it.index
+                draggingItemInitialOffset = it.offset
+            }
     }
 
     internal fun onDragInterrupted() {

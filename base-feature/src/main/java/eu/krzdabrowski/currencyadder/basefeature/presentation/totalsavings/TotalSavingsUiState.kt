@@ -19,6 +19,6 @@ data class TotalSavingsUiState(
 
         data class ChosenCurrencyCodeChanged(val currencyCode: String) : PartialState
 
-        object Error : PartialState
+        data object Error : PartialState
     }
 }
