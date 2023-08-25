@@ -105,12 +105,13 @@ private fun SwipeBackground(dismissState: DismissState) {
     val direction = dismissState.dismissDirection ?: return
 
     val color by animateColorAsState(
-        when (dismissState.targetValue) {
+        targetValue = when (dismissState.targetValue) {
             DismissedToStart,
             DismissedToEnd,
             -> Color.Red
             Default -> Color.LightGray
         },
+        label = "Item color change",
     )
 
     val alignment = when (direction) {
@@ -119,7 +120,8 @@ private fun SwipeBackground(dismissState: DismissState) {
     }
 
     val scale by animateFloatAsState(
-        if (dismissState.targetValue == Default) SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE else 1f,
+        targetValue = if (dismissState.targetValue == Default) SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE else 1f,
+        label = "Item icon size",
     )
 
     Box(
