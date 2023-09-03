@@ -22,7 +22,3 @@ allprojects {
         config.setFrom("$rootDir/gradle/detekt.yml")
     }
 }
-
-tasks.register("clean", Delete::class){
-    delete(rootProject.buildDir)
-}
