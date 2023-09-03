@@ -35,10 +35,11 @@ fun TotalSavingsContent(
     modifier: Modifier = Modifier,
 ) {
     Surface(
+        modifier = modifier,
         tonalElevation = 3.dp,
     ) {
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 8.dp),
             horizontalArrangement = Arrangement.Center,
