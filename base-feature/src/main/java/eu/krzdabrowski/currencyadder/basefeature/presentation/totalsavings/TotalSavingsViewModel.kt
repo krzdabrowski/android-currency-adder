@@ -34,9 +34,9 @@ class TotalSavingsViewModel @Inject constructor(
     totalSavingsInitialState,
 ) {
     init {
-        observeContinuousChanges(getAllCurrencyCodes())
-        observeContinuousChanges(getTotalUserSavings())
-        observeContinuousChanges(getChosenCurrencyCodeForTotalSavings())
+        getAllCurrencyCodes()
+        observeTotalUserSavings()
+        observeChosenCurrencyCodeForTotalSavings()
     }
 
     override fun mapIntents(intent: TotalSavingsIntent): Flow<PartialState> = when (intent) {
@@ -62,7 +62,7 @@ class TotalSavingsViewModel @Inject constructor(
         is Error -> previousState
     }
 
-    private fun getAllCurrencyCodes(): Flow<PartialState> =
+    private fun getAllCurrencyCodes() = acceptChanges(
         getAllCurrencyCodesUseCase()
             .map {
                 it.fold(
@@ -77,9 +77,10 @@ class TotalSavingsViewModel @Inject constructor(
                         Error
                     },
                 )
-            }
+            },
+    )
 
-    private fun getTotalUserSavings(): Flow<PartialState> =
+    private fun observeTotalUserSavings() = acceptChanges(
         getTotalUserSavingsUseCase()
             .map {
                 it.fold(
@@ -90,9 +91,10 @@ class TotalSavingsViewModel @Inject constructor(
                         Error
                     },
                 )
-            }
+            },
+    )
 
-    private fun getChosenCurrencyCodeForTotalSavings(): Flow<PartialState> =
+    private fun observeChosenCurrencyCodeForTotalSavings() = acceptChanges(
         getChosenCurrencyCodeForTotalSavingsUseCase()
             .map {
                 it.fold(
@@ -110,7 +112,8 @@ class TotalSavingsViewModel @Inject constructor(
                         Error
                     },
                 )
-            }
+            },
+    )
 
     private fun updateChosenCurrencyCodeForTotalSavings(code: String): Flow<PartialState> = flow {
         updateChosenCurrencyCodeForTotalSavingsUseCase(code)

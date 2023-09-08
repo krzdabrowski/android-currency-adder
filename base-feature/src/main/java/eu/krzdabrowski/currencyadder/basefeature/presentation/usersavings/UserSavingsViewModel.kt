@@ -59,8 +59,8 @@ class UserSavingsViewModel @Inject constructor(
     userSavingsInitialState,
 ) {
     init {
-        observeContinuousChanges(getUserSavingsWithAllCurrencyCodes())
-        acceptIntent(RefreshExchangeRates)
+        observeUserSavingsWithAllCurrencyCodes()
+        acceptChanges(refreshExchangeRates())
     }
 
     override fun mapIntents(intent: UserSavingsIntent): Flow<PartialState> = when (intent) {
@@ -112,7 +112,7 @@ class UserSavingsViewModel @Inject constructor(
         )
     }
 
-    private fun getUserSavingsWithAllCurrencyCodes(): Flow<PartialState> =
+    private fun observeUserSavingsWithAllCurrencyCodes() = acceptChanges(
         getUserSavingsUseCase()
             .combine(
                 getAllCurrencyCodesUseCase(),
@@ -140,7 +140,8 @@ class UserSavingsViewModel @Inject constructor(
                     currencyCodes = currencyCodesList,
                 )
             }
-            .onStart { emit(Loading) }
+            .onStart { emit(Loading) },
+    )
 
     private fun addUserSaving(): Flow<PartialState> = flow {
         val emptyUserSaving = emptyUserSavingTemplate.copy(
