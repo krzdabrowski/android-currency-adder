@@ -15,8 +15,8 @@ android {
         applicationId = "eu.krzdabrowski.currencyadder"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.2.1"
+        versionCode = 5
+        versionName = "1.2.2"
     }
 
     buildFeatures {
