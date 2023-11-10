@@ -29,5 +29,4 @@ Exchange rates are taken from [National Polish Bank's API](http://api.nbp.pl/).
 * Timber - for logging
 * JUnit5, Turbine and MockK - for unit tests
 * Jetpack Compose test dependencies and Hilt - for UI tests
-* GitHub Actions - for CI/CD
 * KtLint and Detekt - for code linting
