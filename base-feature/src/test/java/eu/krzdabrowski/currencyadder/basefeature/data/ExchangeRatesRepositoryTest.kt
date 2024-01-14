@@ -12,7 +12,10 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -31,6 +34,23 @@ class ExchangeRatesRepositoryTest {
     fun setUp() {
         MockKAnnotations.init(this)
         setUpExchangeRatesRepository()
+    }
+
+    @Test
+    fun `should refresh exchange rates if local database is empty during first launch`() = runTest {
+        // Given
+        val testExchangeRatesFromRemote = listOf(generateTestExchangeRatesFromRemote())
+        every { exchangeRatesDao.getAllCurrencyCodes() } returns flowOf(emptyList())
+        coEvery { exchangeRatesApi.getExchangeRates() } returns testExchangeRatesFromRemote
+
+        // When
+        objectUnderTest.getAllCurrencyCodes().collect()
+
+        // Then
+        coVerifyOrder {
+            exchangeRatesApi.getExchangeRates()
+            exchangeRatesDao.saveExchangeRates(any())
+        }
     }
 
     @Test

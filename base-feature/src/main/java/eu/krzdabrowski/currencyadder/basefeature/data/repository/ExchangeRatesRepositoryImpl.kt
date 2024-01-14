@@ -9,6 +9,7 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.repository.ExchangeRates
 import eu.krzdabrowski.currencyadder.core.utils.resultOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 private const val BASE_EXCHANGE_RATE_CODE = "PLN"
@@ -21,6 +22,11 @@ class ExchangeRatesRepositoryImpl @Inject constructor(
     override fun getAllCurrencyCodes(): Flow<Result<List<String>>> {
         return exchangeRatesDao
             .getAllCurrencyCodes()
+            .onEach { currencyCodes ->
+                if (currencyCodes.isEmpty()) {
+                    refreshExchangeRates()
+                }
+            }
             .map { Result.success(it) }
     }
 
