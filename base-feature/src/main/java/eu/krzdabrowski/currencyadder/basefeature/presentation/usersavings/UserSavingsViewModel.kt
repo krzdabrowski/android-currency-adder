@@ -60,7 +60,6 @@ class UserSavingsViewModel @Inject constructor(
 ) {
     init {
         observeUserSavingsWithAllCurrencyCodes()
-        acceptChanges(refreshExchangeRates())
     }
 
     override fun mapIntents(intent: UserSavingsIntent): Flow<PartialState> = when (intent) {
