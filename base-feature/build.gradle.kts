@@ -63,7 +63,6 @@ dependencies {
     implementation(project(":core"))
 
     implementation(platform(libs.compose.bom))
-    implementation(libs.accompanist.swipe.refresh)
     implementation(libs.compose.material3)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
