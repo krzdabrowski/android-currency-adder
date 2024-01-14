@@ -188,11 +188,13 @@ class UserSavingsViewModel @Inject constructor(
         }
     }
 
-    private fun refreshExchangeRates(): Flow<PartialState> = flow {
+    private fun refreshExchangeRates(): Flow<PartialState> = flow<PartialState> {
         refreshExchangeRatesUseCase()
             .onFailure {
                 emit(Error(it))
             }
+    }.onStart {
+        emit(Loading)
     }
 
     private fun getCurrencyCodesThatStartWith(

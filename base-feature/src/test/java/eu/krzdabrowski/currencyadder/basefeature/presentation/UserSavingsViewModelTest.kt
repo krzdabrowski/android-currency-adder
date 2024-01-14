@@ -15,6 +15,7 @@ import eu.krzdabrowski.currencyadder.basefeature.generateTestCurrencyCodesFromDo
 import eu.krzdabrowski.currencyadder.basefeature.generateTestUserSavingsFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.AddUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.GetCurrencyCodesThatStartWith
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RemoveUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.SwapUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSaving
@@ -63,9 +64,7 @@ class UserSavingsViewModelTest {
     private lateinit var swapUserSavingsUseCase: SwapUserSavingsUseCase
 
     // TODO: https://github.com/mockk/mockk/issues/1073
-    private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase = RefreshExchangeRatesUseCase {
-        Result.success(Unit)
-    }
+    private lateinit var refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase
 
     private val getCurrencyCodesThatStartWithUseCase: GetCurrencyCodesThatStartWithUseCase =
         GetCurrencyCodesThatStartWithUseCase {
@@ -83,6 +82,9 @@ class UserSavingsViewModelTest {
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
+        refreshExchangeRatesUseCase = RefreshExchangeRatesUseCase {
+            Result.success(Unit)
+        }
     }
 
     @Test
@@ -301,6 +303,23 @@ class UserSavingsViewModelTest {
                 expected = emptyList(),
                 actual = actualItem.userSavings[2].currencyPossibilities,
             )
+        }
+    }
+
+    @Test
+    fun `should show loading state with no error state during rockets refresh`() = runTest {
+        // Given
+        setUpUserSavingsViewModel()
+
+        // When
+        objectUnderTest.acceptIntent(RefreshExchangeRates)
+
+        // Then
+        objectUnderTest.uiState.test {
+            val actualItem = awaitItem()
+
+            assertTrue(actualItem.isLoading)
+            assertFalse(actualItem.isError)
         }
     }
 
