@@ -6,31 +6,27 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.DismissDirection.EndToStart
-import androidx.compose.material3.DismissDirection.StartToEnd
-import androidx.compose.material3.DismissState
-import androidx.compose.material3.DismissValue.Default
-import androidx.compose.material3.DismissValue.DismissedToEnd
-import androidx.compose.material3.DismissValue.DismissedToStart
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxState
+import androidx.compose.material3.SwipeToDismissBoxValue.EndToStart
+import androidx.compose.material3.SwipeToDismissBoxValue.Settled
+import androidx.compose.material3.SwipeToDismissBoxValue.StartToEnd
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,10 +66,10 @@ fun UserSavingItem(
     modifier: Modifier = Modifier,
 ) {
     val currentItem by rememberUpdatedState(item)
-    val dismissState = rememberDismissState(
+    val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { dismissValue ->
             currentItem.id?.let { userSavingId ->
-                if (dismissValue != Default) {
+                if (dismissValue != Settled) {
                     onItemRemove(userSavingId)
                     true
                 } else {
@@ -83,44 +79,43 @@ fun UserSavingItem(
         },
     )
 
-    SwipeToDismiss(
+    SwipeToDismissBox(
         state = dismissState,
-        background = { SwipeBackground(dismissState) },
-        dismissContent = {
+        backgroundContent = { SwipeBackground(dismissState) },
+        modifier = modifier
+            .testTag(
+                stringResource(R.string.user_saving_content_description),
+            ),
+        content = {
             UserSavingItemContent(
                 item = item,
                 onItemUpdate = onItemUpdate,
                 onCurrencyCodesUpdate = onCurrencyCodesUpdate,
             )
         },
-        modifier = modifier
-            .testTag(
-                stringResource(R.string.user_saving_content_description),
-            ),
     )
 }
 
 @Composable
-private fun SwipeBackground(dismissState: DismissState) {
-    val direction = dismissState.dismissDirection ?: return
+private fun SwipeBackground(dismissState: SwipeToDismissBoxState) {
+    val alignment = when (dismissState.dismissDirection) {
+        StartToEnd -> Alignment.CenterStart
+        EndToStart -> Alignment.CenterEnd
+        else -> return
+    }
 
     val color by animateColorAsState(
         targetValue = when (dismissState.targetValue) {
-            DismissedToStart,
-            DismissedToEnd,
+            StartToEnd,
+            EndToStart,
             -> Color.Red
-            Default -> Color.LightGray
+            Settled -> Color.LightGray
         },
         label = "Item color change",
     )
 
-    val alignment = when (direction) {
-        StartToEnd -> Alignment.CenterStart
-        EndToStart -> Alignment.CenterEnd
-    }
-
     val scale by animateFloatAsState(
-        targetValue = if (dismissState.targetValue == Default) SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE else 1f,
+        targetValue = if (dismissState.targetValue == Settled) SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE else 1f,
         label = "Item icon size",
     )
 
@@ -332,17 +327,6 @@ private fun UserSavingChosenCurrencyDropdownMenu(
     LaunchedEffect(currentInput) {
         onCurrencyCodesUpdate(currentInput)
     }
-}
-
-@Composable
-private fun VerticalDivider(
-    modifier: Modifier = Modifier,
-) {
-    Divider(
-        modifier = modifier
-            .fillMaxHeight()
-            .width(1.dp),
-    )
 }
 
 private fun String.isValidAmount() =
