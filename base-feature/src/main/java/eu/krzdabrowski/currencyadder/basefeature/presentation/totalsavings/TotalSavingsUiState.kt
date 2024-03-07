@@ -12,13 +12,13 @@ data class TotalSavingsUiState(
     val chosenCurrencyCode: String = "",
 ) : Parcelable {
 
-    sealed interface PartialState {
-        data class TotalUserSavingsFetched(val totalUserSavings: String) : PartialState
+    sealed class PartialState {
+        data class TotalUserSavingsFetched(val totalUserSavings: String) : PartialState()
 
-        data class CurrencyCodesFetched(val currencyCodes: List<String>) : PartialState
+        data class CurrencyCodesFetched(val currencyCodes: List<String>) : PartialState()
 
-        data class ChosenCurrencyCodeChanged(val currencyCode: String) : PartialState
+        data class ChosenCurrencyCodeChanged(val currencyCode: String) : PartialState()
 
-        data object Error : PartialState
+        data object Error : PartialState()
     }
 }

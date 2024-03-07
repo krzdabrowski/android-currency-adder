@@ -13,19 +13,19 @@ data class UserSavingsUiState(
     val isError: Boolean = false,
 ) : Parcelable {
 
-    sealed interface PartialState {
-        sealed interface UserSavingsPartialState : PartialState {
-            data object Loading : UserSavingsPartialState // for simplicity: initial loading & refreshing
+    sealed class PartialState {
+        sealed class UserSavingsPartialState : PartialState() {
+            data object Loading : UserSavingsPartialState() // for simplicity: initial loading & refreshing
             data class UserSavingsWithCurrencyCodesFetched(
                 val userSavings: List<UserSavingDisplayable>,
                 val currencyCodes: List<String>,
-            ) : UserSavingsPartialState
-            data class Error(val throwable: Throwable) : UserSavingsPartialState
+            ) : UserSavingsPartialState()
+            data class Error(val throwable: Throwable) : UserSavingsPartialState()
         }
 
         data class CurrencyCodesFiltered(
             val filteredCurrencyCodes: List<String>,
             val userSavingId: Long,
-        ) : PartialState
+        ) : PartialState()
     }
 }
