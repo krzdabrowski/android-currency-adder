@@ -26,6 +26,7 @@ Exchange rates are taken from [National Polish Bank's API](http://api.nbp.pl/).
 * Hilt - for Dependency Injection pattern implementation
 * Room - for local database
 * Version Catalog - for dependency management
+* Baseline and Startup Profiles - for performance improvements during app launch
 * Timber - for logging
 * JUnit5, Turbine and MockK - for unit tests
 * Jetpack Compose test dependencies and Hilt - for UI tests
