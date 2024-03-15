@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,10 +35,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -114,7 +113,7 @@ private fun SwipeBackground(dismissState: SwipeToDismissBoxState) {
         label = "Item color change",
     )
 
-    val scale by animateFloatAsState(
+    val scaleState by animateFloatAsState(
         targetValue = if (dismissState.targetValue == Settled) SWIPE_ICON_SIZE_INACTIVE_PERCENTAGE else 1f,
         label = "Item icon size",
     )
@@ -130,7 +129,10 @@ private fun SwipeBackground(dismissState: SwipeToDismissBoxState) {
             contentDescription = "Remove user saving",
             modifier = Modifier
                 .align(alignment)
-                .scale(scale),
+                .graphicsLayer {
+                    scaleX = scaleState
+                    scaleY = scaleState
+                },
         )
     }
 }
@@ -143,9 +145,7 @@ private fun UserSavingItemContent(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min),
+        modifier = modifier.height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         UserSavingPlace(

@@ -2,7 +2,7 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -48,8 +48,11 @@ private fun CurrencyAdderScreen(
     totalSavingsUiState: TotalSavingsUiState,
     onUserSavingsIntent: (UserSavingsIntent) -> Unit,
     onTotalSavingsIntent: (TotalSavingsIntent) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column {
+    Column(
+        modifier = modifier.fillMaxWidth()
+    ) {
         UserSavingsContent(
             uiState = userSavingsUiState,
             modifier = Modifier.fillMaxHeight(USER_SAVINGS_SCREEN_HEIGHT_FRACTION),
@@ -78,7 +81,7 @@ private fun CurrencyAdderScreen(
             onGetTotalUserSavingsInChosenCurrency = {
                 onTotalSavingsIntent(UpdateChosenCurrencyCodeForTotalSavings(it))
             },
-            modifier = Modifier.wrapContentHeight(),
+            modifier = Modifier.fillMaxHeight(),
         )
     }
 }

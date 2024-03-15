@@ -233,6 +233,7 @@ internal fun UserSavingsListContent(
                         getCurrencyCodesThatStartWith(it, item.id ?: 0L)
                     },
                     modifier = Modifier
+                        .fillMaxWidth()
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,

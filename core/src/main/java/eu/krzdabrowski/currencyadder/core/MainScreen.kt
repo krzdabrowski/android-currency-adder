@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,7 +34,7 @@ fun MainScreen(
 ) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
-    var showBiometricPrompt by remember { mutableStateOf(true) }
+    var showBiometricPrompt by rememberSaveable { mutableStateOf(true) }
     var showBiometricErrorSnackbar by remember { mutableStateOf(false) }
 
     Scaffold(
