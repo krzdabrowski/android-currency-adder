@@ -48,10 +48,10 @@ private fun CurrencyAdderScreen(
     totalSavingsUiState: TotalSavingsUiState,
     onUserSavingsIntent: (UserSavingsIntent) -> Unit,
     onTotalSavingsIntent: (TotalSavingsIntent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         UserSavingsContent(
             uiState = userSavingsUiState,
