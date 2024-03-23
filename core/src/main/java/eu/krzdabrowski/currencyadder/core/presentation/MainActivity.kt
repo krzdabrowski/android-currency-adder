@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.core
+package eu.krzdabrowski.currencyadder.core.presentation
 
 import android.os.Bundle
 import androidx.activity.compose.setContent

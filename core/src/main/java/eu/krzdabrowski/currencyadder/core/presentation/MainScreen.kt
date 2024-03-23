@@ -1,4 +1,4 @@
-package eu.krzdabrowski.currencyadder.core
+package eu.krzdabrowski.currencyadder.core.presentation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.compose.rememberNavController
+import eu.krzdabrowski.currencyadder.core.R
 import eu.krzdabrowski.currencyadder.core.auth.BiometricPrompt
 import eu.krzdabrowski.currencyadder.core.navigation.NavigationDestination
 import eu.krzdabrowski.currencyadder.core.navigation.NavigationFactory

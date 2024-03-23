@@ -7,7 +7,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import eu.krzdabrowski.currencyadder.basefeature.data.dummy.generateTestUserSavingsFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.presentation.CurrencyAdderRoute
-import eu.krzdabrowski.currencyadder.core.MainActivity
+import eu.krzdabrowski.currencyadder.core.presentation.MainActivity
 import eu.krzdabrowski.currencyadder.core.utils.getHiltTestViewModel
 import org.junit.Before
 import org.junit.Rule
