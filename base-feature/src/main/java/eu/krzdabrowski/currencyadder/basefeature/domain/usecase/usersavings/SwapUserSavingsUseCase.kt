@@ -1,3 +1,6 @@
 package eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings
 
-fun interface SwapUserSavingsUseCase : suspend (Long, Long) -> Result<Unit>
+private typealias FromIndex = Long
+private typealias ToIndex = Long
+
+fun interface SwapUserSavingsUseCase : suspend (FromIndex, ToIndex) -> Result<Unit>
