@@ -24,7 +24,7 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSa
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper.toDomainModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper.toPresentationModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
-import eu.krzdabrowski.currencyadder.core.BaseViewModel
+import eu.krzdabrowski.currencyadder.core.presentation.mvi.BaseViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
