@@ -115,7 +115,7 @@ private fun HandlePullToRefresh(
     onRefreshExchangeRates: () -> Unit,
 ) {
     if (pullState.isRefreshing) {
-        LaunchedEffect(true) {
+        LaunchedEffect(onRefreshExchangeRates) {
             onRefreshExchangeRates()
         }
     }

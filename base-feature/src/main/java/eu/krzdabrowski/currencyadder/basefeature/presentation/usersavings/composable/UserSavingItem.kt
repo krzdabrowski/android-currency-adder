@@ -324,7 +324,7 @@ private fun UserSavingChosenCurrencyDropdownMenu(
         }
     }
 
-    LaunchedEffect(currentInput) {
+    LaunchedEffect(currentInput, onCurrencyCodesUpdate) {
         onCurrencyCodesUpdate(currentInput)
     }
 }
