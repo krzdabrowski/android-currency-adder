@@ -55,9 +55,10 @@ class UserSavingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     userSavingsInitialState: UserSavingsUiState,
 ) : BaseViewModel<UserSavingsUiState, PartialState, Nothing, UserSavingsIntent>(
-    savedStateHandle,
-    userSavingsInitialState,
-) {
+        savedStateHandle = savedStateHandle,
+        initialState = userSavingsInitialState,
+    ) {
+
     init {
         observeUserSavingsWithAllCurrencyCodes()
     }

@@ -111,9 +111,7 @@ class UserSavingsContentTest {
             .assertExists()
     }
 
-    private fun setUpComposable(
-        userSavingsUiState: UserSavingsUiState,
-    ) {
+    private fun setUpComposable(userSavingsUiState: UserSavingsUiState) {
         composeTestRule.setContent {
             UserSavingsContent(
                 uiState = userSavingsUiState,

@@ -19,7 +19,10 @@ class DataStoreManager @Inject constructor(
             it[stringPreferencesKey(key)] ?: ""
         }
 
-    suspend fun writeString(key: String, value: String) {
+    suspend fun writeString(
+        key: String,
+        value: String,
+    ) {
         dataStore.edit {
             it[stringPreferencesKey(key)] = value
         }

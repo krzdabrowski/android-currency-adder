@@ -329,8 +329,7 @@ private fun UserSavingChosenCurrencyDropdownMenu(
     }
 }
 
-private fun String.isValidAmount() =
-    toDoubleOrNull() != null && length <= MAX_TOTAL_DIGITS
+private fun String.isValidAmount() = toDoubleOrNull() != null && length <= MAX_TOTAL_DIGITS
 
 private fun String.isValidFractional() =
     getOrElse(length - MAX_FRACTIONAL_DIGITS - 2) { FRACTIONAL_DEFAULT_VALUE } != FRACTIONAL_LIMITER

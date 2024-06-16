@@ -43,7 +43,10 @@ class UserSavingsRepositoryImpl @Inject constructor(
             .removeUserSaving(userSavingId)
     }
 
-    override suspend fun swapUserSavings(fromIndex: Long, toIndex: Long): Result<Unit> = resultOf {
+    override suspend fun swapUserSavings(
+        fromIndex: Long,
+        toIndex: Long,
+    ): Result<Unit> = resultOf {
         userSavingsDao.swapUserSavings(fromIndex, toIndex)
     }
 }

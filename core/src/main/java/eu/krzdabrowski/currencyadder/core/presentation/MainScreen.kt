@@ -101,9 +101,7 @@ private fun MainTopAppBar() {
 }
 
 @Composable
-private fun MainSnackbar(
-    snackbarHostState: SnackbarHostState,
-) {
+private fun MainSnackbar(snackbarHostState: SnackbarHostState) {
     val errorMessage = stringResource(R.string.dialog_cancelled_snackbar_text)
 
     LaunchedEffect(snackbarHostState) {

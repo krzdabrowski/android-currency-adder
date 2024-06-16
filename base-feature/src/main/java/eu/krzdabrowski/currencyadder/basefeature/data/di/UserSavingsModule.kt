@@ -19,29 +19,24 @@ import javax.inject.Singleton
 internal object UserSavingsModule {
 
     @Provides
-    fun provideGetUserSavingsUseCase(
-        userSavingsRepository: UserSavingsRepository,
-    ) = GetUserSavingsUseCase(userSavingsRepository::getUserSavings)
+    fun provideGetUserSavingsUseCase(userSavingsRepository: UserSavingsRepository) =
+        GetUserSavingsUseCase(userSavingsRepository::getUserSavings)
 
     @Provides
-    fun provideAddUserSavingUseCase(
-        userSavingsRepository: UserSavingsRepository,
-    ) = AddUserSavingUseCase(userSavingsRepository::addUserSaving)
+    fun provideAddUserSavingUseCase(userSavingsRepository: UserSavingsRepository) =
+        AddUserSavingUseCase(userSavingsRepository::addUserSaving)
 
     @Provides
-    fun provideUpdateUserSavingUseCase(
-        userSavingsRepository: UserSavingsRepository,
-    ) = UpdateUserSavingUseCase(userSavingsRepository::updateUserSaving)
+    fun provideUpdateUserSavingUseCase(userSavingsRepository: UserSavingsRepository) =
+        UpdateUserSavingUseCase(userSavingsRepository::updateUserSaving)
 
     @Provides
-    fun provideRemoveUserSavingUseCase(
-        userSavingsRepository: UserSavingsRepository,
-    ) = RemoveUserSavingUseCase(userSavingsRepository::removeUserSaving)
+    fun provideRemoveUserSavingUseCase(userSavingsRepository: UserSavingsRepository) =
+        RemoveUserSavingUseCase(userSavingsRepository::removeUserSaving)
 
     @Provides
-    fun provideSwapUserSavingsUseCase(
-        userSavingsRepository: UserSavingsRepository,
-    ) = SwapUserSavingsUseCase(userSavingsRepository::swapUserSavings)
+    fun provideSwapUserSavingsUseCase(userSavingsRepository: UserSavingsRepository) =
+        SwapUserSavingsUseCase(userSavingsRepository::swapUserSavings)
 
     @Module
     @InstallIn(SingletonComponent::class)

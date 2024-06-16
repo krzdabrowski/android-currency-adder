@@ -173,9 +173,7 @@ private fun UserSavingsNotAvailableContent() {
 }
 
 @Composable
-private fun UserSavingsHeader(
-    modifier: Modifier = Modifier,
-) {
+private fun UserSavingsHeader(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()

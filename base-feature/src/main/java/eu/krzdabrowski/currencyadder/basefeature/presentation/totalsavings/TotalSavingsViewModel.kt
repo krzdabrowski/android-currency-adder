@@ -30,9 +30,10 @@ class TotalSavingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     totalSavingsInitialState: TotalSavingsUiState,
 ) : BaseViewModel<TotalSavingsUiState, PartialState, Nothing, TotalSavingsIntent>(
-    savedStateHandle,
-    totalSavingsInitialState,
-) {
+        savedStateHandle = savedStateHandle,
+        initialState = totalSavingsInitialState,
+    ) {
+
     init {
         getAllCurrencyCodes()
         observeTotalUserSavings()

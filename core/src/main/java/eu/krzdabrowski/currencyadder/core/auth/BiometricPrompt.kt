@@ -39,7 +39,10 @@ fun BiometricPrompt(
                 onAuthenticationSuccess()
             }
 
-            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+            override fun onAuthenticationError(
+                errorCode: Int,
+                errString: CharSequence,
+            ) {
                 super.onAuthenticationError(errorCode, errString)
 
                 if (errorCode == BiometricPrompt.ERROR_USER_CANCELED ||

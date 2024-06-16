@@ -13,5 +13,8 @@ interface UserSavingsRepository {
 
     suspend fun removeUserSaving(userSavingId: Long): Result<Unit>
 
-    suspend fun swapUserSavings(fromIndex: Long, toIndex: Long): Result<Unit>
+    suspend fun swapUserSavings(
+        fromIndex: Long,
+        toIndex: Long,
+    ): Result<Unit>
 }

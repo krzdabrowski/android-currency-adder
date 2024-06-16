@@ -51,9 +51,7 @@ class TotalSavingsContentTest {
             .assertExists()
     }
 
-    private fun setUpComposable(
-        totalSavingsUiState: TotalSavingsUiState,
-    ) {
+    private fun setUpComposable(totalSavingsUiState: TotalSavingsUiState) {
         composeTestRule.setContent {
             TotalSavingsContent(
                 uiState = totalSavingsUiState,

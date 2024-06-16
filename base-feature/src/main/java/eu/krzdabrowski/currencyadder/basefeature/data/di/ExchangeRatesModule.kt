@@ -20,24 +20,19 @@ internal object ExchangeRatesModule {
 
     @Provides
     @Singleton
-    fun provideExchangeRatesApi(
-        retrofit: Retrofit,
-    ): ExchangeRatesApi = retrofit.create(ExchangeRatesApi::class.java)
+    fun provideExchangeRatesApi(retrofit: Retrofit): ExchangeRatesApi = retrofit.create(ExchangeRatesApi::class.java)
 
     @Provides
-    fun provideGetAllCurrencyCodesUseCase(
-        exchangeRatesRepository: ExchangeRatesRepository,
-    ) = GetAllCurrencyCodesUseCase(exchangeRatesRepository::getAllCurrencyCodes)
+    fun provideGetAllCurrencyCodesUseCase(exchangeRatesRepository: ExchangeRatesRepository) =
+        GetAllCurrencyCodesUseCase(exchangeRatesRepository::getAllCurrencyCodes)
 
     @Provides
-    fun provideGetCurrencyCodesThatStartWithUseCase(
-        exchangeRatesRepository: ExchangeRatesRepository,
-    ) = GetCurrencyCodesThatStartWithUseCase(exchangeRatesRepository::getCurrencyCodesThatStartWith)
+    fun provideGetCurrencyCodesThatStartWithUseCase(exchangeRatesRepository: ExchangeRatesRepository) =
+        GetCurrencyCodesThatStartWithUseCase(exchangeRatesRepository::getCurrencyCodesThatStartWith)
 
     @Provides
-    fun provideRefreshExchangeRatesUseCase(
-        exchangeRatesRepository: ExchangeRatesRepository,
-    ) = RefreshExchangeRatesUseCase(exchangeRatesRepository::refreshExchangeRates)
+    fun provideRefreshExchangeRatesUseCase(exchangeRatesRepository: ExchangeRatesRepository) =
+        RefreshExchangeRatesUseCase(exchangeRatesRepository::refreshExchangeRates)
 
     @Module
     @InstallIn(SingletonComponent::class)

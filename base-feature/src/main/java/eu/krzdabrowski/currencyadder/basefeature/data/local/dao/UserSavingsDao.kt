@@ -33,7 +33,10 @@ interface UserSavingsDao {
     suspend fun updateUserSaving(userSaving: UserSavingCached)
 
     @Transaction
-    suspend fun swapUserSavings(fromIndex: Long, toIndex: Long) {
+    suspend fun swapUserSavings(
+        fromIndex: Long,
+        toIndex: Long,
+    ) {
         // to prevent violation of an unique id constraint
 
         setSwappedUserSavingsIdsNegative(fromIndex, toIndex)
@@ -45,7 +48,10 @@ interface UserSavingsDao {
             "SET id = (CASE WHEN id = :fromIndex THEN -:toIndex else -:fromIndex END) " +
             "WHERE id in (:fromIndex, :toIndex)",
     )
-    suspend fun setSwappedUserSavingsIdsNegative(fromIndex: Long, toIndex: Long)
+    suspend fun setSwappedUserSavingsIdsNegative(
+        fromIndex: Long,
+        toIndex: Long,
+    )
 
     @Query(
         "UPDATE User_Savings " +

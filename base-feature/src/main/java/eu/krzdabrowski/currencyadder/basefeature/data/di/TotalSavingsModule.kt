@@ -17,19 +17,16 @@ import javax.inject.Singleton
 internal object TotalSavingsModule {
 
     @Provides
-    fun provideGetTotalUserSavingsUseCase(
-        totalSavingsRepository: TotalSavingsRepository,
-    ) = GetTotalUserSavingsUseCase(totalSavingsRepository::getTotalUserSavings)
+    fun provideGetTotalUserSavingsUseCase(totalSavingsRepository: TotalSavingsRepository) =
+        GetTotalUserSavingsUseCase(totalSavingsRepository::getTotalUserSavings)
 
     @Provides
-    fun provideGetChosenCurrencyCodeForTotalSavingsUseCase(
-        totalSavingsRepository: TotalSavingsRepository,
-    ) = GetChosenCurrencyCodeForTotalSavingsUseCase(totalSavingsRepository::getChosenCurrencyCodeForTotalSavings)
+    fun provideGetChosenCurrencyCodeForTotalSavingsUseCase(totalSavingsRepository: TotalSavingsRepository) =
+        GetChosenCurrencyCodeForTotalSavingsUseCase(totalSavingsRepository::getChosenCurrencyCodeForTotalSavings)
 
     @Provides
-    fun provideUpdateChosenCurrencyCodeForTotalSavingsUseCase(
-        totalSavingsRepository: TotalSavingsRepository,
-    ) = UpdateChosenCurrencyCodeForTotalSavingsUseCase(totalSavingsRepository::updateChosenCurrencyCodeForTotalSavings)
+    fun provideUpdateChosenCurrencyCodeForTotalSavingsUseCase(totalSavingsRepository: TotalSavingsRepository) =
+        UpdateChosenCurrencyCodeForTotalSavingsUseCase(totalSavingsRepository::updateChosenCurrencyCodeForTotalSavings)
 
     @Module
     @InstallIn(SingletonComponent::class)
