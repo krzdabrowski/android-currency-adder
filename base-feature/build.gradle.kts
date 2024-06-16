@@ -80,7 +80,7 @@ dependencies {
     debugImplementation(libs.debug.compose.manifest)
 
     ksp(libs.hilt.compiler)
-    kspAndroidTest(libs.test.android.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
 
     detektPlugins(libs.detekt.compose.rules)
 }

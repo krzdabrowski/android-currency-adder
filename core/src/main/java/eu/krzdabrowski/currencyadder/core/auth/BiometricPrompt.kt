@@ -23,7 +23,7 @@ fun BiometricPrompt(
     subtitleBiometric: String,
     subtitleCredentials: String,
     negativeButton: String,
-    onAuthenticationSucceeded: () -> Unit,
+    onAuthenticationSuccess: () -> Unit,
     onCancel: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -36,7 +36,7 @@ fun BiometricPrompt(
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
 
-                onAuthenticationSucceeded()
+                onAuthenticationSuccess()
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {

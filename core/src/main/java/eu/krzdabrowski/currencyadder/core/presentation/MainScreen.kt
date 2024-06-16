@@ -49,7 +49,7 @@ fun MainScreen(
                 subtitleBiometric = stringResource(R.string.dialog_biometric_subtitle),
                 subtitleCredentials = stringResource(R.string.dialog_credentials_subtitle),
                 negativeButton = stringResource(R.string.dialog_negative_button),
-                onAuthenticationSucceeded = {
+                onAuthenticationSuccess = {
                     showBiometricPrompt = false
                 },
                 onCancel = {
