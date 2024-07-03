@@ -16,7 +16,6 @@ datastore                           = "1.1.1"
 hilt                                = "2.51.1"
 kotlin                              = "2.0.0"
 kotlin-coroutines                   = "1.8.1"
-kotlin-datetime                     = "0.6.0"
 kotlin-serialization                = "1.7.0"
 lifecycle                           = "2.7.0" # update to 2.8.x when it fixes the crash on release version that happens on 2.8.2
 navigation                          = "2.7.7"
@@ -65,7 +64,6 @@ datastore                           = { group = "androidx.datastore", name = "da
 hilt                                = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler                       = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 kotlin-coroutines                   = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
-kotlin-datetime                     = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlin-datetime" }
 kotlin-serialization                = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 kotlin-serialization-converter      = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 lifecycle-runtime-compose           = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }

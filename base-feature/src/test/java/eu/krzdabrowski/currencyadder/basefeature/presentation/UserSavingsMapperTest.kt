@@ -5,6 +5,7 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper.toPresentationModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 import org.junit.jupiter.api.Test
+import java.util.UUID
 import kotlin.test.assertEquals
 
 class UserSavingsMapperTest {
@@ -14,7 +15,7 @@ class UserSavingsMapperTest {
         // Given
         val domainModel = UserSaving(
             id = 1,
-            timestamp = 1684178192634L,
+            uuid = UUID.fromString("e58ed763-928c-4155-bee9-fdbaaadc15f1"),
             place = "home",
             amount = 123.456789,
             currency = "EUR",
@@ -27,7 +28,7 @@ class UserSavingsMapperTest {
         assertEquals(
             expected = UserSavingDisplayable(
                 id = 1,
-                timestamp = 1684178192634L,
+                uuid = "e58ed763-928c-4155-bee9-fdbaaadc15f1",
                 place = "home",
                 amount = "123.46",
                 currency = "EUR",
@@ -42,7 +43,7 @@ class UserSavingsMapperTest {
         // Given
         val domainModel = UserSaving(
             id = 2,
-            timestamp = 1684178192635L,
+            uuid = UUID.fromString("e58ed763-928c-4155-bee9-fdbaaadc15f2"),
             place = "bank",
             amount = 100.0,
             currency = "GBP",
@@ -55,7 +56,7 @@ class UserSavingsMapperTest {
         assertEquals(
             expected = UserSavingDisplayable(
                 id = 2,
-                timestamp = 1684178192635L,
+                uuid = "e58ed763-928c-4155-bee9-fdbaaadc15f2",
                 place = "bank",
                 amount = "100",
                 currency = "GBP",
@@ -70,7 +71,7 @@ class UserSavingsMapperTest {
         // Given
         val domainModel = UserSaving(
             id = 3,
-            timestamp = 1684178192636L,
+            uuid = UUID.fromString("e58ed763-928c-4155-bee9-fdbaaadc15f3"),
             place = "nowhere",
             amount = 0.0,
             currency = "USD",
@@ -83,7 +84,7 @@ class UserSavingsMapperTest {
         assertEquals(
             expected = UserSavingDisplayable(
                 id = 3,
-                timestamp = 1684178192636L,
+                uuid = "e58ed763-928c-4155-bee9-fdbaaadc15f3",
                 place = "nowhere",
                 amount = "",
                 currency = "USD",
@@ -98,7 +99,7 @@ class UserSavingsMapperTest {
         // Given
         val presentationModel = UserSavingDisplayable(
             id = 4,
-            timestamp = 1684178192637L,
+            uuid = "e58ed763-928c-4155-bee9-fdbaaadc15f4",
             place = "mattress",
             amount = "567.89",
             currency = "CHF",
@@ -112,7 +113,7 @@ class UserSavingsMapperTest {
         assertEquals(
             expected = UserSaving(
                 id = 4,
-                timestamp = 1684178192637L,
+                uuid = UUID.fromString("e58ed763-928c-4155-bee9-fdbaaadc15f4"),
                 place = "mattress",
                 amount = 567.89,
                 currency = "CHF",
@@ -126,7 +127,7 @@ class UserSavingsMapperTest {
         // Given
         val presentationModel = UserSavingDisplayable(
             id = 5,
-            timestamp = 1684178192638L,
+            uuid = "e58ed763-928c-4155-bee9-fdbaaadc15f5",
             place = "family",
             amount = "987,65",
             currency = "HUF",
@@ -140,7 +141,7 @@ class UserSavingsMapperTest {
         assertEquals(
             expected = UserSaving(
                 id = 5,
-                timestamp = 1684178192638L,
+                uuid = UUID.fromString("e58ed763-928c-4155-bee9-fdbaaadc15f5"),
                 place = "family",
                 amount = 0.0,
                 currency = "HUF",

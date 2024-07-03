@@ -1,19 +1,12 @@
 package eu.krzdabrowski.currencyadder.basefeature
 
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
+import java.util.UUID
 
 internal fun generateTestUserSavingsFromDomain() = UserSaving(
     id = 1,
-    timestamp = 1684178192634L,
+    uuid = UUID.fromString("e58ed763-928c-4155-bee9-fdbaaadc15f1"),
     place = "home",
     amount = 100.0,
-    currency = "PLN",
-)
-
-internal fun generateEmptyTestUserSavingsFromDomain() = UserSaving(
-    id = null,
-    timestamp = 1684178192635L,
-    place = "",
-    amount = 0.0,
     currency = "PLN",
 )

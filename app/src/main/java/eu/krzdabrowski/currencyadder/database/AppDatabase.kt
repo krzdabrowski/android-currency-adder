@@ -7,7 +7,7 @@ import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.UserSavingsDao
 import eu.krzdabrowski.currencyadder.basefeature.data.local.model.ExchangeRateCached
 import eu.krzdabrowski.currencyadder.basefeature.data.local.model.UserSavingCached
 
-private const val DATABASE_VERSION = 2
+private const val DATABASE_VERSION = 3
 
 @Database(
     version = DATABASE_VERSION,

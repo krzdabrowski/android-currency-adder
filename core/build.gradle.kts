@@ -60,7 +60,6 @@ dependencies {
     implementation(libs.datastore)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
-    implementation(libs.kotlin.datetime)
     implementation(libs.kotlin.serialization)
     implementation(libs.kotlin.serialization.converter)
     implementation(libs.lifecycle.runtime.compose)

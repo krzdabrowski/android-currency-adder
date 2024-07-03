@@ -70,7 +70,6 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.navigation)
     implementation(libs.navigation.hilt)
-    implementation(libs.kotlin.datetime)
     implementation(libs.kotlin.serialization)
     implementation(libs.retrofit)
     implementation(libs.room)

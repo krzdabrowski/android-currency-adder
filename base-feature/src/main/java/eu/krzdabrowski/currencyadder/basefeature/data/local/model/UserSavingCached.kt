@@ -12,8 +12,8 @@ data class UserSavingCached(
     @ColumnInfo(name = "id")
     val id: Long? = null,
 
-    @ColumnInfo(name = "timestamp")
-    val timestamp: Long,
+    @ColumnInfo(name = "uuid")
+    val uuid: String,
 
     @ColumnInfo(name = "place")
     val place: String,

@@ -10,7 +10,6 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetU
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.SwapUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
-import eu.krzdabrowski.currencyadder.basefeature.generateEmptyTestUserSavingsFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.generateTestCurrencyCodesFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.generateTestUserSavingsFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.AddUserSaving
@@ -32,7 +31,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -73,9 +71,6 @@ class UserSavingsViewModelTest {
 
     @RelaxedMockK
     private lateinit var getAllCurrencyCodesUseCase: GetAllCurrencyCodesUseCase
-
-    @RelaxedMockK
-    private lateinit var systemClock: Clock.System
 
     private lateinit var objectUnderTest: UserSavingsViewModel
 
@@ -208,7 +203,7 @@ class UserSavingsViewModelTest {
 
         // Then
         coVerify(exactly = 1) {
-            addUserSavingUseCase(generateEmptyTestUserSavingsFromDomain())
+            addUserSavingUseCase(any())
         }
     }
 
@@ -330,7 +325,6 @@ class UserSavingsViewModelTest {
     ) {
         every { getUserSavingsUseCase() } returns getUserSavings
         every { getAllCurrencyCodesUseCase() } returns getCurrencyCodes
-        every { systemClock.now().toEpochMilliseconds() } returns 1684178192635L
 
         objectUnderTest = UserSavingsViewModel(
             getUserSavingsUseCase = getUserSavingsUseCase,
@@ -341,7 +335,6 @@ class UserSavingsViewModelTest {
             refreshExchangeRatesUseCase = refreshExchangeRatesUseCase,
             getAllCurrencyCodesUseCase = getAllCurrencyCodesUseCase,
             getCurrencyCodesThatStartWithUseCase = getCurrencyCodesThatStartWithUseCase,
-            systemClock = systemClock,
             savedStateHandle = spyk(),
             userSavingsInitialState = initialUiState,
         )

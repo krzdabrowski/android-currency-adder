@@ -3,12 +3,13 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mappe
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 import eu.krzdabrowski.currencyadder.core.utils.toFormattedAmount
+import java.util.UUID
 
 private const val DEFAULT_SAVING_VALUE: Double = 0.0
 
 fun UserSaving.toPresentationModel() = UserSavingDisplayable(
     id = id,
-    timestamp = timestamp,
+    uuid = uuid.toString(),
     place = place,
     amount = if (amount != DEFAULT_SAVING_VALUE) {
         amount.toFormattedAmount().removeSuffix(".00")
@@ -21,7 +22,7 @@ fun UserSaving.toPresentationModel() = UserSavingDisplayable(
 
 fun UserSavingDisplayable.toDomainModel() = UserSaving(
     id = id,
-    timestamp = timestamp,
+    uuid = UUID.fromString(uuid),
     place = place,
     amount = amount.toDoubleOrNull() ?: 0.0,
     currency = currency,

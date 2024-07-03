@@ -217,7 +217,8 @@ internal fun UserSavingsListContent(
     ) {
         itemsIndexed(
             items = uiState.userSavings,
-            key = { _, userSaving -> (userSaving.id ?: 0L) to userSaving.timestamp },
+            // id prevents bouncey UI glitches as it changes frequently, uuid is a proper stable unique identifier
+            key = { _, userSaving -> (userSaving.id ?: 0L) to userSaving.uuid },
         ) { index, item ->
             DraggableItem(
                 dragDropState = dragDropState,

@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
-import kotlinx.datetime.Clock
+import java.util.UUID
 import javax.inject.Inject
 
 private const val BASE_EXCHANGE_RATE_CODE = "PLN"
@@ -51,7 +51,6 @@ class UserSavingsViewModel @Inject constructor(
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
     private val getAllCurrencyCodesUseCase: GetAllCurrencyCodesUseCase,
     private val getCurrencyCodesThatStartWithUseCase: GetCurrencyCodesThatStartWithUseCase,
-    private val systemClock: Clock.System,
     savedStateHandle: SavedStateHandle,
     userSavingsInitialState: UserSavingsUiState,
 ) : BaseViewModel<UserSavingsUiState, PartialState, Nothing, UserSavingsIntent>(
@@ -145,7 +144,7 @@ class UserSavingsViewModel @Inject constructor(
 
     private fun addUserSaving(): Flow<PartialState> = flow {
         val emptyUserSaving = emptyUserSavingTemplate.copy(
-            timestamp = systemClock.now().toEpochMilliseconds(),
+            uuid = UUID.randomUUID().toString(),
         )
 
         addUserSavingUseCase(

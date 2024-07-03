@@ -2,11 +2,12 @@ package eu.krzdabrowski.currencyadder.basefeature.data.dummy
 
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
+import java.util.UUID
 
 internal fun generateTestUserSavingsFromPresentation() = listOf(
     UserSavingDisplayable(
         id = 1,
-        timestamp = 1684178192634L,
+        uuid = "e58ed763-928c-4155-bee9-fdbaaadc15f1",
         place = "home",
         amount = "10.00",
         currency = "PLN",
@@ -14,7 +15,7 @@ internal fun generateTestUserSavingsFromPresentation() = listOf(
     ),
     UserSavingDisplayable(
         id = 2,
-        timestamp = 1684178192635L,
+        uuid = "e58ed763-928c-4155-bee9-fdbaaadc15f2",
         place = "bank",
         amount = "20.00",
         currency = "EUR",
@@ -22,7 +23,7 @@ internal fun generateTestUserSavingsFromPresentation() = listOf(
     ),
     UserSavingDisplayable(
         id = 3,
-        timestamp = 1684178192636L,
+        uuid = "e58ed763-928c-4155-bee9-fdbaaadc15f3",
         place = "mattress",
         amount = "30.00",
         currency = "USD",
@@ -33,21 +34,21 @@ internal fun generateTestUserSavingsFromPresentation() = listOf(
 internal fun generateTestUserSavingsFromDomain() = listOf(
     UserSaving(
         id = 1,
-        timestamp = 1684178192634L,
+        uuid = UUID.fromString("e58ed763-928c-4155-bee9-fdbaaadc15f1"),
         place = "home",
         amount = 10.0,
         currency = "PLN",
     ),
     UserSaving(
         id = 2,
-        timestamp = 1684178192635L,
+        uuid = UUID.fromString("e58ed763-928c-4155-bee9-fdbaaadc15f2"),
         place = "bank",
         amount = 20.0,
         currency = "EUR",
     ),
     UserSaving(
         id = 3,
-        timestamp = 1684178192636L,
+        uuid = UUID.fromString("e58ed763-928c-4155-bee9-fdbaaadc15f3"),
         place = "mattress",
         amount = 30.0,
         currency = "USD",
