@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -44,6 +45,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
+/**
+ * Missing Jetpack Compose feature: drag & drop on Lazy Composables.
+ *
+ * IssueTracker: https://issuetracker.google.com/issues/181282427
+ *
+ * Source code taken from: LazyColumnDragAndDropDemo.kt
+ * in androidx.compose.foundation.demos package.
+ */
 @Composable
 fun rememberDragDropState(
     lazyListState: LazyListState,
@@ -199,12 +208,14 @@ fun LazyItemScope.DraggableItem(
             .graphicsLayer {
                 translationY = dragDropState.draggingItemOffset
             }
+            .focusProperties { canFocus = false }
     } else if (index == dragDropState.previousIndexOfDraggedItem) {
         Modifier
             .zIndex(1f)
             .graphicsLayer {
                 translationY = dragDropState.previousItemOffset.value
             }
+            .focusProperties { canFocus = false }
     } else {
         Modifier.animateItemPlacement()
     }
