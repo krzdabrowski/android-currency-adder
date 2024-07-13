@@ -37,12 +37,17 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 import eu.krzdabrowski.currencyadder.core.utils.DraggableItem
 import eu.krzdabrowski.currencyadder.core.utils.dragContainer
 import eu.krzdabrowski.currencyadder.core.utils.rememberDragDropState
+
+internal const val USER_SAVINGS_PLACE_WIDTH_FRACTION = 0.5f
+internal const val USER_SAVINGS_SAVING_WIDTH_FRACTION = 0.3f
+internal const val USER_SAVINGS_CURRENCY_WIDTH_FRACTION = 0.2f
 
 private val headerStringResources = listOf(
     R.string.list_header_place,
@@ -183,14 +188,28 @@ private fun UserSavingsHeader(modifier: Modifier = Modifier) {
             ),
         horizontalArrangement = Arrangement.SpaceAround,
     ) {
-        for (headerId in headerStringResources) {
-            Text(
-                text = stringResource(headerId),
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
-            )
-        }
+        Text(
+            text = stringResource(headerStringResources[0]),
+            modifier = Modifier.weight(USER_SAVINGS_PLACE_WIDTH_FRACTION),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleMedium,
+        )
+
+        Text(
+            text = stringResource(headerStringResources[1]),
+            modifier = Modifier.weight(USER_SAVINGS_SAVING_WIDTH_FRACTION),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleMedium,
+        )
+
+        Text(
+            text = stringResource(headerStringResources[2]),
+            modifier = Modifier.weight(USER_SAVINGS_CURRENCY_WIDTH_FRACTION),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 

@@ -150,7 +150,7 @@ private fun UserSavingItemContent(
     ) {
         UserSavingPlace(
             place = item.place,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(USER_SAVINGS_PLACE_WIDTH_FRACTION),
             onPlaceUpdate = {
                 onItemUpdate(
                     item.copy(place = it),
@@ -162,7 +162,7 @@ private fun UserSavingItemContent(
 
         UserSavingAmount(
             amount = item.amount,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(USER_SAVINGS_SAVING_WIDTH_FRACTION),
             onAmountUpdate = {
                 onItemUpdate(
                     item.copy(amount = it),
@@ -175,7 +175,7 @@ private fun UserSavingItemContent(
         UserSavingChosenCurrencyDropdownMenu(
             currency = item.currency,
             currencyCodes = item.currencyPossibilities,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(USER_SAVINGS_CURRENCY_WIDTH_FRACTION),
             onCurrencyUpdate = {
                 onItemUpdate(
                     item.copy(currency = it),
