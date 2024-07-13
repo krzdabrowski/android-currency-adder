@@ -29,6 +29,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.UUID
 import javax.inject.Inject
 
@@ -57,6 +59,8 @@ class UserSavingsViewModel @Inject constructor(
         savedStateHandle = savedStateHandle,
         initialState = userSavingsInitialState,
     ) {
+
+    private val swapSavingsMutex = Mutex()
 
     init {
         observeUserSavingsWithAllCurrencyCodes()
@@ -179,11 +183,16 @@ class UserSavingsViewModel @Inject constructor(
         val fromDatabaseIndex = fromListItemIndex + 1L
         val toDatabaseIndex = toListItemIndex + 1L
 
-        swapUserSavingsUseCase(
-            fromDatabaseIndex,
-            toDatabaseIndex,
-        ).onFailure {
-            emit(Error(it))
+        // TODO: this helps but jumping through more than 1 index also happen in rememberDragDropState
+        // possibly update to newer version of Google code sample when Compose 1.7.0 hits stable
+        // see: https://issuetracker.google.com/issues/181282427#comment28
+        swapSavingsMutex.withLock {
+            swapUserSavingsUseCase(
+                fromDatabaseIndex,
+                toDatabaseIndex,
+            ).onFailure {
+                emit(Error(it))
+            }
         }
     }
 
