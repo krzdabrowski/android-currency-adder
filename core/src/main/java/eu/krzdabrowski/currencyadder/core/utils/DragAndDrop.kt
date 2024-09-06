@@ -36,7 +36,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -98,6 +97,7 @@ class DragDropState internal constructor(
 
     internal var previousIndexOfDraggedItem by mutableStateOf<Int?>(null)
         private set
+
     internal var previousItemOffset = Animatable(0f)
         private set
 
@@ -145,22 +145,13 @@ class DragDropState internal constructor(
                 draggingItem.index != item.index
         }
         if (targetItem != null) {
-            val scrollToIndex = if (targetItem.index == state.firstVisibleItemIndex) {
-                draggingItem.index
-            } else if (draggingItem.index == state.firstVisibleItemIndex) {
-                targetItem.index
-            } else {
-                null
+            if (draggingItem.index == state.firstVisibleItemIndex || targetItem.index == state.firstVisibleItemIndex) {
+                state.requestScrollToItem(
+                    state.firstVisibleItemIndex,
+                    state.firstVisibleItemScrollOffset
+                )
             }
-            if (scrollToIndex != null) {
-                scope.launch {
-                    // this is needed to neutralize automatic keeping the first item first.
-                    state.scrollToItem(scrollToIndex, state.firstVisibleItemScrollOffset)
-                    onMove.invoke(draggingItem.index, targetItem.index)
-                }
-            } else {
-                onMove.invoke(draggingItem.index, targetItem.index)
-            }
+            onMove.invoke(draggingItem.index, targetItem.index)
             draggingItemIndex = targetItem.index
         } else {
             val overscroll = when {
@@ -206,16 +197,14 @@ fun LazyItemScope.DraggableItem(
             .graphicsLayer {
                 translationY = dragDropState.draggingItemOffset
             }
-            .focusProperties { canFocus = false }
     } else if (index == dragDropState.previousIndexOfDraggedItem) {
         Modifier
             .zIndex(1f)
             .graphicsLayer {
                 translationY = dragDropState.previousItemOffset.value
             }
-            .focusProperties { canFocus = false }
     } else {
-        Modifier.animateItemPlacement()
+        Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null)
     }
     Column(modifier = modifier.then(draggingModifier)) {
         content(dragging)
