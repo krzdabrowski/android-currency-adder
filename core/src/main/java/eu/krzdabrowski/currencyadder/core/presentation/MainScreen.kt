@@ -70,7 +70,7 @@ fun MainScreen(
                     key = navController,
                 ) { navigationCommand ->
                     when (navigationCommand.destination) {
-                        NavigationDestination.Back.route -> navController.navigateUp()
+                        NavigationDestination.Back -> navController.navigateUp()
                         else -> navController.navigate(navigationCommand.destination, navigationCommand.configuration)
                     }
                 }

@@ -148,7 +148,7 @@ class DragDropState internal constructor(
             if (draggingItem.index == state.firstVisibleItemIndex || targetItem.index == state.firstVisibleItemIndex) {
                 state.requestScrollToItem(
                     state.firstVisibleItemIndex,
-                    state.firstVisibleItemScrollOffset
+                    state.firstVisibleItemScrollOffset,
                 )
             }
             onMove.invoke(draggingItem.index, targetItem.index)
