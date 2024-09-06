@@ -24,16 +24,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -67,13 +64,6 @@ fun UserSavingsContent(
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val pullToRefreshState = rememberPullToRefreshState()
-
-    HandlePullToRefresh(
-        pullState = pullToRefreshState,
-        uiState = uiState,
-        onRefreshExchangeRates = onRefreshExchangeRates,
-    )
 
     Scaffold(
         modifier = modifier,
@@ -86,10 +76,10 @@ fun UserSavingsContent(
             }
         },
     ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .padding(paddingValues)
-                .nestedScroll(pullToRefreshState.nestedScrollConnection),
+        PullToRefreshBox(
+            modifier = Modifier.padding(paddingValues),
+            isRefreshing = uiState.isLoading,
+            onRefresh = onRefreshExchangeRates,
         ) {
             if (uiState.userSavings.isNotEmpty()) {
                 UserSavingsAvailableContent(
@@ -103,31 +93,6 @@ fun UserSavingsContent(
             } else {
                 UserSavingsNotAvailableContent()
             }
-
-            PullToRefreshContainer(
-                state = pullToRefreshState,
-                modifier = Modifier
-                    .align(Alignment.TopCenter),
-            )
-        }
-    }
-}
-
-@Composable
-private fun HandlePullToRefresh(
-    pullState: PullToRefreshState,
-    uiState: UserSavingsUiState,
-    onRefreshExchangeRates: () -> Unit,
-) {
-    if (pullState.isRefreshing) {
-        LaunchedEffect(onRefreshExchangeRates) {
-            onRefreshExchangeRates()
-        }
-    }
-
-    if (uiState.isLoading.not()) {
-        LaunchedEffect(true) {
-            pullState.endRefresh()
         }
     }
 }
