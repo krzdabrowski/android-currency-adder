@@ -20,9 +20,7 @@ internal object DataStoreModule {
     @Provides
     fun provideDataStore(
         @ApplicationContext appContext: Context,
-    ): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create {
-            appContext.preferencesDataStoreFile("settings")
-        }
+    ): DataStore<Preferences> = PreferenceDataStoreFactory.create {
+        appContext.preferencesDataStoreFile("settings")
     }
 }

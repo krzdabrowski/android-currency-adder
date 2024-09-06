@@ -180,18 +180,16 @@ class DragDropState internal constructor(
         get() = this.offset + this.size
 }
 
-fun Modifier.dragContainer(dragDropState: DragDropState): Modifier {
-    return pointerInput(dragDropState) {
-        detectDragGesturesAfterLongPress(
-            onDrag = { change, offset ->
-                change.consume()
-                dragDropState.onDrag(offset = offset)
-            },
-            onDragStart = { offset -> dragDropState.onDragStart(offset) },
-            onDragEnd = { dragDropState.onDragInterrupted() },
-            onDragCancel = { dragDropState.onDragInterrupted() },
-        )
-    }
+fun Modifier.dragContainer(dragDropState: DragDropState): Modifier = pointerInput(dragDropState) {
+    detectDragGesturesAfterLongPress(
+        onDrag = { change, offset ->
+            change.consume()
+            dragDropState.onDrag(offset = offset)
+        },
+        onDragStart = { offset -> dragDropState.onDragStart(offset) },
+        onDragEnd = { dragDropState.onDragInterrupted() },
+        onDragCancel = { dragDropState.onDragInterrupted() },
+    )
 }
 
 @Composable

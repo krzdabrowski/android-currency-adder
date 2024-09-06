@@ -208,7 +208,7 @@ private fun UserSavingsHeader(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

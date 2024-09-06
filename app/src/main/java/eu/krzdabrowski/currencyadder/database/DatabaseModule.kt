@@ -21,28 +21,22 @@ internal object DatabaseModule {
     @Provides
     fun provideAppDatabase(
         @ApplicationContext context: Context,
-    ): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            APP_DATABASE_NAME,
-        )
-            .addMigrations(MIGRATION_2_3)
-            // it is quite impossible to migrate data between v1.0 and v1.1 app versions
-            // and make app not bugged due to lack of information when user saving was added in v1.0 (timestamp)
-            .fallbackToDestructiveMigrationFrom(1)
-            .build()
-    }
+    ): AppDatabase = Room.databaseBuilder(
+        context,
+        AppDatabase::class.java,
+        APP_DATABASE_NAME,
+    )
+        .addMigrations(MIGRATION_2_3)
+        // it is quite impossible to migrate data between v1.0 and v1.1 app versions
+        // and make app not bugged due to lack of information when user saving was added in v1.0 (timestamp)
+        .fallbackToDestructiveMigrationFrom(1)
+        .build()
 
     @Singleton
     @Provides
-    fun provideExchangeRatesDao(database: AppDatabase): ExchangeRatesDao {
-        return database.exchangeRatesDao()
-    }
+    fun provideExchangeRatesDao(database: AppDatabase): ExchangeRatesDao = database.exchangeRatesDao()
 
     @Singleton
     @Provides
-    fun provideUserSavingsDao(database: AppDatabase): UserSavingsDao {
-        return database.userSavingsDao()
-    }
+    fun provideUserSavingsDao(database: AppDatabase): UserSavingsDao = database.userSavingsDao()
 }

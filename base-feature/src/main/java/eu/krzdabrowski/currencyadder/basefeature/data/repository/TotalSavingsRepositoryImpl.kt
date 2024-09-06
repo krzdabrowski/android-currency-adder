@@ -21,30 +21,26 @@ class TotalSavingsRepositoryImpl @Inject constructor(
     private val dataStoreManager: DataStoreManager,
 ) : TotalSavingsRepository {
 
-    override fun getTotalUserSavings(): Flow<Result<Double>> {
-        return getChosenCurrencyCodeForTotalSavings()
-            .flatMapLatest { currencyCode ->
-                combine(
-                    userSavingsDao.getTotalUserSavingsInBaseCurrency(),
-                    exchangeRatesDao.getExchangeRateForChosenCurrency(
-                        currencyCode.getOrDefault(BASE_EXCHANGE_RATE_CODE),
-                    ),
-                ) { totalUserSavingsInBaseCurrency, exchangeRateForChosenCurrency ->
+    override fun getTotalUserSavings(): Flow<Result<Double>> = getChosenCurrencyCodeForTotalSavings()
+        .flatMapLatest { currencyCode ->
+            combine(
+                userSavingsDao.getTotalUserSavingsInBaseCurrency(),
+                exchangeRatesDao.getExchangeRateForChosenCurrency(
+                    currencyCode.getOrDefault(BASE_EXCHANGE_RATE_CODE),
+                ),
+            ) { totalUserSavingsInBaseCurrency, exchangeRateForChosenCurrency ->
 
-                    if (exchangeRateForChosenCurrency != DEFAULT_VALUE_FOR_DOUBLE) {
-                        totalUserSavingsInBaseCurrency / exchangeRateForChosenCurrency
-                    } else {
-                        DEFAULT_VALUE_FOR_DOUBLE
-                    }
-                }.map { Result.success(it) }
-            }
-    }
+                if (exchangeRateForChosenCurrency != DEFAULT_VALUE_FOR_DOUBLE) {
+                    totalUserSavingsInBaseCurrency / exchangeRateForChosenCurrency
+                } else {
+                    DEFAULT_VALUE_FOR_DOUBLE
+                }
+            }.map { Result.success(it) }
+        }
 
-    override fun getChosenCurrencyCodeForTotalSavings(): Flow<Result<String>> {
-        return dataStoreManager
-            .readString(CHOSEN_CURRENCY_CODE_FOR_TOTAL_SAVINGS_KEY)
-            .map { Result.success(it) }
-    }
+    override fun getChosenCurrencyCodeForTotalSavings(): Flow<Result<String>> = dataStoreManager
+        .readString(CHOSEN_CURRENCY_CODE_FOR_TOTAL_SAVINGS_KEY)
+        .map { Result.success(it) }
 
     override suspend fun updateChosenCurrencyCodeForTotalSavings(currencyCode: String): Result<Unit> = resultOf {
         dataStoreManager

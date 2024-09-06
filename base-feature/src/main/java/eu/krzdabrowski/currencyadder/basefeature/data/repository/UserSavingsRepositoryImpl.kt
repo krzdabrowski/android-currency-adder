@@ -14,15 +14,13 @@ class UserSavingsRepositoryImpl @Inject constructor(
     private val userSavingsDao: UserSavingsDao,
 ) : UserSavingsRepository {
 
-    override fun getUserSavings(): Flow<Result<List<UserSaving>>> {
-        return userSavingsDao
-            .getUserSavings()
-            .map { userSavings ->
-                Result.success(
-                    userSavings.map { it.toDomainModel() },
-                )
-            }
-    }
+    override fun getUserSavings(): Flow<Result<List<UserSaving>>> = userSavingsDao
+        .getUserSavings()
+        .map { userSavings ->
+            Result.success(
+                userSavings.map { it.toDomainModel() },
+            )
+        }
 
     override suspend fun addUserSaving(userSaving: UserSaving): Result<Unit> = resultOf {
         userSavingsDao
