@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType.Companion.PrimaryNotEditable
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -86,7 +87,7 @@ private fun TotalSavingsChosenCurrencyDropdownMenu(
         TextField(
             value = value,
             onValueChange = { },
-            modifier = Modifier.menuAnchor(),
+            modifier = Modifier.menuAnchor(type = PrimaryNotEditable),
             readOnly = true,
             textStyle = MaterialTheme.typography.headlineLarge.copy(
                 textAlign = TextAlign.Center,

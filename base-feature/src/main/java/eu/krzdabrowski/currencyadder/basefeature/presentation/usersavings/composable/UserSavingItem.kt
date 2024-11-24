@@ -16,6 +16,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MenuAnchorType.Companion.PrimaryNotEditable
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue.EndToStart
@@ -285,7 +286,7 @@ private fun UserSavingChosenCurrencyDropdownMenu(
                 expanded = true
             },
             modifier = Modifier
-                .menuAnchor()
+                .menuAnchor(type = PrimaryNotEditable)
                 .onFocusChanged {
                     if (!it.isFocused && currentInput != currency) {
                         currentInput = currency
