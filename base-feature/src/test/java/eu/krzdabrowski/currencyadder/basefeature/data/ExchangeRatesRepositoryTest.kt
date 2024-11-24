@@ -16,6 +16,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -96,8 +97,9 @@ class ExchangeRatesRepositoryTest {
 
     private fun setUpExchangeRatesRepository() {
         objectUnderTest = ExchangeRatesRepositoryImpl(
-            exchangeRatesApi,
-            exchangeRatesDao,
+            exchangeRatesApi = exchangeRatesApi,
+            exchangeRatesDao = exchangeRatesDao,
+            ioDispatcher = UnconfinedTestDispatcher(),
         )
     }
 }

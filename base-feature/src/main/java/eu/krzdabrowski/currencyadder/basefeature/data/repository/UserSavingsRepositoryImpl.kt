@@ -5,46 +5,51 @@ import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toDomainModel
 import eu.krzdabrowski.currencyadder.basefeature.data.mapper.toEntityModel
 import eu.krzdabrowski.currencyadder.basefeature.domain.model.UserSaving
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.UserSavingsRepository
+import eu.krzdabrowski.currencyadder.core.coroutines.IoDispatcher
 import eu.krzdabrowski.currencyadder.core.utils.resultOf
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class UserSavingsRepositoryImpl @Inject constructor(
     private val userSavingsDao: UserSavingsDao,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : UserSavingsRepository {
 
     override fun getUserSavings(): Flow<Result<List<UserSaving>>> = userSavingsDao
         .getUserSavings()
         .map { userSavings ->
-            Result.success(
-                userSavings.map { it.toDomainModel() },
-            )
+            Result.success(userSavings.map { it.toDomainModel() })
         }
+        .flowOn(ioDispatcher)
 
     override suspend fun addUserSaving(userSaving: UserSaving): Result<Unit> = resultOf {
-        userSavingsDao
-            .addUserSaving(
-                userSaving.toEntityModel(),
-            )
+        withContext(ioDispatcher) {
+            userSavingsDao.addUserSaving(userSaving.toEntityModel())
+        }
     }
 
     override suspend fun updateUserSaving(userSaving: UserSaving): Result<Unit> = resultOf {
-        userSavingsDao
-            .updateUserSaving(
-                userSaving.toEntityModel(),
-            )
+        withContext(ioDispatcher) {
+            userSavingsDao.updateUserSaving(userSaving.toEntityModel())
+        }
     }
 
     override suspend fun removeUserSaving(userSavingId: Long): Result<Unit> = resultOf {
-        userSavingsDao
-            .removeUserSaving(userSavingId)
+        withContext(ioDispatcher) {
+            userSavingsDao.removeUserSaving(userSavingId)
+        }
     }
 
     override suspend fun swapUserSavings(
         fromIndex: Long,
         toIndex: Long,
     ): Result<Unit> = resultOf {
-        userSavingsDao.swapUserSavings(fromIndex, toIndex)
+        withContext(ioDispatcher) {
+            userSavingsDao.swapUserSavings(fromIndex, toIndex)
+        }
     }
 }

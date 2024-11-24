@@ -9,6 +9,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -26,6 +27,8 @@ class TotalSavingsRepositoryTest {
     @RelaxedMockK
     private lateinit var dataStoreManager: DataStoreManager
 
+    private val testDispatcher = UnconfinedTestDispatcher()
+
     private lateinit var objectUnderTest: TotalSavingsRepositoryImpl
 
     @BeforeEach
@@ -35,7 +38,7 @@ class TotalSavingsRepositoryTest {
     }
 
     @Test
-    fun `should get total user savings in chosen currency`() = runTest {
+    fun `should get total user savings in chosen currency`() = runTest(testDispatcher) {
         // Given
         val chosenCurrencyCodeForTotalSavings = "GBP"
         val totalSavingsInBaseCurrency = 100.0
@@ -68,7 +71,7 @@ class TotalSavingsRepositoryTest {
     }
 
     @Test
-    fun `should get default value of total savings if chosen currency code retrieval fails`() = runTest {
+    fun `should get default value of total savings if chosen currency code retrieval fails`() = runTest(testDispatcher) {
         // Given
         val chosenCurrencyCodeForTotalSavings = "GBP"
         val totalSavingsInBaseCurrency = 100.0
@@ -104,9 +107,10 @@ class TotalSavingsRepositoryTest {
 
     private fun setUpTotalSavingsRepository() {
         objectUnderTest = TotalSavingsRepositoryImpl(
-            userSavingsDao,
-            exchangeRatesDao,
-            dataStoreManager,
+            userSavingsDao = userSavingsDao,
+            exchangeRatesDao = exchangeRatesDao,
+            dataStoreManager = dataStoreManager,
+            ioDispatcher = testDispatcher,
         )
     }
 }

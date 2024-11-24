@@ -3,12 +3,16 @@ package eu.krzdabrowski.currencyadder.basefeature.data.repository
 import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.ExchangeRatesDao
 import eu.krzdabrowski.currencyadder.basefeature.data.local.dao.UserSavingsDao
 import eu.krzdabrowski.currencyadder.basefeature.domain.repository.TotalSavingsRepository
+import eu.krzdabrowski.currencyadder.core.coroutines.IoDispatcher
 import eu.krzdabrowski.currencyadder.core.datastore.DataStoreManager
 import eu.krzdabrowski.currencyadder.core.utils.resultOf
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 private const val CHOSEN_CURRENCY_CODE_FOR_TOTAL_SAVINGS_KEY = "CHOSEN_CURRENCY_CODE_FOR_TOTAL_SAVINGS_KEY"
@@ -19,6 +23,7 @@ class TotalSavingsRepositoryImpl @Inject constructor(
     private val userSavingsDao: UserSavingsDao,
     private val exchangeRatesDao: ExchangeRatesDao,
     private val dataStoreManager: DataStoreManager,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : TotalSavingsRepository {
 
     override fun getTotalUserSavings(): Flow<Result<Double>> = getChosenCurrencyCodeForTotalSavings()
@@ -37,13 +42,16 @@ class TotalSavingsRepositoryImpl @Inject constructor(
                 }
             }.map { Result.success(it) }
         }
+        .flowOn(ioDispatcher)
 
     override fun getChosenCurrencyCodeForTotalSavings(): Flow<Result<String>> = dataStoreManager
         .readString(CHOSEN_CURRENCY_CODE_FOR_TOTAL_SAVINGS_KEY)
         .map { Result.success(it) }
+        .flowOn(ioDispatcher)
 
     override suspend fun updateChosenCurrencyCodeForTotalSavings(currencyCode: String): Result<Unit> = resultOf {
-        dataStoreManager
-            .writeString(CHOSEN_CURRENCY_CODE_FOR_TOTAL_SAVINGS_KEY, currencyCode)
+        withContext(ioDispatcher) {
+            dataStoreManager.writeString(CHOSEN_CURRENCY_CODE_FOR_TOTAL_SAVINGS_KEY, currencyCode)
+        }
     }
 }
