@@ -25,6 +25,7 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper.toPresentationModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 import eu.krzdabrowski.currencyadder.core.presentation.mvi.BaseViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
@@ -33,6 +34,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.util.UUID
 import javax.inject.Inject
+
+private const val ROCKETS_REFRESH_FAILURE_INDICATOR_DURATION_IN_MILLIS = 500L // to make refresh indicator visible for a while
 
 private const val BASE_EXCHANGE_RATE_CODE = "PLN"
 
@@ -199,6 +202,7 @@ class UserSavingsViewModel @Inject constructor(
     private fun refreshExchangeRates(): Flow<PartialState> = flow<PartialState> {
         refreshExchangeRatesUseCase()
             .onFailure {
+                delay(ROCKETS_REFRESH_FAILURE_INDICATOR_DURATION_IN_MILLIS)
                 emit(Error(it))
             }
     }.onStart {
