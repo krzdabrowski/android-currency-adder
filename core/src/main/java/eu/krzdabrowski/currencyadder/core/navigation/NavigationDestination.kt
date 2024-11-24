@@ -1,9 +1,12 @@
 package eu.krzdabrowski.currencyadder.core.navigation
 
-sealed class NavigationDestination(
-    val route: String,
-) {
-    data object CurrencyAdder : NavigationDestination("currencyAdderDestination")
+import kotlinx.serialization.Serializable
 
-    data object Back : NavigationDestination("navigationBack")
+sealed class NavigationDestination {
+
+    @Serializable
+    data object CurrencyAdder : NavigationDestination()
+
+    @Serializable
+    data object Back : NavigationDestination()
 }

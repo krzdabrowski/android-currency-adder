@@ -9,7 +9,7 @@ import javax.inject.Inject
 class CurrencyAdderNavigationFactory @Inject constructor() : NavigationFactory {
 
     override fun create(builder: NavGraphBuilder) {
-        builder.composable(CurrencyAdder.route) {
+        builder.composable<CurrencyAdder> {
             CurrencyAdderRoute()
         }
     }
