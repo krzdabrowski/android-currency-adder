@@ -153,6 +153,8 @@ private fun UserSavingsHeader(modifier: Modifier = Modifier) {
             ),
         horizontalArrangement = Arrangement.SpaceAround,
     ) {
+        Spacer(modifier = Modifier.width(32.dp))
+
         Text(
             text = stringResource(headerStringResources[0]),
             modifier = Modifier.weight(USER_SAVINGS_PLACE_WIDTH_FRACTION),
