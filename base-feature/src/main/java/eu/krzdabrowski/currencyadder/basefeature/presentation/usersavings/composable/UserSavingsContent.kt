@@ -230,7 +230,7 @@ internal fun UserSavingsListContent(
                 )
             }
 
-            HorizontalDivider(color = Color.Black)
+            HorizontalDivider(color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
