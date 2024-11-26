@@ -20,11 +20,11 @@ interface UserSavingsDao {
     @Query("SELECT * FROM User_Savings")
     fun getUserSavings(): Flow<List<UserSavingCached>>
 
-    @Query(
-        "SELECT SUM(savings.amount * rates.value) " +
-            "FROM User_Savings savings " +
-            "JOIN Exchange_Rates rates ON rates.code = savings.currency",
-    )
+    @Query("""
+        SELECT SUM(savings.amount * rates.value)
+        FROM User_Savings savings
+        JOIN Exchange_Rates rates ON rates.code = savings.currency
+    """)
     fun getTotalUserSavingsInBaseCurrency(): Flow<Double>
     // endregion
 
@@ -71,17 +71,17 @@ interface UserSavingsDao {
         updateUserSavingsIdsGreaterThan(userSavingId)
     }
 
-    @Query(
-        "DELETE FROM User_Savings " +
-            "WHERE id = :userSavingId",
-    )
+    @Query("""
+        DELETE FROM User_Savings
+        WHERE id = :userSavingId
+    """)
     suspend fun deleteUserSaving(userSavingId: Long)
 
-    @Query(
-        "UPDATE User_Savings " +
-            "SET id = id - 1 " +
-            "WHERE id > :userSavingId",
-    )
+    @Query("""
+        UPDATE User_Savings
+        SET id = id - 1
+        WHERE id > :userSavingId
+    """)
     suspend fun updateUserSavingsIdsGreaterThan(userSavingId: Long)
     // endregion
 }
