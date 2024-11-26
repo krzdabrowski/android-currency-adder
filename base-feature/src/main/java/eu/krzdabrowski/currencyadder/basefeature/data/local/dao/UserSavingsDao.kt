@@ -35,34 +35,33 @@ interface UserSavingsDao {
     @Transaction
     suspend fun updateUserSavingPositions(
         movedItemId: Long,
-        fromIndex: Long,
-        toIndex: Long,
+        fromPosition: Int,
+        toPosition: Int,
     ) {
-        if (fromIndex < toIndex) {
-            decrementPositions(fromIndex, toIndex)
-        } else if (fromIndex > toIndex) {
-            incrementPositions(fromIndex, toIndex)
+        if (fromPosition > toPosition) {
+            incrementPositions(fromPosition, toPosition)
+        } else if (fromPosition < toPosition) {
+            decrementPositions(fromPosition, toPosition)
         }
-        updateItemPosition(movedItemId, toIndex)
+        updateItemPosition(movedItemId, toPosition)
     }
 
     @Query("""
         UPDATE User_Savings
-        SET id = id - 1
-        WHERE id > :fromPosition AND id <= :toPosition
+        SET positionIndex = positionIndex + 1
+        WHERE positionIndex >= :toPosition AND positionIndex < :fromPosition
     """)
-    suspend fun decrementPositions(fromPosition: Long, toPosition: Long)
+    suspend fun incrementPositions(fromPosition: Int, toPosition: Int)
 
     @Query("""
         UPDATE User_Savings
-        SET id = id + 1
-        WHERE id >= :toPosition AND id < :fromPosition
+        SET positionIndex = positionIndex - 1
+        WHERE positionIndex > :fromPosition AND positionIndex <= :toPosition
     """)
-    suspend fun incrementPositions(fromPosition: Long, toPosition: Long)
+    suspend fun decrementPositions(fromPosition: Int, toPosition: Int)
 
     @Query("UPDATE User_Savings SET id = :toPosition WHERE id = :itemId")
-    suspend fun updateItemPosition(itemId: Long, toPosition: Long)
-
+    suspend fun updateItemPosition(itemId: Long, toPosition: Int)
     // endregion
 
     // region [D]elete operations
