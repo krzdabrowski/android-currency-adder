@@ -33,32 +33,36 @@ interface UserSavingsDao {
     suspend fun updateUserSaving(userSaving: UserSavingCached)
 
     @Transaction
-    suspend fun swapUserSavings(
+    suspend fun updateUserSavingPositions(
+        movedItemId: Long,
         fromIndex: Long,
         toIndex: Long,
     ) {
-        // to prevent violation of an unique id constraint
-
-        setSwappedUserSavingsIdsNegative(fromIndex, toIndex)
-        setSwappedUserSavingsIdsPositive()
+        if (fromIndex < toIndex) {
+            decrementPositions(fromIndex, toIndex)
+        } else if (fromIndex > toIndex) {
+            incrementPositions(fromIndex, toIndex)
+        }
+        updateItemPosition(movedItemId, toIndex)
     }
 
-    @Query(
-        "UPDATE User_Savings " +
-            "SET id = (CASE WHEN id = :fromIndex THEN -:toIndex else -:fromIndex END) " +
-            "WHERE id in (:fromIndex, :toIndex)",
-    )
-    suspend fun setSwappedUserSavingsIdsNegative(
-        fromIndex: Long,
-        toIndex: Long,
-    )
+    @Query("""
+        UPDATE User_Savings
+        SET id = id - 1
+        WHERE id > :fromPosition AND id <= :toPosition
+    """)
+    suspend fun decrementPositions(fromPosition: Long, toPosition: Long)
 
-    @Query(
-        "UPDATE User_Savings " +
-            "SET id = -id " +
-            "WHERE id < 0",
-    )
-    suspend fun setSwappedUserSavingsIdsPositive()
+    @Query("""
+        UPDATE User_Savings
+        SET id = id + 1
+        WHERE id >= :toPosition AND id < :fromPosition
+    """)
+    suspend fun incrementPositions(fromPosition: Long, toPosition: Long)
+
+    @Query("UPDATE User_Savings SET id = :toPosition WHERE id = :itemId")
+    suspend fun updateItemPosition(itemId: Long, toPosition: Long)
+
     // endregion
 
     // region [D]elete operations
