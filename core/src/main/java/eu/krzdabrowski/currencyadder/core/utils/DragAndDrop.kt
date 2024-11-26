@@ -56,12 +56,14 @@ import kotlinx.coroutines.launch
 fun rememberDragDropState(
     lazyListState: LazyListState,
     onMove: (Int, Int) -> Unit,
+    onMoveCompleted: (Int, Int) -> Unit,
 ): DragDropState {
     val scope = rememberCoroutineScope()
     val state = remember(lazyListState) {
         DragDropState(
             state = lazyListState,
             onMove = onMove,
+            onMoveCompleted = onMoveCompleted,
             scope = scope,
         )
     }
@@ -78,9 +80,12 @@ class DragDropState internal constructor(
     private val state: LazyListState,
     private val scope: CoroutineScope,
     private val onMove: (Int, Int) -> Unit,
+    private val onMoveCompleted: (Int, Int) -> Unit,
 ) {
     var draggingItemIndex by mutableStateOf<Int?>(null)
         private set
+
+    private var originalIndex: Int? = null
 
     internal val scrollChannel = Channel<Float>()
 
@@ -107,6 +112,7 @@ class DragDropState internal constructor(
                 offset.y.toInt() in item.offset..(item.offset + item.size)
             }?.also {
                 draggingItemIndex = it.index
+                originalIndex = it.index
                 draggingItemInitialOffset = it.offset
             }
     }
@@ -129,7 +135,16 @@ class DragDropState internal constructor(
         }
         draggingItemDraggedDelta = 0f
         draggingItemIndex = null
+        originalIndex = null
         draggingItemInitialOffset = 0
+    }
+
+    internal fun onDragEnd() {
+        val fromIndex = originalIndex
+        val toIndex = draggingItemIndex
+        if (fromIndex == null || toIndex == null) return
+
+        onMoveCompleted(fromIndex, toIndex)
     }
 
     internal fun onDrag(offset: Offset) {
@@ -178,8 +193,11 @@ fun Modifier.dragContainer(dragDropState: DragDropState): Modifier = pointerInpu
             dragDropState.onDrag(offset = offset)
         },
         onDragStart = { offset -> dragDropState.onDragStart(offset) },
-        onDragEnd = { dragDropState.onDragInterrupted() },
         onDragCancel = { dragDropState.onDragInterrupted() },
+        onDragEnd = {
+            dragDropState.onDragEnd()
+            dragDropState.onDragInterrupted()
+        },
     )
 }
 

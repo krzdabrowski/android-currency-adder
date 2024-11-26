@@ -2,15 +2,15 @@ package eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.compo
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -27,14 +27,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import eu.krzdabrowski.currencyadder.basefeature.R
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
@@ -58,7 +61,7 @@ fun UserSavingsContent(
     onAddUserSaving: () -> Unit,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (Long) -> Unit,
-    onDragAndDropUserSaving: (Int, Int) -> Unit,
+    onDragAndDropUserSaving: (Long, Int, Int) -> Unit,
     getCurrencyCodesThatStartWith: (String, Long) -> Unit,
     onRefreshExchangeRates: () -> Unit,
     modifier: Modifier = Modifier,
@@ -103,7 +106,7 @@ private fun UserSavingsAvailableContent(
     uiState: UserSavingsUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (Long) -> Unit,
-    onDragAndDropUserSaving: (Int, Int) -> Unit,
+    onDragAndDropUserSaving: (Long, Int, Int) -> Unit,
     getCurrencyCodesThatStartWith: (String, Long) -> Unit,
 ) {
     if (uiState.isError) {
@@ -186,14 +189,26 @@ internal fun UserSavingsListContent(
     uiState: UserSavingsUiState,
     onUpdateUserSaving: (UserSavingDisplayable) -> Unit,
     onRemoveUserSaving: (Long) -> Unit,
-    onDragAndDropUserSaving: (Int, Int) -> Unit,
+    onDragAndDropUserSaving: (Long, Int, Int) -> Unit,
     getCurrencyCodesThatStartWith: (String, Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val uiList = remember {
+        mutableStateListOf<UserSavingDisplayable>().apply { addAll(uiState.userSavings) }
+    }
+
     val listState = rememberLazyListState()
     val dragDropState = rememberDragDropState(
         lazyListState = listState,
-        onMove = onDragAndDropUserSaving,
+        onMove = { fromIndex, toIndex ->
+            uiList.add(toIndex, uiList.removeAt(fromIndex))
+        },
+        onMoveCompleted = { fromIndex, toIndex ->
+            val movedItem = uiList[toIndex]
+            val movedItemId = movedItem.id ?: return@rememberDragDropState
+
+            onDragAndDropUserSaving(movedItemId, fromIndex, toIndex)
+        }
     )
 
     LazyColumn(
@@ -202,7 +217,7 @@ internal fun UserSavingsListContent(
         state = listState,
     ) {
         itemsIndexed(
-            items = uiState.userSavings,
+            items = uiList,
             // id prevents bouncey UI glitches as it changes frequently, uuid is a proper stable unique identifier
             key = { _, userSaving -> (userSaving.id ?: 0L) to userSaving.uuid },
         ) { index, item ->
@@ -219,11 +234,7 @@ internal fun UserSavingsListContent(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            enabled = !isDragging,
-                        ) { /* no-op */ }
+                        .focusProperties { canFocus = !isDragging }
                         .background(
                             if (isDragging) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
                         ),
