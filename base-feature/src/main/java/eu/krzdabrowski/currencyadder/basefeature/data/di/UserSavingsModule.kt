@@ -10,7 +10,7 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.repository.UserSavingsRe
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.SwapUserSavingsUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingPositionsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
 import javax.inject.Singleton
 
@@ -35,8 +35,8 @@ internal object UserSavingsModule {
         RemoveUserSavingUseCase(userSavingsRepository::removeUserSaving)
 
     @Provides
-    fun provideSwapUserSavingsUseCase(userSavingsRepository: UserSavingsRepository) =
-        SwapUserSavingsUseCase(userSavingsRepository::swapUserSavings)
+    fun provideUpdateUserSavingPositionsUseCase(userSavingsRepository: UserSavingsRepository) =
+        UpdateUserSavingPositionsUseCase(userSavingsRepository::updateUserSavingPositions)
 
     @Module
     @InstallIn(SingletonComponent::class)
