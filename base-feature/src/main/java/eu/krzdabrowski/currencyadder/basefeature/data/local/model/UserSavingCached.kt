@@ -7,13 +7,12 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "User_Savings")
 data class UserSavingCached(
 
-    // to not use AUTOINCREMENT as it is discouraged by SQLite
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Long? = null,
+    val id: Long = 0L,
 
-    @ColumnInfo(name = "uuid")
-    val uuid: String,
+    @ColumnInfo(name = "positionIndex")
+    val position: Int,
 
     @ColumnInfo(name = "place")
     val place: String,
