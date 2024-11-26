@@ -8,14 +8,14 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.Re
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.SwapUserSavingsUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingPositionsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.AddUserSaving
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.GetCurrencyCodesThatStartWith
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RemoveUserSaving
-import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.SwapUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSavingPositions
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.CurrencyCodesFiltered
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.UserSavingsPartialState.Error
@@ -30,8 +30,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import java.util.UUID
 import javax.inject.Inject
 
@@ -51,8 +49,8 @@ class UserSavingsViewModel @Inject constructor(
     private val getUserSavingsUseCase: GetUserSavingsUseCase,
     private val addUserSavingUseCase: AddUserSavingUseCase,
     private val updateUserSavingUseCase: UpdateUserSavingUseCase,
+    private val updateUserSavingPositionsUseCase: UpdateUserSavingPositionsUseCase,
     private val removeUserSavingUseCase: RemoveUserSavingUseCase,
-    private val swapUserSavingsUseCase: SwapUserSavingsUseCase,
     private val refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase,
     private val getAllCurrencyCodesUseCase: GetAllCurrencyCodesUseCase,
     private val getCurrencyCodesThatStartWithUseCase: GetCurrencyCodesThatStartWithUseCase,
@@ -63,8 +61,6 @@ class UserSavingsViewModel @Inject constructor(
         initialState = userSavingsInitialState,
     ) {
 
-    private val swapSavingsMutex = Mutex()
-
     init {
         observeUserSavingsWithAllCurrencyCodes()
     }
@@ -73,7 +69,7 @@ class UserSavingsViewModel @Inject constructor(
         is AddUserSaving -> addUserSaving()
         is UpdateUserSaving -> updateUserSaving(intent.updatedSaving)
         is RemoveUserSaving -> removeUserSaving(intent.removedUserSavingId)
-        is SwapUserSavings -> swapUserSavings(intent.fromListItemIndex, intent.toListItemIndex)
+        is UpdateUserSavingPositions -> updateUserSavingPositions(intent.movedItemId, intent.fromListItemIndex, intent.toListItemIndex)
         is GetCurrencyCodesThatStartWith -> getCurrencyCodesThatStartWith(intent.searchPhrase, intent.userSavingId)
         is RefreshExchangeRates -> refreshExchangeRates()
     }
@@ -178,7 +174,8 @@ class UserSavingsViewModel @Inject constructor(
             }
     }
 
-    private fun swapUserSavings(
+    private fun updateUserSavingPositions(
+        movedItemId: Long,
         fromListItemIndex: Int,
         toListItemIndex: Int,
     ): Flow<PartialState> = flow {
@@ -186,16 +183,12 @@ class UserSavingsViewModel @Inject constructor(
         val fromDatabaseIndex = fromListItemIndex + 1L
         val toDatabaseIndex = toListItemIndex + 1L
 
-        // TODO: this helps but jumping through more than 1 index also happen in rememberDragDropState
-        // possibly update to newer version of Google code sample when Compose 1.7.0 hits stable
-        // see: https://issuetracker.google.com/issues/181282427#comment28
-        swapSavingsMutex.withLock {
-            swapUserSavingsUseCase(
-                fromDatabaseIndex,
-                toDatabaseIndex,
-            ).onFailure {
-                emit(Error(it))
-            }
+        updateUserSavingPositionsUseCase(
+            movedItemId,
+            fromDatabaseIndex,
+            toDatabaseIndex,
+        ).onFailure {
+            emit(Error(it))
         }
     }
 
