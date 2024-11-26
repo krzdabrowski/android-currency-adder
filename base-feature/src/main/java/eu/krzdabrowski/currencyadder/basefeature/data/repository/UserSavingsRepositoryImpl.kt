@@ -44,12 +44,13 @@ class UserSavingsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun swapUserSavings(
+    override suspend fun updateUserSavingPositions(
+        movedItemId: Long,
         fromIndex: Long,
         toIndex: Long,
     ): Result<Unit> = resultOf {
         withContext(ioDispatcher) {
-            userSavingsDao.swapUserSavings(fromIndex, toIndex)
+            userSavingsDao.updateUserSavingPositions(movedItemId, fromIndex, toIndex)
         }
     }
 }
