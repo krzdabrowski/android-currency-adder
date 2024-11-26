@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
-import java.util.UUID
 import javax.inject.Inject
 
 private const val ROCKETS_REFRESH_FAILURE_INDICATOR_DURATION_IN_MILLIS = 500L // to make refresh indicator visible for a while
@@ -146,9 +145,7 @@ class UserSavingsViewModel @Inject constructor(
     )
 
     private fun addUserSaving(): Flow<PartialState> = flow {
-        val emptyUserSaving = emptyUserSavingTemplate.copy(
-            uuid = UUID.randomUUID().toString(),
-        )
+        val emptyUserSaving = emptyUserSavingTemplate
 
         addUserSavingUseCase(
             emptyUserSaving.toDomainModel(),

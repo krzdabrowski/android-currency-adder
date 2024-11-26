@@ -204,9 +204,7 @@ internal fun UserSavingsListContent(
             uiList.add(toIndex, uiList.removeAt(fromIndex))
         },
         onMoveCompleted = { fromIndex, toIndex ->
-            val movedItem = uiList[toIndex]
-            val movedItemId = movedItem.id ?: return@rememberDragDropState
-
+            val movedItemId = uiList[toIndex].id
             onDragAndDropUserSaving(movedItemId, fromIndex, toIndex)
         }
     )
@@ -218,8 +216,7 @@ internal fun UserSavingsListContent(
     ) {
         itemsIndexed(
             items = uiList,
-            // id prevents bouncey UI glitches as it changes frequently, uuid is a proper stable unique identifier
-            key = { _, userSaving -> (userSaving.id ?: 0L) to userSaving.uuid },
+            key = { _, userSaving -> userSaving.id },
         ) { index, item ->
             DraggableItem(
                 dragDropState = dragDropState,
