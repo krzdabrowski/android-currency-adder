@@ -51,3 +51,32 @@ internal val MIGRATION_2_3: Migration = object : Migration(2, 3) {
         db.execSQL("ALTER TABLE new_User_Savings RENAME TO User_Savings")
     }
 }
+
+internal val MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("""
+            CREATE TABLE IF NOT EXISTS new_User_Savings (
+                id INTEGER PRIMARY KEY NOT NULL,
+                positionIndex INTEGER NOT NULL DEFAULT 0,
+                place TEXT NOT NULL,
+                amount REAL NOT NULL,
+                currency TEXT NOT NULL
+            )
+        """.trimIndent())
+
+        db.execSQL("""
+            INSERT INTO new_User_Savings (id, positionIndex, place, amount, currency)
+            SELECT
+                id,
+                CAST(id AS INTEGER) - 1,
+                place,
+                amount,
+                currency
+            FROM User_Savings
+        """.trimIndent())
+
+        db.execSQL("DROP TABLE User_Savings")
+
+        db.execSQL("ALTER TABLE new_User_Savings RENAME TO User_Savings")
+    }
+}
