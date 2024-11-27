@@ -179,14 +179,10 @@ class UserSavingsViewModel @Inject constructor(
         fromListItemIndex: Int,
         toListItemIndex: Int,
     ): Flow<PartialState> = flow {
-        // SQLite starts indexing from 1; the whole CS world starts indexing from 0
-        val fromDatabasePosition = fromListItemIndex + 1
-        val toDatabasePosition = toListItemIndex + 1
-
         updateUserSavingPositionsUseCase(
             movedItemId,
-            fromDatabasePosition,
-            toDatabasePosition,
+            fromListItemIndex,
+            toListItemIndex,
         ).onFailure {
             emit(Error(it))
         }
