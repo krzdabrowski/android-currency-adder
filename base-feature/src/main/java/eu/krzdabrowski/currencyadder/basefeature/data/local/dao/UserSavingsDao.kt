@@ -68,9 +68,13 @@ interface UserSavingsDao {
     // region [D]elete operations
     @Transaction
     suspend fun removeUserSaving(userSavingId: Long) {
+        val position = getPositionIndexById(userSavingId)
         deleteUserSaving(userSavingId)
-        updateUserSavingsIdsGreaterThan(userSavingId)
+        updateUserSavingsPositionsGreaterThan(position)
     }
+
+    @Query("SELECT positionIndex FROM User_Savings WHERE id = :userSavingId")
+    suspend fun getPositionIndexById(userSavingId: Long): Int
 
     @Query("""
         DELETE FROM User_Savings
@@ -80,9 +84,9 @@ interface UserSavingsDao {
 
     @Query("""
         UPDATE User_Savings
-        SET id = id - 1
-        WHERE id > :userSavingId
+        SET positionIndex = positionIndex - 1
+        WHERE positionIndex > :position
     """)
-    suspend fun updateUserSavingsIdsGreaterThan(userSavingId: Long)
+    suspend fun updateUserSavingsPositionsGreaterThan(position: Int)
     // endregion
 }
