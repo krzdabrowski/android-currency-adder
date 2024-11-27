@@ -9,6 +9,7 @@ import eu.krzdabrowski.currencyadder.core.utils.resultOf
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -42,6 +43,7 @@ class TotalSavingsRepositoryImpl @Inject constructor(
                 }
             }.map { Result.success(it) }
         }
+        .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
     override fun getChosenCurrencyCodeForTotalSavings(): Flow<Result<String>> = dataStoreManager

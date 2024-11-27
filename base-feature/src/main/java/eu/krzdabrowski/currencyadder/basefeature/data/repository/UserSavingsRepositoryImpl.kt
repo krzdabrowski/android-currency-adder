@@ -9,6 +9,7 @@ import eu.krzdabrowski.currencyadder.core.coroutines.IoDispatcher
 import eu.krzdabrowski.currencyadder.core.utils.resultOf
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -24,6 +25,7 @@ class UserSavingsRepositoryImpl @Inject constructor(
         .map { userSavings ->
             Result.success(userSavings.map { it.toDomainModel() })
         }
+        .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
     override suspend fun addUserSaving(userSaving: UserSaving): Result<Unit> = resultOf {
