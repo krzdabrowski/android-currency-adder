@@ -17,7 +17,7 @@ interface UserSavingsDao {
     // endregion
 
     // region [R]ead operations
-    @Query("SELECT * FROM User_Savings")
+    @Query("SELECT * FROM User_Savings ORDER BY positionIndex")
     fun getUserSavings(): Flow<List<UserSavingCached>>
 
     @Query("""
@@ -43,6 +43,7 @@ interface UserSavingsDao {
         } else if (fromPosition < toPosition) {
             decrementPositions(fromPosition, toPosition)
         }
+
         updateItemPosition(movedItemId, toPosition)
     }
 
@@ -60,7 +61,7 @@ interface UserSavingsDao {
     """)
     suspend fun decrementPositions(fromPosition: Int, toPosition: Int)
 
-    @Query("UPDATE User_Savings SET id = :toPosition WHERE id = :itemId")
+    @Query("UPDATE User_Savings SET positionIndex = :toPosition WHERE id = :itemId")
     suspend fun updateItemPosition(itemId: Long, toPosition: Int)
     // endregion
 
