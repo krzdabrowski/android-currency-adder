@@ -70,14 +70,12 @@ fun UserSavingItem(
     val currentItem by rememberUpdatedState(item)
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { dismissValue ->
-            currentItem.id?.let { userSavingId ->
-                if (dismissValue != Settled) {
-                    onItemRemove(userSavingId)
-                    true
-                } else {
-                    false
-                }
-            } ?: false
+            if (dismissValue != Settled) {
+                onItemRemove(currentItem.id)
+                true
+            } else {
+                false
+            }
         },
     )
 
@@ -334,7 +332,7 @@ private fun UserSavingChosenCurrencyDropdownMenu(
         }
     }
 
-    LaunchedEffect(currentInput, onCurrencyCodesUpdate) {
+    LaunchedEffect(currentInput) {
         onCurrencyCodesUpdate(currentInput)
     }
 }
