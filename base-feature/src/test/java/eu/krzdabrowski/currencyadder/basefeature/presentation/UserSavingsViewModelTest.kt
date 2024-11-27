@@ -8,7 +8,7 @@ import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.exchangerates.Re
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.AddUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.GetUserSavingsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.RemoveUserSavingUseCase
-import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.SwapUserSavingsUseCase
+import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingPositionsUseCase
 import eu.krzdabrowski.currencyadder.basefeature.domain.usecase.usersavings.UpdateUserSavingUseCase
 import eu.krzdabrowski.currencyadder.basefeature.generateTestCurrencyCodesFromDomain
 import eu.krzdabrowski.currencyadder.basefeature.generateTestUserSavingsFromDomain
@@ -16,8 +16,8 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSa
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.GetCurrencyCodesThatStartWith
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RefreshExchangeRates
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.RemoveUserSaving
-import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.SwapUserSavings
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSaving
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSavingPositions
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsViewModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper.toPresentationModel
@@ -59,7 +59,7 @@ class UserSavingsViewModelTest {
     private lateinit var removeUserSavingUseCase: RemoveUserSavingUseCase
 
     @RelaxedMockK
-    private lateinit var swapUserSavingsUseCase: SwapUserSavingsUseCase
+    private lateinit var updateUserSavingPositionsUseCase: UpdateUserSavingPositionsUseCase
 
     // TODO: https://github.com/mockk/mockk/issues/1073
     private lateinit var refreshExchangeRatesUseCase: RefreshExchangeRatesUseCase
@@ -231,31 +231,29 @@ class UserSavingsViewModelTest {
         setUpUserSavingsViewModel()
 
         // When
-        objectUnderTest.acceptIntent(RemoveUserSaving(testUserSavingFromPresentation.id!!))
+        objectUnderTest.acceptIntent(RemoveUserSaving(testUserSavingFromPresentation.id))
 
         // Then
         coVerify(exactly = 1) {
-            removeUserSavingUseCase(testUserSavingFromDomain.id!!)
+            removeUserSavingUseCase(testUserSavingFromDomain.id)
         }
     }
 
     @Test
-    fun `should call proper use case with increased parameters during swapping user savings`() = runTest {
+    fun `should call proper use case with proper parameters during upading user saving positions`() = runTest {
         // Given
+        val movedItemId = 4L
         val fromListIndex = 0
         val toListIndex = 1
-
-        val fromDatabaseIndex = fromListIndex + 1L
-        val toDatabaseIndex = toListIndex + 1L
 
         setUpUserSavingsViewModel()
 
         // When
-        objectUnderTest.acceptIntent(SwapUserSavings(fromListIndex, toListIndex))
+        objectUnderTest.acceptIntent(UpdateUserSavingPositions(movedItemId, fromListIndex, toListIndex))
 
         // Then
         coVerify(exactly = 1) {
-            swapUserSavingsUseCase(fromDatabaseIndex, toDatabaseIndex)
+            updateUserSavingPositionsUseCase(movedItemId, fromListIndex, toListIndex)
         }
     }
 
@@ -331,7 +329,7 @@ class UserSavingsViewModelTest {
             addUserSavingUseCase = addUserSavingUseCase,
             updateUserSavingUseCase = updateUserSavingUseCase,
             removeUserSavingUseCase = removeUserSavingUseCase,
-            swapUserSavingsUseCase = swapUserSavingsUseCase,
+            updateUserSavingPositionsUseCase = updateUserSavingPositionsUseCase,
             refreshExchangeRatesUseCase = refreshExchangeRatesUseCase,
             getAllCurrencyCodesUseCase = getAllCurrencyCodesUseCase,
             getCurrencyCodesThatStartWithUseCase = getCurrencyCodesThatStartWithUseCase,

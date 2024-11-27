@@ -118,7 +118,7 @@ class UserSavingsContentTest {
                 onAddUserSaving = { },
                 onUpdateUserSaving = { },
                 onRemoveUserSaving = { },
-                onDragAndDropUserSaving = { _, _ -> },
+                onDragAndDropUserSaving = { _, _, _ -> },
                 getCurrencyCodesThatStartWith = { _, _ -> },
                 onRefreshExchangeRates = { },
             )
