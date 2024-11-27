@@ -18,17 +18,18 @@ import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSa
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsIntent.UpdateUserSavingPositions
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.CurrencyCodesFiltered
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.UserSavingsPartialState.CurrencyCodesFetched
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.UserSavingsPartialState.Error
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.UserSavingsPartialState.Loading
-import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.UserSavingsPartialState.UserSavingsWithCurrencyCodesFetched
+import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.UserSavingsUiState.PartialState.UserSavingsPartialState.UserSavingsFetched
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper.toDomainModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.mapper.toPresentationModel
 import eu.krzdabrowski.currencyadder.basefeature.presentation.usersavings.model.UserSavingDisplayable
 import eu.krzdabrowski.currencyadder.core.presentation.mvi.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
@@ -62,7 +63,8 @@ class UserSavingsViewModel @Inject constructor(
     ) {
 
     init {
-        observeUserSavingsWithAllCurrencyCodes()
+        observeCurrencyCodes()
+        observeUserSavings()
     }
 
     override fun mapIntents(intent: UserSavingsIntent): Flow<PartialState> = when (intent) {
@@ -83,15 +85,21 @@ class UserSavingsViewModel @Inject constructor(
             isError = false,
         )
 
-        is UserSavingsWithCurrencyCodesFetched -> {
+        is UserSavingsFetched -> {
             previousState.copy(
                 isLoading = false,
                 userSavings = partialState.userSavings.map {
                     it.copy(
-                        currencyPossibilities = partialState.currencyCodes,
+                        currencyPossibilities = previousState.currencyCodes,
                     )
                 },
                 isError = false,
+            )
+        }
+
+        is CurrencyCodesFetched -> {
+            previousState.copy(
+                currencyCodes = partialState.currencyCodes,
             )
         }
 
@@ -104,7 +112,7 @@ class UserSavingsViewModel @Inject constructor(
             }
 
             previousState.copy(
-                userSavings = (updatedSavings + restSavings).sortedBy { it.id },
+                userSavings = (updatedSavings + restSavings).sortedBy { it.position },
             )
         }
 
@@ -114,35 +122,32 @@ class UserSavingsViewModel @Inject constructor(
         )
     }
 
-    private fun observeUserSavingsWithAllCurrencyCodes() = acceptChanges(
-        getUserSavingsUseCase()
-            .combine(
-                getAllCurrencyCodesUseCase(),
-            ) { userSavingsResult, currencyCodesResult ->
-                if (userSavingsResult.isFailure || currencyCodesResult.isFailure) {
-                    return@combine Error(
-                        IllegalStateException("Something went wrong during retrieval of either user savings, or currency codes"),
+    private fun observeCurrencyCodes() = acceptChanges(
+        getAllCurrencyCodesUseCase().map { result ->
+            result.fold(
+                onSuccess = {
+                    CurrencyCodesFetched(it)
+                },
+                onFailure = {
+                    Error(IllegalStateException("Something went wrong during retrieval of currency codes"))
+                },
+            )
+        }.onStart { emit(Loading) },
+    )
+
+    private fun observeUserSavings() = acceptChanges(
+        getUserSavingsUseCase().map { result ->
+            result.fold(
+                onSuccess = { list ->
+                    UserSavingsFetched(
+                        userSavings = list.map { it.toPresentationModel() }
                     )
-                }
-
-                val userSavingList = userSavingsResult.fold(
-                    onSuccess = { userSavingList ->
-                        userSavingList.map { it.toPresentationModel() }
-                    },
-                    onFailure = { emptyList() },
-                )
-
-                val currencyCodesList = currencyCodesResult.fold(
-                    onSuccess = { it },
-                    onFailure = { emptyList() },
-                )
-
-                return@combine UserSavingsWithCurrencyCodesFetched(
-                    userSavings = userSavingList,
-                    currencyCodes = currencyCodesList,
-                )
-            }
-            .onStart { emit(Loading) },
+                },
+                onFailure = {
+                    Error(IllegalStateException("Something went wrong during retrieval of user savings"))
+                },
+            )
+        }.onStart { emit(Loading) },
     )
 
     private fun addUserSaving(): Flow<PartialState> = flow {
