@@ -20,11 +20,13 @@ interface UserSavingsDao {
     @Query("SELECT * FROM User_Savings ORDER BY positionIndex")
     fun getUserSavings(): Flow<List<UserSavingCached>>
 
-    @Query("""
+    @Query(
+        """
         SELECT SUM(savings.amount * rates.value)
         FROM User_Savings savings
         JOIN Exchange_Rates rates ON rates.code = savings.currency
-    """)
+    """,
+    )
     fun getTotalUserSavingsInBaseCurrency(): Flow<Double>
     // endregion
 
@@ -47,22 +49,35 @@ interface UserSavingsDao {
         updateItemPosition(movedItemId, toPosition)
     }
 
-    @Query("""
+    @Query(
+        """
         UPDATE User_Savings
         SET positionIndex = positionIndex + 1
         WHERE positionIndex >= :toPosition AND positionIndex < :fromPosition
-    """)
-    suspend fun incrementPositions(fromPosition: Int, toPosition: Int)
+    """,
+    )
+    suspend fun incrementPositions(
+        fromPosition: Int,
+        toPosition: Int,
+    )
 
-    @Query("""
+    @Query(
+        """
         UPDATE User_Savings
         SET positionIndex = positionIndex - 1
         WHERE positionIndex > :fromPosition AND positionIndex <= :toPosition
-    """)
-    suspend fun decrementPositions(fromPosition: Int, toPosition: Int)
+    """,
+    )
+    suspend fun decrementPositions(
+        fromPosition: Int,
+        toPosition: Int,
+    )
 
     @Query("UPDATE User_Savings SET positionIndex = :toPosition WHERE id = :itemId")
-    suspend fun updateItemPosition(itemId: Long, toPosition: Int)
+    suspend fun updateItemPosition(
+        itemId: Long,
+        toPosition: Int,
+    )
     // endregion
 
     // region [D]elete operations
@@ -76,17 +91,21 @@ interface UserSavingsDao {
     @Query("SELECT positionIndex FROM User_Savings WHERE id = :userSavingId")
     suspend fun getPositionIndexById(userSavingId: Long): Int
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM User_Savings
         WHERE id = :userSavingId
-    """)
+    """,
+    )
     suspend fun deleteUserSaving(userSavingId: Long)
 
-    @Query("""
+    @Query(
+        """
         UPDATE User_Savings
         SET positionIndex = positionIndex - 1
         WHERE positionIndex > :position
-    """)
+    """,
+    )
     suspend fun updateUserSavingsPositionsGreaterThan(position: Int)
     // endregion
 }

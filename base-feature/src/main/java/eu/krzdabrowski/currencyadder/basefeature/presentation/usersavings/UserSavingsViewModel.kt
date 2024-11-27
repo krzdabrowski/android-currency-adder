@@ -71,7 +71,11 @@ class UserSavingsViewModel @Inject constructor(
         is AddUserSaving -> addUserSaving()
         is UpdateUserSaving -> updateUserSaving(intent.updatedSaving)
         is RemoveUserSaving -> removeUserSaving(intent.removedUserSavingId)
-        is UpdateUserSavingPositions -> updateUserSavingPositions(intent.movedItemId, intent.fromListItemIndex, intent.toListItemIndex)
+        is UpdateUserSavingPositions -> updateUserSavingPositions(
+            intent.movedItemId,
+            intent.fromListItemIndex,
+            intent.toListItemIndex,
+        )
         is GetCurrencyCodesThatStartWith -> getCurrencyCodesThatStartWith(intent.searchPhrase, intent.userSavingId)
         is RefreshExchangeRates -> refreshExchangeRates()
     }
@@ -140,7 +144,7 @@ class UserSavingsViewModel @Inject constructor(
             result.fold(
                 onSuccess = { list ->
                     UserSavingsFetched(
-                        userSavings = list.map { it.toPresentationModel() }
+                        userSavings = list.map { it.toPresentationModel() },
                     )
                 },
                 onFailure = {

@@ -54,7 +54,8 @@ internal val MIGRATION_2_3: Migration = object : Migration(2, 3) {
 
 internal val MIGRATION_3_4 = object : Migration(3, 4) {
     override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("""
+        db.execSQL(
+            """
             CREATE TABLE IF NOT EXISTS new_User_Savings (
                 id INTEGER PRIMARY KEY NOT NULL,
                 positionIndex INTEGER NOT NULL DEFAULT 0,
@@ -62,9 +63,11 @@ internal val MIGRATION_3_4 = object : Migration(3, 4) {
                 amount REAL NOT NULL,
                 currency TEXT NOT NULL
             )
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
-        db.execSQL("""
+        db.execSQL(
+            """
             INSERT INTO new_User_Savings (id, positionIndex, place, amount, currency)
             SELECT
                 id,
@@ -73,7 +76,8 @@ internal val MIGRATION_3_4 = object : Migration(3, 4) {
                 amount,
                 currency
             FROM User_Savings
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
         db.execSQL("DROP TABLE User_Savings")
 

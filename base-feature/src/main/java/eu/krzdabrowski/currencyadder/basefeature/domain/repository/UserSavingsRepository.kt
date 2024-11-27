@@ -11,7 +11,11 @@ interface UserSavingsRepository {
 
     suspend fun updateUserSaving(userSaving: UserSaving): Result<Unit>
 
-    suspend fun updateUserSavingPositions(movedItemId: Long, fromPosition: Int, toPosition: Int): Result<Unit>
+    suspend fun updateUserSavingPositions(
+        movedItemId: Long,
+        fromPosition: Int,
+        toPosition: Int,
+    ): Result<Unit>
 
     suspend fun removeUserSaving(userSavingId: Long): Result<Unit>
 }

@@ -213,7 +213,7 @@ internal fun UserSavingsListContent(
         onMoveCompleted = { fromIndex, toIndex ->
             val movedItemId = localUserSavingsForDragDrop[toIndex].id
             onDragAndDropUserSaving(movedItemId, fromIndex, toIndex)
-        }
+        },
     )
 
     LazyColumn(

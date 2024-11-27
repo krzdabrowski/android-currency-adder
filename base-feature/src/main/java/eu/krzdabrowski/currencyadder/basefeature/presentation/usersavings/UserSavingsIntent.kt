@@ -10,7 +10,7 @@ sealed interface UserSavingsIntent {
     data class UpdateUserSavingPositions(
         val movedItemId: Long,
         val fromListItemIndex: Int,
-        val toListItemIndex: Int
+        val toListItemIndex: Int,
     ) : UserSavingsIntent
 
     data class RemoveUserSaving(val removedUserSavingId: Long) : UserSavingsIntent
