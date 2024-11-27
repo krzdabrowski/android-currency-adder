@@ -37,6 +37,7 @@ private const val ROCKETS_REFRESH_FAILURE_INDICATOR_DURATION_IN_MILLIS = 500L //
 private const val BASE_EXCHANGE_RATE_CODE = "PLN"
 
 private val emptyUserSavingTemplate = UserSavingDisplayable(
+    position = -1,
     place = "",
     amount = "0",
     currency = BASE_EXCHANGE_RATE_CODE,
@@ -145,7 +146,9 @@ class UserSavingsViewModel @Inject constructor(
     )
 
     private fun addUserSaving(): Flow<PartialState> = flow {
-        val emptyUserSaving = emptyUserSavingTemplate
+        val emptyUserSaving = emptyUserSavingTemplate.copy(
+            position = uiState.value.userSavings.size,
+        )
 
         addUserSavingUseCase(
             emptyUserSaving.toDomainModel(),
