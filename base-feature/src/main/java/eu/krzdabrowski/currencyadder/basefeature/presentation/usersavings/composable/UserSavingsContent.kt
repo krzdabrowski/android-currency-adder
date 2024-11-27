@@ -193,18 +193,25 @@ internal fun UserSavingsListContent(
     getCurrencyCodesThatStartWith: (String, Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val uiList = remember {
-        mutableStateListOf<UserSavingDisplayable>().apply { addAll(uiState.userSavings) }
+    val localUserSavingsForDragDrop = remember {
+        mutableStateListOf<UserSavingDisplayable>()
+    }
+
+    LaunchedEffect(uiState.userSavings) {
+        with(localUserSavingsForDragDrop) {
+            clear()
+            addAll(uiState.userSavings)
+        }
     }
 
     val listState = rememberLazyListState()
     val dragDropState = rememberDragDropState(
         lazyListState = listState,
         onMove = { fromIndex, toIndex ->
-            uiList.add(toIndex, uiList.removeAt(fromIndex))
+            localUserSavingsForDragDrop.add(toIndex, localUserSavingsForDragDrop.removeAt(fromIndex))
         },
         onMoveCompleted = { fromIndex, toIndex ->
-            val movedItemId = uiList[toIndex].id
+            val movedItemId = localUserSavingsForDragDrop[toIndex].id
             onDragAndDropUserSaving(movedItemId, fromIndex, toIndex)
         }
     )
@@ -215,7 +222,7 @@ internal fun UserSavingsListContent(
         state = listState,
     ) {
         itemsIndexed(
-            items = uiList,
+            items = localUserSavingsForDragDrop,
             key = { _, userSaving -> userSaving.id },
         ) { index, item ->
             DraggableItem(
@@ -227,7 +234,7 @@ internal fun UserSavingsListContent(
                     onItemUpdate = onUpdateUserSaving,
                     onItemRemove = onRemoveUserSaving,
                     onCurrencyCodesUpdate = {
-                        getCurrencyCodesThatStartWith(it, item.id ?: 0L)
+                        getCurrencyCodesThatStartWith(it, item.id)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
