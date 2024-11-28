@@ -103,7 +103,9 @@ class UserSavingsViewModel @Inject constructor(
 
         is CurrencyCodesFetched -> {
             previousState.copy(
+                isLoading = false,
                 currencyCodes = partialState.currencyCodes,
+                isError = false,
             )
         }
 
