@@ -83,39 +83,62 @@ class UserSavingsViewModelTest {
     }
 
     @Test
-    fun `should show combined user savings & currency codes during init user savings & currency codes retrieval success`() =
-        runTest {
-            // Given
-            val testUserSavingsFromDomain = listOf(generateTestUserSavingsFromDomain())
-            val testUserSavingsToPresentation = testUserSavingsFromDomain.map { it.toPresentationModel() }
-            val testCurrencyCodesFromDomain = generateTestCurrencyCodesFromDomain()
-            val testUserSavingsWithCurrencyCodes = testUserSavingsToPresentation.map {
-                it.copy(
-                    currencyPossibilities = testCurrencyCodesFromDomain,
-                )
-            }
-            setUpUserSavingsViewModel(
-                getUserSavings = flowOf(
-                    Result.success(testUserSavingsFromDomain),
-                ),
-                getCurrencyCodes = flowOf(
-                    Result.success(testCurrencyCodesFromDomain),
-                ),
+    fun `should set currency codes during init currency codes retrieval success`() = runTest {
+        // Given
+        val testCurrencyCodesFromDomain = generateTestCurrencyCodesFromDomain()
+        setUpUserSavingsViewModel(
+            getCurrencyCodes = flowOf(
+                Result.success(testCurrencyCodesFromDomain),
+            ),
+        )
+
+        // When
+        // init
+
+        // Then
+        objectUnderTest.uiState.test {
+            val actualItem = awaitItem()
+
+            assertEquals(
+                expected = testCurrencyCodesFromDomain,
+                actual = actualItem.currencyCodes,
             )
-
-            // When
-            // init
-
-            // Then
-            objectUnderTest.uiState.test {
-                val actualItem = awaitItem()
-
-                assertEquals(
-                    expected = testUserSavingsWithCurrencyCodes,
-                    actual = actualItem.userSavings,
-                )
-            }
         }
+    }
+
+    @Test
+    fun `should show user savings & currency codes during init user savings retrieval success`() = runTest {
+        // Given
+        val testUserSavingsFromDomain = listOf(generateTestUserSavingsFromDomain())
+        val testUserSavingsToPresentation = testUserSavingsFromDomain.map { it.toPresentationModel() }
+        val testCurrencyCodesFromDomain = generateTestCurrencyCodesFromDomain()
+        val testUserSavingsWithCurrencyCodes = testUserSavingsToPresentation.map {
+            it.copy(
+                currencyPossibilities = testCurrencyCodesFromDomain,
+            )
+        }
+        setUpUserSavingsViewModel(
+            getUserSavings = flowOf(
+                Result.success(testUserSavingsFromDomain),
+            ),
+            getCurrencyCodes = flowOf(
+                Result.success(testCurrencyCodesFromDomain),
+            ),
+        )
+
+        // When
+        // init
+
+        // Then
+        objectUnderTest.uiState.test {
+            val actualItem = awaitItem()
+
+            assertEquals(
+                expected = testUserSavingsWithCurrencyCodes,
+                actual = actualItem.userSavings,
+            )
+        }
+    }
 
     @Test
     fun `should show no loading & error state during init user savings & currency codes retrieval success`() = runTest {
@@ -169,43 +192,34 @@ class UserSavingsViewModelTest {
     }
 
     @Test
-    fun `should show error state with no loading state during init currency codes retrieval failure`() = runTest {
-        // Given
-        val testUserSavingsFromDomain = listOf(generateTestUserSavingsFromDomain())
-        setUpUserSavingsViewModel(
-            getUserSavings = flowOf(
-                Result.success(testUserSavingsFromDomain),
-            ),
-            getCurrencyCodes = flowOf(
-                Result.failure(IllegalStateException("Test error")),
-            ),
-        )
+    fun `should call proper use case with empty user saving at position of savings list size during adding new user saving`() =
+        runTest {
+            // Given
+            val testUserSavingFromDomain = generateTestUserSavingsFromDomain()
+            val testUserSavingFromPresentation = testUserSavingFromDomain.toPresentationModel()
+            val testUserSavingList = listOf(testUserSavingFromPresentation)
 
-        // When
-        // init
+            setUpUserSavingsViewModel(
+                initialUiState = UserSavingsUiState(
+                    userSavings = testUserSavingList,
+                ),
+            )
 
-        // Then
-        objectUnderTest.uiState.test {
-            val actualItem = awaitItem()
+            // When
+            objectUnderTest.acceptIntent(AddUserSaving)
 
-            assertTrue(actualItem.isError)
-            assertFalse(actualItem.isLoading)
+            // Then
+            coVerify(exactly = 1) {
+                addUserSavingUseCase(
+                    UserSaving(
+                        position = testUserSavingList.size,
+                        place = "",
+                        amount = 0.0,
+                        currency = "PLN",
+                    ),
+                )
+            }
         }
-    }
-
-    @Test
-    fun `should call proper use case with empty user saving during adding new user saving`() = runTest {
-        // Given
-        setUpUserSavingsViewModel()
-
-        // When
-        objectUnderTest.acceptIntent(AddUserSaving)
-
-        // Then
-        coVerify(exactly = 1) {
-            addUserSavingUseCase(any())
-        }
-    }
 
     @Test
     fun `should call proper use case with mapped user saving during updating user saving`() = runTest {
@@ -240,7 +254,7 @@ class UserSavingsViewModelTest {
     }
 
     @Test
-    fun `should call proper use case with proper parameters during upading user saving positions`() = runTest {
+    fun `should call proper use case with proper parameters during updating user saving positions`() = runTest {
         // Given
         val movedItemId = 4L
         val fromListIndex = 0
@@ -264,9 +278,9 @@ class UserSavingsViewModelTest {
         val testUserSaving = generateTestUserSavingsFromDomain()
         val testUserSavingId = 2L
         val testUserSavingsFromDomain = listOf(
-            testUserSaving.copy(id = 1),
-            testUserSaving.copy(id = testUserSavingId),
-            testUserSaving.copy(id = 3),
+            testUserSaving.copy(id = 1L, position = 0),
+            testUserSaving.copy(id = testUserSavingId, position = 1),
+            testUserSaving.copy(id = 3L, position = 2),
         )
         val testUserSavingsFromPresentation = testUserSavingsFromDomain.map { it.toPresentationModel() }
         setUpUserSavingsViewModel(
@@ -281,6 +295,8 @@ class UserSavingsViewModelTest {
         // Then
         objectUnderTest.uiState.test {
             val actualItem = awaitItem()
+
+            println(actualItem.userSavings)
 
             assertEquals(
                 expected = emptyList(),

@@ -105,6 +105,23 @@ class TotalSavingsRepositoryTest {
         }
     }
 
+    @Test
+    fun `should only emit total user savings once if repeated values occur`() = runTest(testDispatcher) {
+        // Given
+        every { dataStoreManager.readString(any()) } returns flowOf("PLN")
+        every { userSavingsDao.getTotalUserSavingsInBaseCurrency() } returns flowOf(100.0, 100.0, 100.0)
+        every { exchangeRatesDao.getExchangeRateForChosenCurrency(any()) } returns flowOf(5.0, 5.0, 5.0)
+
+        // When
+        val totalSavingsFlow = objectUnderTest.getTotalUserSavings()
+
+        // Then
+        totalSavingsFlow.test {
+            awaitItem()
+            awaitComplete()
+        }
+    }
+
     private fun setUpTotalSavingsRepository() {
         objectUnderTest = TotalSavingsRepositoryImpl(
             userSavingsDao = userSavingsDao,

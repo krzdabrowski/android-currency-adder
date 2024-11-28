@@ -10,7 +10,6 @@ import eu.krzdabrowski.currencyadder.core.coroutines.IoDispatcher
 import eu.krzdabrowski.currencyadder.core.utils.resultOf
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -33,7 +32,6 @@ class ExchangeRatesRepositoryImpl @Inject constructor(
             }
         }
         .map { Result.success(it) }
-        .distinctUntilChanged()
         .flowOn(ioDispatcher)
 
     override suspend fun getCurrencyCodesThatStartWith(searchPhrase: String): Result<List<String>> = resultOf {
