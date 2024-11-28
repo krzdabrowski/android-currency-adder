@@ -2,8 +2,10 @@
 
 Android project, generated using [Android Starter](https://github.com/krzdabrowski/android-starter-2022).
 
-![Demo file 1](demo1.gif)
-![Demo file 2](demo2.gif)
+<p float="left">
+  <img src="demo1.gif" height=720/>
+  <img src="demo2.gif" height=720/>
+</p>
 
 ### **Features**
 * manage your savings in multiple currencies
